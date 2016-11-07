@@ -1,0 +1,116 @@
+
+\section*{Basic definitions}
+
+Let $A$ be a matrix and denote with $\sigma$ the spectre of $A$, namely the set of $A$ eigenvalues, 
+formally $\sigma(A) = \lbrace \lambda_{i}: 1\leq i\leq \nu\rbrace$,
+with multiplicities $\lbrace m_{i}: 1\leq i\leq \nu\rbrace$, respectively. 
+
+Let $f$ be a function on the variable $z$. We say that function $f$ 
+\emph{is defined on the spectre $\sigma$ of matrix $A$} if exists
+    \begin{displaymath}
+        \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}
+    \end{displaymath}
+for $i\in \lbrace 1, \ldots, \nu \rbrace$, for $j \in \lbrace 0, \ldots, m_{i}-1 \rbrace$.    
+
+Given a function $f$ defined on the spectre of a matrix $A$, define the polynomial $g$ such that
+it takes the same values of $f$ on the spectre of $A$, formally:
+    \begin{displaymath}
+        \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{i}} =
+        \left. \frac{\partial^{(j)}{g}}{\partial{z}} \right|_{z=\lambda_{i}}
+    \end{displaymath}
+for $i\in \lbrace 1, \ldots, \nu \rbrace$, for $j \in \lbrace 0, \ldots, m_{i}-1 \rbrace$,
+then $f(A) = g(A)$; in words, we say that $f$ is lifted as \emph{matrix function} through
+polynomial $g$.
+
+Such $g$ can be defined using the generalized Lagrange base, formally:
+\begin{displaymath}
+g(z) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{
+        \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(z)
+    }}
+\end{displaymath}
+where each polynomial $\Phi_{ij}$, of degree $m-1$, is defined implicitly as the solution of the system:
+\begin{displaymath}
+    \left. \frac{\partial^{(r-1)}{\Phi_{ij}}}{\partial{z}} \right|_{z=\lambda_{l}} = \delta_{il}\delta_{jr}
+\end{displaymath}
+for $l\in \lbrace 1, \ldots, \nu \rbrace$, for $r \in \lbrace 0, \ldots, m_{l}-1 \rbrace$, where
+$\delta$ is the Kroneker delta, defined as $\delta_{ij}=1 \leftrightarrow i=j$.
+
+In the rest of this document we assume that $\mathcal{R}_{m}\in\mathbb{C}^{m\times m}$ is a \emph{finite Riordan matrix}, 
+hence $\sigma(\mathcal{R}_{m})= \lbrace \lambda_{1} \rbrace$, so $\nu=1$, where $\lambda_{1}=1$ and $m_{1}=m$. We give the 
+following identity that is repeatedly used:
+\begin{displaymath}
+  \Phi_{1j}(z) = \sum_{k=0}^{j-1}{\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}
+\end{displaymath}
+
+\section{$f(z)=\frac{1}{z}$}
+
+The general form of $j$th derivative of function $f$ is 
+$$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = \frac{(-1)^{j}j!}{z^{j+1}}$$ 
+therefore
+\begin{displaymath}
+\begin{split}
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. \frac{(-1)^{j-1}(j-1)!}{z^{j}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. \frac{1}{z^{j}} \right|_{z=1}(-1)^{j-1}(j-1)!\Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{(-1)^{j-1}(j-1)!\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}} \\
+       &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{{{j-1}\choose{k}}(-z)^{k}}} 
+\end{split}
+\end{displaymath}
+To swap summations we reason on the relation $k=j-1$, which holds by the inner summation upper limit:
+$k\in \lbrace 0,\ldots,m-1 \rbrace$ because last value for $j$ is $m$. Finally, to cover the same set 
+of pairs $(j, k)$, when $k=0$ then $j\in \lbrace 1,\ldots,m \rbrace$ and when $k=m-1$ then 
+$j\in \lbrace m \rbrace$, therefore $j\in \lbrace k+1, \ldots, m \rbrace$ is required, in the general case.
+Binomial manipulations yield:
+\begin{displaymath}
+\begin{split}
+  g(z) &= \sum_{k=0}^{m-1}{\left(\sum_{j=k+1}^{m}{{{j-1}\choose{k}}}\right)(-z)^{k}} \\
+       &= \sum_{k=0}^{m-1}{\left(\sum_{j=k}^{m-1}{{{j}\choose{k}}}\right)(-z)^{k}} \\
+       &= \sum_{k=0}^{m-1}{{{m}\choose{k+1}}(-z)^{k}} \\
+\end{split}
+\end{displaymath}
+namely, $\mathcal{R}_{m}^{-1}=g(\mathcal{R}_{m})$ for any proper, finite Riordan matrix $\mathcal{R}_{m}$.
+
+Polynomial $g$ can also be written in closed form, assuming convergence condition $|z|\leq 1$:
+\begin{displaymath}
+g(z) = \frac{1- \left(1- z \right)^{m} }{z}
+\end{displaymath}
+
+
+
+\section{$f(z)=z^{r}$}
+
+The general form of $j$th derivative of function $f$ is 
+$$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = (r)_{(j)} z^{r-j}$$ 
+where $(r)_{(j)} = r(r-1)\cdots(r-j+1)$ is the falling factorial, therefore
+\begin{displaymath}
+\begin{split}
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. (r)_{(j-1)} z^{r-j+1} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. z^{r-j+1} \right|_{z=\lambda_{1}}(r)_{(j-1)} \Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{\frac{(r)_{(j-1)}}{(j-1)_{(j-1)}}\frac{(j-1)!(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}} \\
+       &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{(-1)^{j-1}{{r}\choose{j-1}}{{j-1}\choose{k}}(-z)^{k}}} 
+\end{split}
+\end{displaymath}
+We swap summations holding the same argument explained in previous section:
+\begin{displaymath}
+\begin{split}
+  g(z) &= \sum_{k=0}^{m-1}{\left(\sum_{j=k+1}^{m}{(-1)^{j-1}{{r}\choose{j-1}}{{j-1}\choose{k}}}\right)(-z)^{k}} \\
+       &= \sum_{k=0}^{m-1}{\left(\sum_{j=k}^{m-1}{(-1)^{j}{{r}\choose{j}}{{j}\choose{k}}}\right)(-z)^{k}} \\
+       &= \sum_{k=0}^{m-1}{\left(\left(-1\right)^{m}\frac{ k - m }{r-k}{\binom{m}{k}} {\binom{r}{m}}\right)(-z)^{k}}\\
+       &= \sum_{k=0}^{m-1}{\left(\frac{ k - m }{r-k}{\binom{m}{k}} {\binom{m-r-1}{m}}\right)(-z)^{k}}\\
+\end{split}
+\end{displaymath}
+namely, $\mathcal{R}_{m}^{r}=g(\mathcal{R}_{m})$ for any proper, finite Riordan matrix $\mathcal{R}_{m}$.
+
+
+
+
+
+
+
+
+
+
+
+
+

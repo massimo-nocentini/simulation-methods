@@ -1,0 +1,3 @@
+
+compile:
+	lualatex article.tex

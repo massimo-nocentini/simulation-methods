@@ -1,0 +1,52 @@
+
+% article example for classicthesis.sty
+\documentclass[8pt,a4paper,twocolumn]{article} % KOMA-Script article scrartcl
+\usepackage{lipsum}
+\usepackage{url}
+\usepackage[nochapters]{classicthesis} % nochapters
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{euler}
+%\usepackage{caption}
+\usepackage{acronym}
+%\usepackage{bm}
+%\usepackage{bbold}
+\usepackage[english]{babel}
+%\usepackage{minted}
+%\usepackage{changepage}
+%\usepackage{hyperref}
+%\usepackage{concrete}
+
+\textwidth 16cm \textheight 23cm \topmargin -1cm \oddsidemargin 0cm
+
+\begin{document}
+
+    \pagestyle{plain}
+    \title{\rmfamily\normalfont{A note about functions of Riordan matrices}}
+    \author{\spacedlowsmallcaps{Donatella Merlini}\\\spacedlowsmallcaps{Massimo Nocentini}}
+    \date{} % no date
+    
+    \maketitle
+    
+    \begin{abstract}
+        \noindent This note collect instantiations of function matrix theory to matrices
+        in the Riordan group. Actually, these results applies to any square matrix
+        with only one eigenvalue $\lambda$ of multiplicity $m \in\mathbb{N}$.
+
+    \end{abstract}
+       
+    %\tableofcontents
+    
+    \input{content.tex}
+    
+    \iffalse % % bib stuff {{{
+    \nocite{*}
+    \addtocontents{toc}{\protect\vspace{\beforebibskip}}
+    \addcontentsline{toc}{section}{\refname}    
+    \bibliographystyle{plain}
+    \bibliography{../Bibliography}
+    \fi
+    % }}}
+
+\end{document}
