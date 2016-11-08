@@ -96,12 +96,58 @@ We swap summations holding the same argument explained in previous section:
 \begin{split}
   g(z) &= \sum_{k=0}^{m-1}{\left(\sum_{j=k+1}^{m}{(-1)^{j-1}{{r}\choose{j-1}}{{j-1}\choose{k}}}\right)(-z)^{k}} \\
        &= \sum_{k=0}^{m-1}{\left(\sum_{j=k}^{m-1}{(-1)^{j}{{r}\choose{j}}{{j}\choose{k}}}\right)(-z)^{k}} \\
-       &= \sum_{k=0}^{m-1}{\left(\left(-1\right)^{m}\frac{ k - m }{r-k}{\binom{m}{k}} {\binom{r}{m}}\right)(-z)^{k}}\\
+\end{split}
+\end{displaymath}
+The above expression holds without conditions on both $r$ and $m$; however it is possible 
+to find a closed expression for the inner sum:
+\begin{displaymath}
+\begin{split}
+  g(z) &= \sum_{k=0}^{m-1}{\left(\left(-1\right)^{m}\frac{ k - m }{r-k}{\binom{m}{k}} {\binom{r}{m}}\right)(-z)^{k}}\\
        &= \sum_{k=0}^{m-1}{\left(\frac{ k - m }{r-k}{\binom{m}{k}} {\binom{m-r-1}{m}}\right)(-z)^{k}}\\
 \end{split}
 \end{displaymath}
-namely, $\mathcal{R}_{m}^{r}=g(\mathcal{R}_{m})$ for any proper, finite Riordan matrix $\mathcal{R}_{m}$.
+Last expression is defined unless $r=k$, namely $\mathcal{R}_{m}^{r}=g(\mathcal{R}_{m})$ for any proper, 
+finite Riordan matrix $\mathcal{R}_{m}$, where $m\leq r$. On the other hand, for $m>r$ we have 
+$g(z)=z^{r}$.
 
+
+\section{$f(z)=\sqrt{z}$}
+
+The general form of $j$th derivative of function $f$ is 
+$$\frac{\partial^{(j)}{f}(z)}{\partial{z}} =\frac{(-1)^{j-1}}{2}\frac{(j-1)!}{4^{j-1}}{{2(j-1)}\choose{j-1}}\frac{1}{z^{\frac{2(j-1)+1}{2}}} $$ 
+for $j \geq 1$, therefore
+\begin{displaymath}
+\begin{split}
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+       &= \sum_{j=0}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j+1}(z)} \\
+       &= f(1)\Phi_{11}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j+1}(z)} \\
+\end{split}
+\end{displaymath}
+Observing that $\Phi_{11}(z)=1$ and
+\begin{displaymath}
+  \Phi_{1,j+1}(z) = \sum_{k=0}^{j}{\frac{(-1)^{j-k}}{(j-k)!}\frac{z^{k}}{k!}}
+\end{displaymath}
+we rewrite
+\begin{displaymath}
+\begin{split}
+  g(z) &= 1 +\frac{1}{2} \sum_{j=1}^{m-1}{\sum_{k=0}^{j}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
+\end{split}
+\end{displaymath}
+To swap summations, for covering the same set of pairs $(j, k)$ it is required that 
+$j\in \lbrace 1, \ldots, m-1 \rbrace$ for both $k=0$ and $k=1$, therefore we split
+the outer sum over $k$ extracting the very first term due to $k=0$:
+\begin{displaymath}
+\begin{split}
+  g(z) &= 1 +\frac{1}{2} \sum_{k=1}^{m-1}{\sum_{j=k}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
+       &+ \frac{1}{2}\sum_{j=1}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}}
+\end{split}
+\end{displaymath}
+compactly:
+\begin{displaymath}
+\begin{split}
+  g(z) &= 1 +\frac{1}{2} \sum_{k=0}^{m-1}{\sum_{j=k+\delta_{k0}}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
+\end{split}
+\end{displaymath}
 
 
 
