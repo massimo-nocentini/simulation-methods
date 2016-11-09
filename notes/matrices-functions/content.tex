@@ -108,7 +108,9 @@ to find a closed expression for the inner sum:
 \end{displaymath}
 Last expression is defined unless $r=k$, namely $\mathcal{R}_{m}^{r}=g(\mathcal{R}_{m})$ for any proper, 
 finite Riordan matrix $\mathcal{R}_{m}$, where $m\leq r$. On the other hand, for $m>r$ we have 
-$g(z)=z^{r}$.
+$g(z)=z^{r}$, which agrees with intuition because computing $g(\mathcal{R}_{m})$, for $m$ much bigger than $r$, 
+requires computing combination of powers $\mathcal{R}_{m}^{j}$ for $j\in \lbrace 0,\ldots,r \rbrace$ at least,
+which outperforms computing $\mathcal{R}_{m}^{r}$ as a whole.
 
 
 \section{$f(z)=\sqrt{z}$}
@@ -127,7 +129,7 @@ Observing that $\Phi_{11}(z)=1$ and
 \begin{displaymath}
   \Phi_{1,j+1}(z) = \sum_{k=0}^{j}{\frac{(-1)^{j-k}}{(j-k)!}\frac{z^{k}}{k!}}
 \end{displaymath}
-we rewrite
+it allows us to rewrite
 \begin{displaymath}
 \begin{split}
   g(z) &= 1 +\frac{1}{2} \sum_{j=1}^{m-1}{\sum_{k=0}^{j}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
@@ -148,8 +150,20 @@ compactly:
   g(z) &= 1 +\frac{1}{2} \sum_{k=0}^{m-1}{\sum_{j=k+\delta_{k0}}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
 \end{split}
 \end{displaymath}
-
-
+Finding closed expressions for the inner sum and independent coefficient yields:
+\begin{displaymath}
+\begin{split}
+  g(z) &= \frac{2 }{4^{m}(2 m - 1)}\binom{2 m}{m}\sum_{k=1}^{m-1}{\frac{ \left(k - m\right) }{\left(2 k - 1\right) }{\binom{m}{k}} { (-z)^{k}}} \\
+       &+ \frac{2 m }{4^{m}(2 m - 1)}{\binom{2 m}{m}}
+\end{split}
+\end{displaymath}
+we can put the coefficient back inside sum, so the final expression is:
+\begin{displaymath}
+\begin{split}
+  g(z) &= \frac{2 }{4^{m}(2 m - 1)}\binom{2 m}{m}\sum_{k=0}^{m-1}{\frac{ \left(k - m\right) }{\left(2 k - 1\right) }{\binom{m}{k}} { (-z)^{k}}} \\
+\end{split}
+\end{displaymath}
+namely $\sqrt{\mathcal{R}_{m}}=g(\mathcal{R}_{m})$ for any proper, finite Riordan matrix $\mathcal{R}_{m}$.
 
 
 
