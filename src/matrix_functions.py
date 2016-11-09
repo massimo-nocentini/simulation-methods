@@ -89,6 +89,13 @@ def component_polynomials(Phi_poly, eigendata):
 
     return polynomials
 
+def component_polynomials_riordan(degree):
+    z = symbols('z')
+    return {(1, j): define( let=Function(r'\Phi_{{ {}, {} }}'.format(1, j))(z), 
+                            be=Sum((-1)**(j-1-k)*z**k/(factorial(k)*factorial(j-1-k)), (k, 0, j-1)).doit()) 
+                for j in range(1, degree+1)}
+
+
 def g_poly(f_eq, eigendata, Phi_polys, matrix_form=False):
     
     data, eigenvals, multiplicities = eigendata

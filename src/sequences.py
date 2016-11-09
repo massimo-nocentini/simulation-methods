@@ -1,4 +1,6 @@
 
+from functools import lru_cache
+
 from sympy import Symbol, Integer, poly, Eq
 
 def convolution(sequences, variable=Symbol('t'), op=max):
@@ -23,3 +25,16 @@ def convolution(sequences, variable=Symbol('t'), op=max):
         conv = convolve(conv, b)
     
     return Eq(conv_def, conv)
+
+
+def riordan_matrix_by_convolution(d, h, t):
+
+    @lru_cache(maxsize=None)
+    def column(j):
+        return convolution([column(j-1), h], t) if j else d
+        #return convolution([d] + [h]*j, t)
+
+    return lambda i, j: column(j).rhs.coeff(t, i).expand()
+
+
+
