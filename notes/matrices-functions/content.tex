@@ -1,9 +1,12 @@
 
 \section*{Basic definitions}
 
-Let $A$ be a matrix and denote with $\sigma$ the spectre of $A$, namely the set of $A$ eigenvalues, 
+Let $A\in\mathbb{C}^{m\times m}$ be a matrix and denote with $\sigma$ the spectre of $A$, namely the set of $A$ eigenvalues, 
 formally $\sigma(A) = \lbrace \lambda_{i}: 1\leq i\leq \nu\rbrace$,
-with multiplicities $\lbrace m_{i}: 1\leq i\leq \nu\rbrace$, respectively. 
+with multiplicities $\lbrace m_{i}: 1\leq i\leq \nu\rbrace$, respectively, such that
+\begin{displaymath}
+\sum_{i=1}^{\nu}{m_{i}}=m
+\end{displaymath}
 
 Let $f$ be a function on the variable $z$. We say that function $f$ 
 \emph{is defined on the spectre $\sigma$ of matrix $A$} if exists
@@ -25,7 +28,7 @@ polynomial $g$.
 Such $g$ can be defined using the generalized Lagrange base, formally:
 \begin{displaymath}
 g(z) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{
-        \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(z)
+        \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(z)
     }}
 \end{displaymath}
 where each polynomial $\Phi_{ij}$, of degree $m-1$, is defined implicitly as the solution of the system:
@@ -42,6 +45,29 @@ following identity that is repeatedly used:
   \Phi_{1j}(z) = \sum_{k=0}^{j-1}{\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}
 \end{displaymath}
 
+For the sake of clarity we show polynomials $\Phi_{1j}$ for $j\in \lbrace 1,\ldots,m \rbrace$ relative to any finite Riordan
+matrix $\mathcal{R}_{m}$ where $m=8$:
+\begin{displaymath}
+\begin{array}{c}
+ \Phi_{ 1, 1 }{\left (z \right )} = 1\\
+ \Phi_{ 1, 2 }{\left (z \right )} = z - 1\\
+ \Phi_{ 1, 3 }{\left (z \right )} = \frac{z^{2}}{2} - z + \frac{1}{2}\\
+ \Phi_{ 1, 4 }{\left (z \right )} = \frac{z^{3}}{6} - \frac{z^{2}}{2} + \frac{z}{2} - \frac{1}{6}\\
+ \Phi_{ 1, 5 }{\left (z \right )} = \frac{z^{4}}{24} - \frac{z^{3}}{6} + \frac{z^{2}}{4} - \frac{z}{6} + \frac{1}{24}\\
+ \Phi_{ 1, 6 }{\left (z \right )} = \frac{z^{5}}{120} - \frac{z^{4}}{24} + \frac{z^{3}}{12} - \frac{z^{2}}{12} + \frac{z}{24} - \frac{1}{120}\\
+ \Phi_{ 1, 7 }{\left (z \right )} = \frac{z^{6}}{720} - \frac{z^{5}}{120} + \frac{z^{4}}{48} - \frac{z^{3}}{36} + \frac{z^{2}}{48} - \frac{z}{120} + \frac{1}{720}\\
+ \Phi_{ 1, 8 }{\left (z \right )} = \frac{z^{7}}{5040} - \frac{z^{6}}{720} + \frac{z^{5}}{240} - \frac{z^{4}}{144} + \frac{z^{3}}{144} - \frac{z^{2}}{240} + \frac{z}{720} - \frac{1}{5040}\\
+ %\Phi_{ 1, 9 }{\left (z \right )} = \frac{z^{8}}{40320} - \frac{z^{7}}{5040} + \frac{z^{6}}{1440} - \frac{z^{5}}{720} + \frac{z^{4}}{576} - \frac{z^{3}}{720} + \frac{z^{2}}{1440} - \frac{z}{5040} + \frac{1}{40320}\\
+ %\Phi_{ 1, 10 }{\left (z \right )} = \frac{z^{9}}{362880} - \frac{z^{8}}{40320} + \frac{z^{7}}{10080} - \frac{z^{6}}{4320} + \frac{z^{5}}{2880} - \frac{z^{4}}{2880} + \frac{z^{3}}{4320} - \frac{z^{2}}{10080} + \frac{z}{40320} - \frac{1}{362880}\\
+\end{array}
+\end{displaymath}
+Above equations can be compressed in matrix notation:
+\begin{displaymath}
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0 & 0\\- \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0\\\frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0\\- \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0\\\frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0\\- \frac{1}{5040} & \frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1\end{matrix}\right] \cdot \left[\begin{matrix}1\\z\\\frac{z^{2}}{2!}\\\frac{z^{3}}{3!}\\\frac{z^{4}}{4!}\\\frac{z^{5}}{5!}\\\frac{z^{6}}{6!}\\\frac{z^{7}}{7!}\end{matrix}\right] 
+\end{displaymath}
+the coefficient matrix is a \emph{Toeplitz matrix}.
+
+\newpage
 \section{$f(z)=\frac{1}{z}$}
 
 The general form of $j$th derivative of function $f$ is 
@@ -53,9 +79,13 @@ therefore
        &= \sum_{j=1}^{m}{ \left. \frac{(-1)^{j-1}(j-1)!}{z^{j}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
        &= \sum_{j=1}^{m}{ \left. \frac{1}{z^{j}} \right|_{z=1}(-1)^{j-1}(j-1)!\Phi_{1j}(z)} \\
        &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{(-1)^{j-1}(j-1)!\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}} \\
-       &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{{{j-1}\choose{k}}(-z)^{k}}} 
 \end{split}
 \end{displaymath}
+yielding equation
+\begin{equation}
+  g(z) = \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{{{j-1}\choose{k}}(-z)^{k}}} 
+\end{equation}
+
 To swap summations we reason on the relation $k=j-1$, which holds by the inner summation upper limit:
 $k\in \lbrace 0,\ldots,m-1 \rbrace$ because last value for $j$ is $m$. Finally, to cover the same set 
 of pairs $(j, k)$, when $k=0$ then $j\in \lbrace 1,\ldots,m \rbrace$ and when $k=m-1$ then 
@@ -65,15 +95,40 @@ Binomial manipulations yield:
 \begin{split}
   g(z) &= \sum_{k=0}^{m-1}{\left(\sum_{j=k+1}^{m}{{{j-1}\choose{k}}}\right)(-z)^{k}} \\
        &= \sum_{k=0}^{m-1}{\left(\sum_{j=k}^{m-1}{{{j}\choose{k}}}\right)(-z)^{k}} \\
-       &= \sum_{k=0}^{m-1}{{{m}\choose{k+1}}(-z)^{k}} \\
 \end{split}
 \end{displaymath}
+the inner sum admits a closed expression, yielding equation
+\begin{equation}
+  g(z) = \sum_{k=0}^{m-1}{{{m}\choose{k+1}}(-z)^{k}} \\
+\end{equation}
 namely, $\mathcal{R}_{m}^{-1}=g(\mathcal{R}_{m})$ for any proper, finite Riordan matrix $\mathcal{R}_{m}$.
 
 Polynomial $g$ can also be written in closed form, assuming convergence condition $|z|\leq 1$:
 \begin{displaymath}
 g(z) = \frac{1- \left(1- z \right)^{m} }{z}
 \end{displaymath}
+
+For the sake of clarity, polynomial $g$ when $m=8$ and relaxing the condition $\lambda=1$, is defined according to 
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= - \frac{z^{7}}{\lambda^{8}} \\
+&+ z^{6} \left(\frac{1}{\lambda^{7}} + \frac{7}{\lambda^{8}}\right) \\
+&+ z^{5} \left(- \frac{1}{\lambda^{6}} - \frac{6}{\lambda^{7}} - \frac{21}{\lambda^{8}}\right) \\
+&+ z^{4} \left(\frac{1}{\lambda^{5}} + \frac{5}{\lambda^{6}} + \frac{15}{\lambda^{7}} + \frac{35}{\lambda^{8}}\right) \\
+&+ z^{3} \left(- \frac{1}{\lambda^{4}} - \frac{4}{\lambda^{5}} - \frac{10}{\lambda^{6}} - \frac{20}{\lambda^{7}} - \frac{35}{\lambda^{8}}\right) \\
+&+ z^{2} \left(\frac{1}{\lambda^{3}} + \frac{3}{\lambda^{4}} + \frac{6}{\lambda^{5}} + \frac{10}{\lambda^{6}} + \frac{15}{\lambda^{7}} + \frac{21}{\lambda^{8}}\right) \\
+&+ z \left(- \frac{1}{\lambda^{2}} - \frac{2}{\lambda^{3}} - \frac{3}{\lambda^{4}} - \frac{4}{\lambda^{5}} - \frac{5}{\lambda^{6}} - \frac{6}{\lambda^{7}} - \frac{7}{\lambda^{8}}\right) \\
+&+ \frac{1}{\lambda} + \frac{1}{\lambda^{2}} + \frac{1}{\lambda^{3}} + \frac{1}{\lambda^{4}} + \frac{1}{\lambda^{5}} + \frac{1}{\lambda^{6}} + \frac{1}{\lambda^{7}} + \frac{1}{\lambda^{8}}
+\end{split}
+\end{displaymath}
+restoring $\lambda=1$ yields \[g{\left (z \right )} = - z^{7} + 8 z^{6} - 28 z^{5} + 56 z^{4} - 70 z^{3} + 56 z^{2} - 28 z + 8\]
+
+A computation observation concerns the evaluation of $g(\mathcal{R}_{m})$, which should be carried out as
+\begin{displaymath}
+g(z) = z \left(z \left(z \left(z \left(z \left(z \left(- z + 8\right) - 28\right) + 56\right) - 70\right) + 56\right) - 28\right) + 8
+\end{displaymath}
+namely, according to the Horner rule for polynomials, interpreting each coefficient $c\in\mathbb{R}$ as $cI$ where $I\in\mathbb{C}^{m\times m}$ is the
+identity matrix. Such approach requires $m-2$ matrix products and $m-1$ additions; finally, we implicitly use this scheme in all subsequent evaluation of a polynomial $g$ to a matrix $A$.
 
 
 
@@ -88,29 +143,68 @@ where $(r)_{(j)} = r(r-1)\cdots(r-j+1)$ is the falling factorial, therefore
        &= \sum_{j=1}^{m}{ \left. (r)_{(j-1)} z^{r-j+1} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
        &= \sum_{j=1}^{m}{ \left. z^{r-j+1} \right|_{z=\lambda_{1}}(r)_{(j-1)} \Phi_{1j}(z)} \\
        &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{\frac{(r)_{(j-1)}}{(j-1)_{(j-1)}}\frac{(j-1)!(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}} \\
-       &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{(-1)^{j-1}{{r}\choose{j-1}}{{j-1}\choose{k}}(-z)^{k}}} 
 \end{split}
 \end{displaymath}
+yielding equation
+\begin{equation}
+  g(z) = \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{(-1)^{j-1}{{r}\choose{j-1}}{{j-1}\choose{k}}(-z)^{k}}} 
+\end{equation}
 We swap summations holding the same argument explained in previous section:
 \begin{displaymath}
-\begin{split}
-  g(z) &= \sum_{k=0}^{m-1}{\left(\sum_{j=k+1}^{m}{(-1)^{j-1}{{r}\choose{j-1}}{{j-1}\choose{k}}}\right)(-z)^{k}} \\
-       &= \sum_{k=0}^{m-1}{\left(\sum_{j=k}^{m-1}{(-1)^{j}{{r}\choose{j}}{{j}\choose{k}}}\right)(-z)^{k}} \\
-\end{split}
+  g(z) = \sum_{k=0}^{m-1}{\left(\sum_{j=k+1}^{m}{(-1)^{j-1}{{r}\choose{j-1}}{{j-1}\choose{k}}}\right)(-z)^{k}}
 \end{displaymath}
+yielding equation
+\begin{equation}
+  g(z) = \sum_{k=0}^{m-1}{\left(\sum_{j=k}^{m-1}{(-1)^{j}{{r}\choose{j}}{{j}\choose{k}}}\right)(-z)^{k}}
+\end{equation}
 The above expression holds without conditions on both $r$ and $m$; however it is possible 
 to find a closed expression for the inner sum:
-\begin{displaymath}
-\begin{split}
+\begin{eqnarray}
   g(z) &= \sum_{k=0}^{m-1}{\left(\left(-1\right)^{m}\frac{ k - m }{r-k}{\binom{m}{k}} {\binom{r}{m}}\right)(-z)^{k}}\\
-       &= \sum_{k=0}^{m-1}{\left(\frac{ k - m }{r-k}{\binom{m}{k}} {\binom{m-r-1}{m}}\right)(-z)^{k}}\\
-\end{split}
-\end{displaymath}
+       &= \sum_{k=0}^{m-1}{\left(\frac{ k - m }{r-k}{\binom{m}{k}} {\binom{m-r-1}{m}}\right)(-z)^{k}}
+\end{eqnarray}
 Last expression is defined unless $r=k$, namely $\mathcal{R}_{m}^{r}=g(\mathcal{R}_{m})$ for any proper, 
 finite Riordan matrix $\mathcal{R}_{m}$, where $m\leq r$. On the other hand, for $m>r$ we have 
 $g(z)=z^{r}$, which agrees with intuition because computing $g(\mathcal{R}_{m})$, for $m$ much bigger than $r$, 
 requires computing combination of powers $\mathcal{R}_{m}^{j}$ for $j\in \lbrace 0,\ldots,r \rbrace$ at least,
 which outperforms computing $\mathcal{R}_{m}^{r}$ as a whole.
+
+For the sake of clarity, let $m=8$ to define polynomial $g$:
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= z^{7} {\binom{r}{7}} \\
+&+ z^{6} \left({\binom{r}{6}} - 7 {\binom{r}{7}}\right) \\
+&+ z^{5} \left({\binom{r}{5}} - 6 {\binom{r}{6}} + 21 {\binom{r}{7}}\right) \\
+&+ z^{4} \left({\binom{r}{4}} - 5 {\binom{r}{5}} + 15 {\binom{r}{6}} - 35 {\binom{r}{7}}\right) \\
+&+ z^{3} \left({\binom{r}{3}} - 4 {\binom{r}{4}} + 10 {\binom{r}{5}} - 20 {\binom{r}{6}} + 35 {\binom{r}{7}}\right) \\
+&+ z^{2} \left({\binom{r}{2}} - 3 {\binom{r}{3}} + 6 {\binom{r}{4}} - 10 {\binom{r}{5}} + 15 {\binom{r}{6}} - 21 {\binom{r}{7}}\right) \\
+&+ z \left({\binom{r}{1}} - 2 {\binom{r}{2}} + 3 {\binom{r}{3}} - 4 {\binom{r}{4}} + 5 {\binom{r}{5}} - 6 {\binom{r}{6}} + 7 {\binom{r}{7}}\right) \\
+&- {\binom{r}{1}} + {\binom{r}{2}} - {\binom{r}{3}} + {\binom{r}{4}} - {\binom{r}{5}} + {\binom{r}{6}} - {\binom{r}{7}} + 1 \\
+\end{split}
+\end{displaymath}
+expansion of inner binomial coefficients yields
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= - \frac{r^{7}}{5040} + \frac{r^{6}}{180} - \frac{23 r^{5}}{360} + \frac{7 r^{4}}{18} - \frac{967 r^{3}}{720} + \frac{469 r^{2}}{180} - \frac{363 r}{140} \\
+&+ z^{7} \left(\frac{r^{7}}{5040} - \frac{r^{6}}{240} + \frac{5 r^{5}}{144} - \frac{7 r^{4}}{48} + \frac{29 r^{3}}{90} - \frac{7 r^{2}}{20} + \frac{r}{7}\right) \\
+&+ z^{6} \left(- \frac{r^{7}}{720} + \frac{11 r^{6}}{360} - \frac{19 r^{5}}{72} + \frac{41 r^{4}}{36} - \frac{1849 r^{3}}{720} + \frac{1019 r^{2}}{360} - \frac{7 r}{6}\right) \\
+&+ z^{5} \left(\frac{r^{7}}{240} - \frac{23 r^{6}}{240} + \frac{69 r^{5}}{80} - \frac{185 r^{4}}{48} + \frac{134 r^{3}}{15} - \frac{201 r^{2}}{20} + \frac{21 r}{5}\right) \\
+&+ z^{4} \left(- \frac{r^{7}}{144} + \frac{r^{6}}{6} - \frac{113 r^{5}}{72} + \frac{22 r^{4}}{3} - \frac{2545 r^{3}}{144} + \frac{41 r^{2}}{2} - \frac{35 r}{4}\right) \\
+&+ z^{3} \left(\frac{r^{7}}{144} - \frac{25 r^{6}}{144} + \frac{247 r^{5}}{144} - \frac{1219 r^{4}}{144} + \frac{389 r^{3}}{18} - \frac{949 r^{2}}{36} + \frac{35 r}{3}\right) \\
+&+ z^{2} \left(- \frac{r^{7}}{240} + \frac{13 r^{6}}{120} - \frac{9 r^{5}}{8} + \frac{71 r^{4}}{12} - \frac{3929 r^{3}}{240} + \frac{879 r^{2}}{40} - \frac{21 r}{2}\right) \\
+&+ z \left(\frac{r^{7}}{720} - \frac{3 r^{6}}{80} + \frac{59 r^{5}}{144} - \frac{37 r^{4}}{16} + \frac{319 r^{3}}{45} - \frac{223 r^{2}}{20} + 7 r\right) + 1
+\end{split}
+\end{displaymath}
+Moreover, using last two equations and requiring $r \geq 8$, we have:
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= 8 {\binom{r}{8}} \left( \frac{z^{7}}{r - 7} - \frac{7 z^{6}}{r - 6} + \frac{21 z^{5}}{r - 5}\right. \\
+& \left. - \frac{35 z^{4}}{r - 4} + \frac{35 z^{3}}{r - 3} - \frac{21 z^{2}}{r - 2} + \frac{7 z}{r - 1} - \frac{1}{r} \right) \\
+&= 8 {\binom{7-r}{8}} \left( \frac{z^{7}}{r - 7} - \frac{7 z^{6}}{r - 6} + \frac{21 z^{5}}{r - 5}\right. \\
+& \left. - \frac{35 z^{4}}{r - 4} + \frac{35 z^{3}}{r - 3} - \frac{21 z^{2}}{r - 2} + \frac{7 z}{r - 1} - \frac{1}{r} \right) \\
+\end{split}
+\end{displaymath}
+respectively.
 
 
 \section{$f(z)=\sqrt{z}$}
