@@ -1,7 +1,7 @@
 
 from functools import lru_cache
 
-from sympy import Symbol, Integer, poly, Eq
+from sympy import Symbol, Integer, poly, Eq, expand, zeros
 
 def convolution(sequences, variable=Symbol('t'), op=max):
     
@@ -38,3 +38,24 @@ def riordan_matrix_by_convolution(d, h, t):
 
 
 
+def riordan_matrix_by_recurrence(dim, rec, init={(0,0):1}, ctor=zeros, post=expand, lattice=None):
+    
+    if not lattice: lattice = [(n, k) for n in range(1, dim) for k in range(n+1)]
+    
+    R = ctor(dim)
+    
+    for cell, i in init.items(): R[cell] = i
+    
+    for cell in lattice:
+        for comb_cell, v in rec(*cell).items():
+            
+            try:
+                combined = v * (1 if cell == comb_cell else R[comb_cell])
+            except IndexError:
+                combined = 0
+                
+            R[cell] += combined
+    
+    if callable(post): R = R.applyfunc(post)
+
+    return lambda n, k: R[n, k]
