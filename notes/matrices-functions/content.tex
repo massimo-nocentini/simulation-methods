@@ -223,34 +223,34 @@ Observing that $\Phi_{11}(z)=1$ and
 \begin{displaymath}
   \Phi_{1,j+1}(z) = \sum_{k=0}^{j}{\frac{(-1)^{j-k}}{(j-k)!}\frac{z^{k}}{k!}}
 \end{displaymath}
-it allows us to rewrite
-\begin{displaymath}
-\begin{split}
-  g(z) &= 1 +\frac{1}{2} \sum_{j=1}^{m-1}{\sum_{k=0}^{j}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
-\end{split}
-\end{displaymath}
+it allows us to state the equation
+\begin{equation}
+  g(z) = 1 +\frac{1}{2} \sum_{j=1}^{m-1}{\sum_{k=0}^{j}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}}
+\end{equation}
 To swap summations, for covering the same set of pairs $(j, k)$ it is required that 
 $j\in \lbrace 1, \ldots, m-1 \rbrace$ for both $k=0$ and $k=1$, therefore we split
 the outer sum over $k$ extracting the very first term due to $k=0$:
-\begin{displaymath}
+\begin{equation}
 \begin{split}
   g(z) &= 1 +\frac{1}{2} \sum_{k=1}^{m-1}{\sum_{j=k}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
        &+ \frac{1}{2}\sum_{j=1}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}}
 \end{split}
-\end{displaymath}
-compactly:
-\begin{displaymath}
+\end{equation}
+compactly using Kroneker delta in the inner sum's starting:
+\begin{equation}
 \begin{split}
   g(z) &= 1 +\frac{1}{2} \sum_{k=0}^{m-1}{\sum_{j=k+\delta_{k0}}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
 \end{split}
-\end{displaymath}
+\end{equation}
+
+\iffalse %  {{{
 Finding closed expressions for the inner sum and independent coefficient yields:
-\begin{displaymath}
+\begin{equation}
 \begin{split}
   g(z) &= \frac{2 }{4^{m}(2 m - 1)}\binom{2 m}{m}\sum_{k=1}^{m-1}{\frac{ \left(k - m\right) }{\left(2 k - 1\right) }{\binom{m}{k}} { (-z)^{k}}} \\
        &+ \frac{2 m }{4^{m}(2 m - 1)}{\binom{2 m}{m}}
 \end{split}
-\end{displaymath}
+\end{equation}
 we can put the coefficient back inside sum, so the final expression is:
 \begin{displaymath}
 \begin{split}
@@ -259,12 +259,74 @@ we can put the coefficient back inside sum, so the final expression is:
 \end{displaymath}
 namely $\sqrt{\mathcal{R}_{m}}=g(\mathcal{R}_{m})$ for any proper, finite Riordan matrix $\mathcal{R}_{m}$.
 
+\fi
+% }}}
+
+For the sake of clarity, here is $g$ polynomial where $m=8$ and relaxing $\lambda=1$ hypothesis:
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= \frac{33 z^{7}}{2048 \lambda^{\frac{13}{2}}} \\
+&+ z^{6} \left(- \frac{21}{1024 \lambda^{\frac{11}{2}}} - \frac{231}{2048 \lambda^{\frac{13}{2}}}\right) \\
+&+ z^{5} \left(\frac{7}{256 \lambda^{\frac{9}{2}}} + \frac{63}{512 \lambda^{\frac{11}{2}}} + \frac{693}{2048 \lambda^{\frac{13}{2}}}\right) \\
+&+ z^{4} \left(- \frac{5}{128 \lambda^{\frac{7}{2}}} - \frac{35}{256 \lambda^{\frac{9}{2}}} - \frac{315}{1024 \lambda^{\frac{11}{2}}} - \frac{1155}{2048 \lambda^{\frac{13}{2}}}\right) \\
+&+ z^{3} \left(\frac{1}{16 \lambda^{\frac{5}{2}}} + \frac{5}{32 \lambda^{\frac{7}{2}}} + \frac{35}{128 \lambda^{\frac{9}{2}}} + \frac{105}{256 \lambda^{\frac{11}{2}}} + \frac{1155}{2048 \lambda^{\frac{13}{2}}}\right) \\
+&+ z^{2} \left(- \frac{1}{8 \lambda^{\frac{3}{2}}} - \frac{3}{16 \lambda^{\frac{5}{2}}} - \frac{15}{64 \lambda^{\frac{7}{2}}} - \frac{35}{128 \lambda^{\frac{9}{2}}} - \frac{315}{1024 \lambda^{\frac{11}{2}}} - \frac{693}{2048 \lambda^{\frac{13}{2}}}\right) \\
+&+ z \left(\frac{1}{2 \sqrt{\lambda}} + \frac{1}{4 \lambda^{\frac{3}{2}}} + \frac{3}{16 \lambda^{\frac{5}{2}}} + \frac{5}{32 \lambda^{\frac{7}{2}}} + \frac{35}{256 \lambda^{\frac{9}{2}}} \right. \\
+    &+ \left. \frac{63}{512 \lambda^{\frac{11}{2}}} + \frac{231}{2048 \lambda^{\frac{13}{2}}}\right) \\
+&+ \sqrt{\lambda} - \frac{1}{2 \sqrt{\lambda}} - \frac{1}{8 \lambda^{\frac{3}{2}}} - \frac{1}{16 \lambda^{\frac{5}{2}}} - \frac{5}{128 \lambda^{\frac{7}{2}}} - \frac{7}{256 \lambda^{\frac{9}{2}}} \\
+&- \frac{21}{1024 \lambda^{\frac{11}{2}}} - \frac{33}{2048 \lambda^{\frac{13}{2}}}
+\end{split}
+\end{displaymath}
+restoring $\lambda=1$:
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= \frac{33 z^{7}}{2048} - \frac{273 z^{6}}{2048} + \frac{1001 z^{5}}{2048} - \frac{2145 z^{4}}{2048} + \frac{3003 z^{3}}{2048} \\
+&- \frac{3003 z^{2}}{2048} + \frac{3003 z}{2048} + \frac{429}{2048}
+\end{split}
+\end{displaymath}
+
+
+\section{Case studies}
+
+\subsection{Pascal array $\mathcal{P}$}
+
+Let $m=8$ and define
+\begin{displaymath}
+\mathcal{P}_{m}=\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\1 & 3 & 3 & 1 & 0 & 0 & 0 & 0\\1 & 4 & 6 & 4 & 1 & 0 & 0 & 0\\1 & 5 & 10 & 10 & 5 & 1 & 0 & 0\\1 & 6 & 15 & 20 & 15 & 6 & 1 & 0\\1 & 7 & 21 & 35 & 35 & 21 & 7 & 1\end{matrix}\right]
+\end{displaymath}
+therefore $\mathcal{P}_{m}^{-1}$ is
+\begin{displaymath}
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\1 & -2 & 1 & 0 & 0 & 0 & 0 & 0\\-1 & 3 & -3 & 1 & 0 & 0 & 0 & 0\\1 & -4 & 6 & -4 & 1 & 0 & 0 & 0\\-1 & 5 & -10 & 10 & -5 & 1 & 0 & 0\\1 & -6 & 15 & -20 & 15 & -6 & 1 & 0\\-1 & 7 & -21 & 35 & -35 & 21 & -7 & 1\end{matrix}\right]
+\end{displaymath}
+$\mathcal{P}_{m}^{r}$ is
+\begin{displaymath}
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\r & 1 & 0 & 0 & 0 & 0 & 0 & 0\\r^{2} & 2 r & 1 & 0 & 0 & 0 & 0 & 0\\r^{3} & 3 r^{2} & 3 r & 1 & 0 & 0 & 0 & 0\\r^{4} & 4 r^{3} & 6 r^{2} & 4 r & 1 & 0 & 0 & 0\\r^{5} & 5 r^{4} & 10 r^{3} & 10 r^{2} & 5 r & 1 & 0 & 0\\r^{6} & 6 r^{5} & 15 r^{4} & 20 r^{3} & 15 r^{2} & 6 r & 1 & 0\\r^{7} & 7 r^{6} & 21 r^{5} & 35 r^{4} & 35 r^{3} & 21 r^{2} & 7 r & 1\end{matrix}\right]
+\end{displaymath}
+finally, $\sqrt{\mathcal{P}_{m}}$ is
+\begin{displaymath}
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{1}{8} & \frac{3}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{1}{16} & \frac{1}{2} & \frac{3}{2} & 2 & 1 & 0 & 0 & 0\\\frac{1}{32} & \frac{5}{16} & \frac{5}{4} & \frac{5}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{1}{64} & \frac{3}{16} & \frac{15}{16} & \frac{5}{2} & \frac{15}{4} & 3 & 1 & 0\\\frac{1}{128} & \frac{7}{64} & \frac{21}{32} & \frac{35}{16} & \frac{35}{8} & \frac{21}{4} & \frac{7}{2} & 1\end{matrix}\right]
+\end{displaymath}
+evaluating corresponding $g$ polynomials on $\mathcal{P}_{m}$, as required.
 
 
 
+\subsection{Catalan array $\mathcal{C}$}
 
-
-
-
-
+Let $m=8$ and define
+\begin{displaymath}
+\mathcal{C}_{m}=\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\2 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\5 & 5 & 3 & 1 & 0 & 0 & 0 & 0\\14 & 14 & 9 & 4 & 1 & 0 & 0 & 0\\42 & 42 & 28 & 14 & 5 & 1 & 0 & 0\\132 & 132 & 90 & 48 & 20 & 6 & 1 & 0\\429 & 429 & 297 & 165 & 75 & 27 & 7 & 1\end{matrix}\right]
+\end{displaymath}
+therefore $\mathcal{C}_{m}^{-1}$ is
+\begin{displaymath}
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & -2 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 1 & -3 & 1 & 0 & 0 & 0 & 0\\0 & 0 & 3 & -4 & 1 & 0 & 0 & 0\\0 & 0 & -1 & 6 & -5 & 1 & 0 & 0\\0 & 0 & 0 & -4 & 10 & -6 & 1 & 0\\0 & 0 & 0 & 1 & -10 & 15 & -7 & 1\end{matrix}\right]
+\end{displaymath}
+$\mathcal{C}_{m}^{r}$ is
+\begin{displaymath}
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\r & 1 & 0 & 0 & 0 & 0 & 0 & 0\\r \left(r + 1\right) & 2 r & 1 & 0 & 0 & 0 & 0 & 0\\\frac{r}{2} \left(2 r^{2} + 5 r + 3\right) & r \left(3 r + 2\right) & 3 r & 1 & 0 & 0 & 0 & 0\\\frac{r}{3} \left(3 r^{3} + 13 r^{2} + 18 r + 8\right) & r \left(4 r^{2} + 7 r + 3\right) & 3 r \left(2 r + 1\right) & 4 r & 1 & 0 & 0 & 0\\\frac{r}{12} \left(12 r^{4} + 77 r^{3} + 178 r^{2} + 175 r + 62\right) & \frac{r}{3} \left(15 r^{3} + 47 r^{2} + 48 r + 16\right) & \frac{r}{2} \left(20 r^{2} + 27 r + 9\right) & 2 r \left(5 r + 2\right) & 5 r & 1 & 0 & 0\\\frac{r}{30} \left(30 r^{5} + 261 r^{4} + 875 r^{3} + 1405 r^{2} + 1075 r + 314\right) & \frac{r}{6} \left(36 r^{4} + 171 r^{3} + 298 r^{2} + 225 r + 62\right) & r \left(15 r^{3} + 37 r^{2} + 30 r + 8\right) & 2 r \left(10 r^{2} + 11 r + 3\right) & 5 r \left(3 r + 1\right) & 6 r & 1 & 0\\\frac{r}{60} \left(60 r^{6} + 669 r^{5} + 3002 r^{4} + 6900 r^{3} + 8510 r^{2} + 5301 r + 1298\right) & \frac{r}{60} \left(420 r^{5} + 2754 r^{4} + 7075 r^{3} + 8860 r^{2} + 5375 r + 1256\right) & \frac{r}{4} \left(84 r^{4} + 319 r^{3} + 448 r^{2} + 275 r + 62\right) & \frac{r}{3} \left(105 r^{3} + 214 r^{2} + 144 r + 32\right) & \frac{5 r}{2} \left(14 r^{2} + 13 r + 3\right) & 3 r \left(7 r + 2\right) & 7 r & 1\end{matrix}\right]
+\end{displaymath}
+finally, $\sqrt{\mathcal{C}_{m}}$ is
+\begin{displaymath}
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{3}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{3}{2} & \frac{7}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{55}{16} & \frac{15}{4} & 3 & 2 & 1 & 0 & 0 & 0\\\frac{545}{64} & \frac{143}{16} & \frac{55}{8} & \frac{9}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{709}{32} & \frac{727}{32} & \frac{273}{16} & 11 & \frac{25}{4} & 3 & 1 & 0\\\frac{15249}{256} & \frac{3855}{64} & \frac{2853}{64} & \frac{455}{16} & \frac{65}{4} & \frac{33}{4} & \frac{7}{2} & 1\end{matrix}\right]
+\end{displaymath}
+evaluating corresponding $g$ polynomials on $\mathcal{C}_{m}$, as required.
 
