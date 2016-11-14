@@ -38,9 +38,31 @@ where each polynomial $\Phi_{ij}$, of degree $m-1$, is defined implicitly as the
 for $l\in \lbrace 1, \ldots, \nu \rbrace$, for $r \in \lbrace 0, \ldots, m_{l}-1 \rbrace$, where
 $\delta$ is the Kroneker delta, defined as $\delta_{ij}=1 \leftrightarrow i=j$.
 
+We would like to study functions of \emph{Riordan matrices}. A Riordan matrix 
+$\mathcal{R}=(d_{nk})_{n,k\in\mathbb{N}}$ is an infinite, lower triangular matrix
+such that there exist two generating functions $d$ and $h$, with $h(0)=0 \wedge h^{\prime}(0)\neq0$, satisfying
+\begin{displaymath}
+R_{k}(t) = d(t)h(t)^{k}
+\end{displaymath}
+where $R_{k}(t) = \sum_{n\in\mathbb{N}}{d_{nk}t^{n}}$ is the formal power series with coefficients lying 
+on column $k$; finally, we write $\mathcal{R}=(d, h)$ with a little abuse of notation. Their defining structure 
+entails many useful properties, such as:
+\begin{itemize} 
+\item matrix-vector product $\mathcal{R}\cdot \textbf{a}$ is defined as 
+    $ d(t)A(h(t))$, where $A$ is a formal power series
+    with coefficients belonging to vector $\textbf{a}$ and $\mathcal{R}=(d, h)$;
+\item matrix-matrix product $\mathcal{R}\cdot \mathcal{W}$ is defined as 
+    $(d(t)g(h(t)), l(h(t)))$, where $\mathcal{R}=(d, h)$ and $\mathcal{W}=(g, l)$;
+\item identity matrix $I$ is $(1, t)$;
+\item the inverse $\mathcal{R}^{-1}$ of $\mathcal{R}=(d, h)$ is defined as 
+    $\left(\frac{1}{d(\bar{h}(t))}, \bar{h}\right)$, where $\bar{h}$ is the \emph{compositional inverse} 
+    of $h$, namely $\bar{h}(h(t))=t$;
+\item the set of these matrices is a \emph{group} with matrix-matrix product as operation.    
+\end{itemize}
+
 In the rest of this document we assume that $\mathcal{R}_{m}\in\mathbb{C}^{m\times m}$ is a \emph{finite Riordan matrix}, 
-hence $\sigma(\mathcal{R}_{m})= \lbrace \lambda_{1} \rbrace$, so $\nu=1$, where $\lambda_{1}=1$ and $m_{1}=m$. We give the 
-following identity that is repeatedly used:
+hence $\sigma(\mathcal{R}_{m})= \lbrace \lambda_{1} \rbrace$, so $\nu=1$, where $\lambda_{1}=1$ 
+with multiplicity $m_{1}=m$. We give the following identity that is repeatedly used:
 \begin{displaymath}
   \Phi_{1j}(z) = \sum_{k=0}^{j-1}{\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}
 \end{displaymath}
@@ -67,7 +89,6 @@ Above equations can be compressed in matrix notation:
 \end{displaymath}
 the coefficient matrix is a \emph{Toeplitz matrix}.
 
-\newpage
 \section{$f(z)=\frac{1}{z}$}
 
 The general form of $j$th derivative of function $f$ is 
