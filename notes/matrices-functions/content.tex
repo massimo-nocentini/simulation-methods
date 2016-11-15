@@ -22,10 +22,8 @@ it takes the same values of $f$ on the spectre of $A$, formally:
         \left. \frac{\partial^{(j)}{g}}{\partial{z}} \right|_{z=\lambda_{i}}
     \end{displaymath}
 for $i\in \lbrace 1, \ldots, \nu \rbrace$, for $j \in \lbrace 0, \ldots, m_{i}-1 \rbrace$,
-then $f(A) = g(A)$; in words, we say that $f$ is lifted as \emph{matrix function} through
-polynomial $g$.
-
-Such $g$ can be defined using the generalized Lagrange base, formally:
+then $f(A) = g(A)$; finally, polynomial $g$ is an \emph{interpolating Hermite polynomial} which
+can be defined using the generalized Lagrange base $ \lbrace \Phi_{ij} \rbrace$, formally:
 \begin{displaymath}
 g(z) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{
         \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(z)
@@ -35,34 +33,22 @@ where each polynomial $\Phi_{ij}$, of degree $m-1$, is defined implicitly as the
 \begin{displaymath}
     \left. \frac{\partial^{(r-1)}{\Phi_{ij}}}{\partial{z}} \right|_{z=\lambda_{l}} = \delta_{il}\delta_{jr}
 \end{displaymath}
-for $l\in \lbrace 1, \ldots, \nu \rbrace$, for $r \in \lbrace 0, \ldots, m_{l}-1 \rbrace$, where
+for $l\in \lbrace 1, \ldots, \nu \rbrace$, for $r \in \lbrace 1, \ldots, m_{l} \rbrace$, where
 $\delta$ is the Kroneker delta, defined as $\delta_{ij}=1 \leftrightarrow i=j$.
 
-We would like to study functions of \emph{Riordan matrices}. A Riordan matrix 
+The aim of this work is to study functions of \emph{Riordan matrices}. A Riordan matrix 
 $\mathcal{R}=(d_{nk})_{n,k\in\mathbb{N}}$ is an infinite, lower triangular matrix
 such that there exist two generating functions $d$ and $h$, with $h(0)=0 \wedge h^{\prime}(0)\neq0$, satisfying
-\begin{displaymath}
-R_{k}(t) = d(t)h(t)^{k}
-\end{displaymath}
+$R_{k}(t) = d(t)h(t)^{k}$
 where $R_{k}(t) = \sum_{n\in\mathbb{N}}{d_{nk}t^{n}}$ is the formal power series with coefficients lying 
-on column $k$; finally, we write $\mathcal{R}=(d, h)$ with a little abuse of notation. Their defining structure 
-entails many useful properties, such as:
-\begin{itemize} 
-\item matrix-vector product $\mathcal{R}\cdot \textbf{a}$ is defined as 
-    $ d(t)A(h(t))$, where $A$ is a formal power series
-    with coefficients belonging to vector $\textbf{a}$ and $\mathcal{R}=(d, h)$;
-\item matrix-matrix product $\mathcal{R}\cdot \mathcal{W}$ is defined as 
-    $(d(t)g(h(t)), l(h(t)))$, where $\mathcal{R}=(d, h)$ and $\mathcal{W}=(g, l)$;
-\item identity matrix $I$ is $(1, t)$;
-\item the inverse $\mathcal{R}^{-1}$ of $\mathcal{R}=(d, h)$ is defined as 
-    $\left(\frac{1}{d(\bar{h}(t))}, \bar{h}\right)$, where $\bar{h}$ is the \emph{compositional inverse} 
-    of $h$, namely $\bar{h}(h(t))=t$;
-\item the set of these matrices is a \emph{group} with matrix-matrix product as operation.    
-\end{itemize}
+on column $k$; finally, we write $\mathcal{R}$ as a pair, namely $\mathcal{R}=(d, h)$. 
 
 In the rest of this document we assume that $\mathcal{R}_{m}\in\mathbb{C}^{m\times m}$ is a \emph{finite Riordan matrix}, 
 hence $\sigma(\mathcal{R}_{m})= \lbrace \lambda_{1} \rbrace$, so $\nu=1$, where $\lambda_{1}=1$ 
-with multiplicity $m_{1}=m$. We give the following identity that is repeatedly used:
+with multiplicity $m_{1}=m$. 
+
+
+Therefore, the generalized Lagrange base is composed of polynomials
 \begin{displaymath}
   \Phi_{1j}(z) = \sum_{k=0}^{j-1}{\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}
 \end{displaymath}
@@ -85,9 +71,11 @@ matrix $\mathcal{R}_{m}$ where $m=8$:
 \end{displaymath}
 Above equations can be compressed in matrix notation:
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0 & 0\\- \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0\\\frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0\\- \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0\\\frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0\\- \frac{1}{5040} & \frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1\end{matrix}\right] \cdot \left[\begin{matrix}1\\z\\\frac{z^{2}}{2!}\\\frac{z^{3}}{3!}\\\frac{z^{4}}{4!}\\\frac{z^{5}}{5!}\\\frac{z^{6}}{6!}\\\frac{z^{7}}{7!}\end{matrix}\right] 
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0 & 0\\- \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0\\\frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0\\- \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0\\\frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0\\- \frac{1}{5040} & \frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1\end{matrix}\right] 
 \end{displaymath}
-the coefficient matrix is a \emph{Toeplitz matrix}.
+multiplied on the right by the vector $\left[\begin{matrix}1\,z\,\frac{z^{2}}{2!}\,\frac{z^{3}}{3!}\,\frac{z^{4}}{4!}\,\frac{z^{5}}{5!}\,\frac{z^{6}}{6!}\,\frac{z^{7}}{7!}\end{matrix}\right]^{T}$
+; the coefficient matrix is a \emph{Toeplitz matrix}.
+
 
 \section{$f(z)=\frac{1}{z}$}
 
@@ -341,9 +329,10 @@ therefore $\mathcal{C}_{m}^{-1}$ is
 \begin{displaymath}
 \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & -2 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 1 & -3 & 1 & 0 & 0 & 0 & 0\\0 & 0 & 3 & -4 & 1 & 0 & 0 & 0\\0 & 0 & -1 & 6 & -5 & 1 & 0 & 0\\0 & 0 & 0 & -4 & 10 & -6 & 1 & 0\\0 & 0 & 0 & 1 & -10 & 15 & -7 & 1\end{matrix}\right]
 \end{displaymath}
-$\mathcal{C}_{m}^{r}$ is
+since $\mathcal{C}_{m}^{r}$ is too big we report $\mathcal{C}_{m}^{r}\textbf{e}_{1}$ 
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\r & 1 & 0 & 0 & 0 & 0 & 0 & 0\\r \left(r + 1\right) & 2 r & 1 & 0 & 0 & 0 & 0 & 0\\\frac{r}{2} \left(2 r^{2} + 5 r + 3\right) & r \left(3 r + 2\right) & 3 r & 1 & 0 & 0 & 0 & 0\\\frac{r}{3} \left(3 r^{3} + 13 r^{2} + 18 r + 8\right) & r \left(4 r^{2} + 7 r + 3\right) & 3 r \left(2 r + 1\right) & 4 r & 1 & 0 & 0 & 0\\\frac{r}{12} \left(12 r^{4} + 77 r^{3} + 178 r^{2} + 175 r + 62\right) & \frac{r}{3} \left(15 r^{3} + 47 r^{2} + 48 r + 16\right) & \frac{r}{2} \left(20 r^{2} + 27 r + 9\right) & 2 r \left(5 r + 2\right) & 5 r & 1 & 0 & 0\\\frac{r}{30} \left(30 r^{5} + 261 r^{4} + 875 r^{3} + 1405 r^{2} + 1075 r + 314\right) & \frac{r}{6} \left(36 r^{4} + 171 r^{3} + 298 r^{2} + 225 r + 62\right) & r \left(15 r^{3} + 37 r^{2} + 30 r + 8\right) & 2 r \left(10 r^{2} + 11 r + 3\right) & 5 r \left(3 r + 1\right) & 6 r & 1 & 0\\\frac{r}{60} \left(60 r^{6} + 669 r^{5} + 3002 r^{4} + 6900 r^{3} + 8510 r^{2} + 5301 r + 1298\right) & \frac{r}{60} \left(420 r^{5} + 2754 r^{4} + 7075 r^{3} + 8860 r^{2} + 5375 r + 1256\right) & \frac{r}{4} \left(84 r^{4} + 319 r^{3} + 448 r^{2} + 275 r + 62\right) & \frac{r}{3} \left(105 r^{3} + 214 r^{2} + 144 r + 32\right) & \frac{5 r}{2} \left(14 r^{2} + 13 r + 3\right) & 3 r \left(7 r + 2\right) & 7 r & 1\end{matrix}\right]
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\r & 1 & 0 & 0 & 0 & 0 & 0 & 0\\r \left(r + 1\right) & 2 r & 1 & 0 & 0 & 0 & 0 & 0\\\frac{r}{2} \left(2 r^{2} + 5 r + 3\right) & r \left(3 r + 2\right) & 3 r & 1 & 0 & 0 & 0 & 0\\\frac{r}{3} \left(3 r^{3} + 13 r^{2} + 18 r + 8\right) & r \left(4 r^{2} + 7 r + 3\right) & 3 r \left(2 r + 1\right) & 4 r & 1 & 0 & 0 & 0\\\frac{r}{12} \left(12 r^{4} + 77 r^{3} + 178 r^{2} + 175 r + 62\right) & \frac{r}{3} \left(15 r^{3} + 47 r^{2} + 48 r + 16\right) & \frac{r}{2} \left(20 r^{2} + 27 r + 9\right) & 2 r \left(5 r + 2\right) & 5 r & 1 & 0 & 0\\\frac{r}{30} \left(30 r^{5} + 261 r^{4} + 875 r^{3} + 1405 r^{2} + 1075 r + 314\right) & \frac{r}{6} \left(36 r^{4} + 171 r^{3} + 298 r^{2} + 225 r + 62\right) & r \left(15 r^{3} + 37 r^{2} + 30 r + 8\right) & 2 r \left(10 r^{2} + 11 r + 3\right) & 5 r \left(3 r + 1\right) & 6 r & 1 & 0\\\frac{r}{60} \left(60 r^{6} + 669 r^{5} + 3002 r^{4} + 6900 r^{3} + 8510 r^{2} + 5301 r + 1298\right) & \frac{r}{60} \left(420 r^{5} + 2754 r^{4} + 7075 r^{3} + 8860 r^{2} + 5375 r + 1256\right) & \frac{r}{4} \left(84 r^{4} + 319 r^{3} + 448 r^{2} + 275 r + 62\right) & \frac{r}{3} \left(105 r^{3} + 214 r^{2} + 144 r + 32\right) & \frac{5 r}{2} \left(14 r^{2} + 13 r + 3\right) & 3 r \left(7 r + 2\right) & 7 r & 1\end{matrix}\right]
+\left[\begin{matrix}1 \\r \\r \left(r + 1\right) \\\frac{r}{2} \left(2 r^{2} + 5 r + 3\right) \\\frac{r}{3} \left(3 r^{3} + 13 r^{2} + 18 r + 8\right) \\\frac{r}{12} \left(12 r^{4} + 77 r^{3} + 178 r^{2} + 175 r + 62\right) \\\frac{r}{30} \left(30 r^{5} + 261 r^{4} + 875 r^{3} + 1405 r^{2} + 1075 r + 314\right) \\\frac{r}{60} \left(60 r^{6} + 669 r^{5} + 3002 r^{4} + 6900 r^{3} + 8510 r^{2} + 5301 r + 1298\right) \end{matrix}\right]
 \end{displaymath}
 finally, $\sqrt{\mathcal{C}_{m}}$ is
 \begin{displaymath}
@@ -378,3 +367,20 @@ For the sake of clarity, choose $r=8$ to obtain
     \mathcal{F}^{8} = \left[\begin{matrix}f_{9} & f_{8}\\f_{8} & f_{7}\end{matrix}\right] = \left[\begin{matrix}34 & 21\\21 & 13\end{matrix}\right]
     \end{displaymath}
 where $f_{n}$ is the $n$-th Fibonacci number within sequence A000045 in the OEIS.
+
+\section*{Facts about Riordan matrices}
+
+Defining structure of Riordan matrices entails many useful properties, such as:
+\begin{itemize} 
+\item matrix-vector product $\mathcal{R}\cdot \textbf{a}$ is defined as 
+    $ d(t)A(h(t))$, where $A$ is a formal power series
+    with coefficients belonging to vector $\textbf{a}$ and $\mathcal{R}=(d, h)$;
+\item matrix-matrix product $\mathcal{R}\cdot \mathcal{W}$ is defined as 
+    $(d(t)g(h(t)), l(h(t)))$, where $\mathcal{R}=(d, h)$ and $\mathcal{W}=(g, l)$;
+\item identity matrix $I$ is $(1, t)$;
+\item the inverse $\mathcal{R}^{-1}$ of $\mathcal{R}=(d, h)$ is defined as 
+    $\left(\frac{1}{d(\bar{h}(t))}, \bar{h}\right)$, where $\bar{h}$ is the \emph{compositional inverse} 
+    of $h$, namely $\bar{h}(h(t))=t$;
+\item the set of these matrices is a \emph{group} with matrix-matrix product as operation.    
+\end{itemize}
+
