@@ -294,6 +294,51 @@ g{\left (z \right )} &= \frac{33 z^{7}}{2048} - \frac{273 z^{6}}{2048} + \frac{1
 \end{split}
 \end{displaymath}
 
+\section{$f(z)=e^{\alpha z}$}
+
+The general form of $j$th derivative of function $f$ is 
+$$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = \alpha^{j} e^{\alpha z}$$ 
+therefore
+\begin{displaymath}
+\begin{split}
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. \alpha^{j-1} e^{\alpha z} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. e^{\alpha z} \right|_{z=\lambda_{1}}\alpha^{j-1} \Phi_{1j}(z)} \\
+       &= e^{\alpha}\sum_{j=1}^{m}{\sum_{k=0}^{j-1}{\frac{\alpha^{j-1}}{(j-1)!}  \frac{(j-1)!(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}}\\
+\end{split}
+\end{displaymath}
+yielding equation
+\begin{equation}
+  g(z) = e^{\alpha}\sum_{j=1}^{m}{\sum_{k=0}^{j-1}{\frac{(-\alpha)^{j-1}}{(j-1)!}{{j-1}\choose{k}}(-z)^{k}}} 
+\end{equation}
+We swap summations holding the same argument explained in previous section:
+\begin{displaymath}
+  g(z) = e^{\alpha}\sum_{k=0}^{m-1}{\left(\sum_{j=k+1}^{m}{\frac{(-\alpha)^{j-1}}{(j-1)!}{{j-1}\choose{k}}}\right)(-z)^{k}}
+\end{displaymath}
+yielding equation
+\begin{equation}
+  g(z) = e^{\alpha}\sum_{k=0}^{m-1}{\left(\sum_{j=k}^{m-1}{\frac{(-\alpha)^{j}}{j!}{{j}\choose{k}}}\right)(-z)^{k}}
+\end{equation}
+namely $e^{\alpha\mathcal{R}_{m}}=g(\mathcal{R}_{m})$ for any proper, 
+finite Riordan matrix $\mathcal{R}_{m}$.
+
+For the sake of clarity, let $m=8$ to define polynomial $g$:
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= e^{\alpha}\left(\frac{\alpha^{7} z^{7}}{5040}\right. \\
+&+ \frac{\alpha^{6} z^{6}}{720} \left(- \alpha + 1\right) \\
+&+ \frac{\alpha^{5} z^{5}}{240} \left(\alpha^{2} - 2 \alpha + 2\right) \\
+&+ \frac{\alpha^{4} z^{4}}{144} \left(- \alpha^{3} + 3 \alpha^{2} - 6 \alpha + 6\right) \\
+&+ \frac{\alpha^{3} z^{3}}{144} \left(\alpha^{4} - 4 \alpha^{3} + 12 \alpha^{2} - 24 \alpha + 24\right) \\
+&+ \frac{\alpha^{2} z^{2}}{240} \left(- \alpha^{5} + 5 \alpha^{4} - 20 \alpha^{3} + 60 \alpha^{2} - 120 \alpha + 120\right) \\
+&+ \frac{\alpha z}{720} \left(\alpha^{6} - 6 \alpha^{5} + 30 \alpha^{4} - 120 \alpha^{3} + 360 \alpha^{2} - 720 \alpha + 720\right) \\
+&- \left.\frac{\alpha^{7}}{5040} + \frac{\alpha^{6}}{720} - \frac{\alpha^{5}}{120} + \frac{\alpha^{4}}{24} - \frac{\alpha^{3}}{6} + \frac{\alpha^{2}}{2} -\alpha + 1\right) 
+\end{split}
+\end{displaymath}
+choosing $\alpha=1$ yields:
+$$ g{\left (z \right )} = e \left(\frac{z^{7}}{5040} + \frac{z^{5}}{240} + \frac{z^{4}}{72} + \frac{z^{3}}{16} + \frac{11 z^{2}}{60} + \frac{53 z}{144} + \frac{103}{280}\right) $$
+on the other hand, choosing $\alpha=-1$ yields:
+$$ e\,g{\left (z \right )} = - \frac{z^{7}}{5040} + \frac{z^{6}}{360} - \frac{z^{5}}{48} + \frac{z^{4}}{9} - \frac{65 z^{3}}{144} + \frac{163 z^{2}}{120} - \frac{1957 z}{720} + \frac{685}{252} $$
 
 \section{Case studies}
 
@@ -311,11 +356,18 @@ $\mathcal{P}_{m}^{r}$ is
 \begin{displaymath}
 \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\r & 1 & 0 & 0 & 0 & 0 & 0 & 0\\r^{2} & 2 r & 1 & 0 & 0 & 0 & 0 & 0\\r^{3} & 3 r^{2} & 3 r & 1 & 0 & 0 & 0 & 0\\r^{4} & 4 r^{3} & 6 r^{2} & 4 r & 1 & 0 & 0 & 0\\r^{5} & 5 r^{4} & 10 r^{3} & 10 r^{2} & 5 r & 1 & 0 & 0\\r^{6} & 6 r^{5} & 15 r^{4} & 20 r^{3} & 15 r^{2} & 6 r & 1 & 0\\r^{7} & 7 r^{6} & 21 r^{5} & 35 r^{4} & 35 r^{3} & 21 r^{2} & 7 r & 1\end{matrix}\right]
 \end{displaymath}
-finally, $\sqrt{\mathcal{P}_{m}}$ is
+$\sqrt{\mathcal{P}_{m}}$ is
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{1}{8} & \frac{3}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{1}{16} & \frac{1}{2} & \frac{3}{2} & 2 & 1 & 0 & 0 & 0\\\frac{1}{32} & \frac{5}{16} & \frac{5}{4} & \frac{5}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{1}{64} & \frac{3}{16} & \frac{15}{16} & \frac{5}{2} & \frac{15}{4} & 3 & 1 & 0\\\frac{1}{128} & \frac{7}{64} & \frac{21}{32} & \frac{35}{16} & \frac{35}{8} & \frac{21}{4} & \frac{7}{2} & 1\end{matrix}\right]
+\indent\indent\indent \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{1}{8} & \frac{3}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{1}{16} & \frac{1}{2} & \frac{3}{2} & 2 & 1 & 0 & 0 & 0\\\frac{1}{32} & \frac{5}{16} & \frac{5}{4} & \frac{5}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{1}{64} & \frac{3}{16} & \frac{15}{16} & \frac{5}{2} & \frac{15}{4} & 3 & 1 & 0\\\frac{1}{128} & \frac{7}{64} & \frac{21}{32} & \frac{35}{16} & \frac{35}{8} & \frac{21}{4} & \frac{7}{2} & 1\end{matrix}\right]
 \end{displaymath}
-evaluating corresponding $g$ polynomials on $\mathcal{P}_{m}$, as required.
+finally, $e^{\mathcal{P}_{m}}$ is
+\begin{displaymath}
+e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\2 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\5 & 6 & 3 & 1 & 0 & 0 & 0 & 0\\15 & 20 & 12 & 4 & 1 & 0 & 0 & 0\\52 & 75 & 50 & 20 & 5 & 1 & 0 & 0\\203 & 312 & 225 & 100 & 30 & 6 & 1 & 0\\877 & 1421 & 1092 & 525 & 175 & 42 & 7 & 1\end{matrix}\right]
+\end{displaymath}
+such matrix is known as $A056857$ in the OEIS, there we found
+the interesting relation $$e^{\mathcal{P}_{m}}=e\left(S_{m}\cdot P\cdot S_{m}^{-1}\right)$$
+where $S_{m}$ is the matrix of Stirling numbers of the second kind, defined in a moment
+%evaluating corresponding $g$ polynomials on $\mathcal{P}_{m}$, as required.
 
 
 
@@ -334,9 +386,38 @@ since $\mathcal{C}_{m}^{r}$ is too big we report $\mathcal{C}_{m}^{r}\textbf{e}_
 %\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\r & 1 & 0 & 0 & 0 & 0 & 0 & 0\\r \left(r + 1\right) & 2 r & 1 & 0 & 0 & 0 & 0 & 0\\\frac{r}{2} \left(2 r^{2} + 5 r + 3\right) & r \left(3 r + 2\right) & 3 r & 1 & 0 & 0 & 0 & 0\\\frac{r}{3} \left(3 r^{3} + 13 r^{2} + 18 r + 8\right) & r \left(4 r^{2} + 7 r + 3\right) & 3 r \left(2 r + 1\right) & 4 r & 1 & 0 & 0 & 0\\\frac{r}{12} \left(12 r^{4} + 77 r^{3} + 178 r^{2} + 175 r + 62\right) & \frac{r}{3} \left(15 r^{3} + 47 r^{2} + 48 r + 16\right) & \frac{r}{2} \left(20 r^{2} + 27 r + 9\right) & 2 r \left(5 r + 2\right) & 5 r & 1 & 0 & 0\\\frac{r}{30} \left(30 r^{5} + 261 r^{4} + 875 r^{3} + 1405 r^{2} + 1075 r + 314\right) & \frac{r}{6} \left(36 r^{4} + 171 r^{3} + 298 r^{2} + 225 r + 62\right) & r \left(15 r^{3} + 37 r^{2} + 30 r + 8\right) & 2 r \left(10 r^{2} + 11 r + 3\right) & 5 r \left(3 r + 1\right) & 6 r & 1 & 0\\\frac{r}{60} \left(60 r^{6} + 669 r^{5} + 3002 r^{4} + 6900 r^{3} + 8510 r^{2} + 5301 r + 1298\right) & \frac{r}{60} \left(420 r^{5} + 2754 r^{4} + 7075 r^{3} + 8860 r^{2} + 5375 r + 1256\right) & \frac{r}{4} \left(84 r^{4} + 319 r^{3} + 448 r^{2} + 275 r + 62\right) & \frac{r}{3} \left(105 r^{3} + 214 r^{2} + 144 r + 32\right) & \frac{5 r}{2} \left(14 r^{2} + 13 r + 3\right) & 3 r \left(7 r + 2\right) & 7 r & 1\end{matrix}\right]
 \left[\begin{matrix}1 \\r \\r \left(r + 1\right) \\\frac{r}{2} \left(2 r^{2} + 5 r + 3\right) \\\frac{r}{3} \left(3 r^{3} + 13 r^{2} + 18 r + 8\right) \\\frac{r}{12} \left(12 r^{4} + 77 r^{3} + 178 r^{2} + 175 r + 62\right) \\\frac{r}{30} \left(30 r^{5} + 261 r^{4} + 875 r^{3} + 1405 r^{2} + 1075 r + 314\right) \\\frac{r}{60} \left(60 r^{6} + 669 r^{5} + 3002 r^{4} + 6900 r^{3} + 8510 r^{2} + 5301 r + 1298\right) \end{matrix}\right]
 \end{displaymath}
-finally, $\sqrt{\mathcal{C}_{m}}$ is
+$\sqrt{\mathcal{C}_{m}}$ is
 \begin{displaymath}
 \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{3}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{3}{2} & \frac{7}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{55}{16} & \frac{15}{4} & 3 & 2 & 1 & 0 & 0 & 0\\\frac{545}{64} & \frac{143}{16} & \frac{55}{8} & \frac{9}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{709}{32} & \frac{727}{32} & \frac{273}{16} & 11 & \frac{25}{4} & 3 & 1 & 0\\\frac{15249}{256} & \frac{3855}{64} & \frac{2853}{64} & \frac{455}{16} & \frac{65}{4} & \frac{33}{4} & \frac{7}{2} & 1\end{matrix}\right]
+\end{displaymath}
+finally, $e^{\mathcal{C}_{m}}$ is
+\begin{displaymath}
+e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\3 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{23}{2} & 8 & 3 & 1 & 0 & 0 & 0 & 0\\\frac{154}{3} & 37 & 15 & 4 & 1 & 0 & 0 & 0\\\frac{1027}{4} & \frac{572}{3} & \frac{163}{2} & 24 & 5 & 1 & 0 & 0\\\frac{7046}{5} & \frac{6439}{6} & 478 & 150 & 35 & 6 & 1 & 0\\\frac{502481}{60} & \frac{390899}{60} & \frac{12005}{4} & \frac{2965}{3} & \frac{495}{2} & 48 & 7 & 1\end{matrix}\right]
+\end{displaymath}
+evaluating corresponding $g$ polynomials on $\mathcal{C}_{m}$, as required.
+
+\subsection{Stirling array $\mathcal{S}$}
+
+Let $m=8$ and define
+\begin{displaymath}
+\mathcal{S}_{m} = \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 3 & 1 & 0 & 0 & 0 & 0\\0 & 1 & 7 & 6 & 1 & 0 & 0 & 0\\0 & 1 & 15 & 25 & 10 & 1 & 0 & 0\\0 & 1 & 31 & 90 & 65 & 15 & 1 & 0\\0 & 1 & 63 & 301 & 350 & 140 & 21 & 1\end{matrix}\right]
+\end{displaymath}
+therefore $\mathcal{S}_{m}^{-1}$ is
+\begin{displaymath}
+\quad\quad\quad\quad\quad\quad\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & -1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 2 & -3 & 1 & 0 & 0 & 0 & 0\\0 & -6 & 11 & -6 & 1 & 0 & 0 & 0\\0 & 24 & -50 & 35 & -10 & 1 & 0 & 0\\0 & -120 & 274 & -225 & 85 & -15 & 1 & 0\\0 & 720 & -1764 & 1624 & -735 & 175 & -21 & 1\end{matrix}\right]
+\end{displaymath}
+since $\mathcal{S}_{m}^{r}$ is too big we report $\mathcal{S}_{m}^{r}\textbf{e}_{1}$ 
+\begin{displaymath}
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & r & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{r}{2} \left(3 r - 1\right) & 3 r & 1 & 0 & 0 & 0 & 0\\0 & \frac{r}{2} \left(6 r^{2} - 5 r + 1\right) & r \left(9 r - 2\right) & 6 r & 1 & 0 & 0 & 0\\0 & \frac{r}{6} \left(45 r^{3} - 65 r^{2} + 30 r - 4\right) & \frac{5 r}{2} \left(12 r^{2} - 7 r + 1\right) & 5 r \left(6 r - 1\right) & 10 r & 1 & 0 & 0\\0 & \frac{r}{24} \left(540 r^{4} - 1155 r^{3} + 890 r^{2} - 273 r + 22\right) & \frac{r}{2} \left(225 r^{3} - 235 r^{2} + 80 r - 8\right) & \frac{15 r}{2} \left(20 r^{2} - 9 r + 1\right) & 5 r \left(15 r - 2\right) & 15 r & 1 & 0\\0 & \frac{r}{24} \left(1890 r^{5} - 5481 r^{4} + 6125 r^{3} - 3129 r^{2} + 637 r - 18\right) & \frac{7 r}{24} \left(1620 r^{4} - 2565 r^{3} + 1490 r^{2} - 351 r + 22\right) & \frac{7 r}{2} \left(225 r^{3} - 185 r^{2} + 50 r - 4\right) & \frac{35 r}{2} \left(30 r^{2} - 11 r + 1\right) & \frac{35 r}{2} \left(9 r - 1\right) & 21 r & 1\end{matrix}\right]
+\left[\begin{matrix} 0 \\ 1 \\ r \\ \frac{r}{2} \left(3 r - 1\right) \\ \frac{r}{2} \left(6 r^{2} - 5 r + 1\right) \\ \frac{r}{6} \left(45 r^{3} - 65 r^{2} + 30 r - 4\right) \\ \frac{r}{24} \left(540 r^{4} - 1155 r^{3} + 890 r^{2} - 273 r + 22\right) \\ \frac{r}{24} \left(1890 r^{5} - 5481 r^{4} + 6125 r^{3} - 3129 r^{2} + 637 r - 18\right) \end{matrix}\right]
+\end{displaymath}
+$\sqrt{\mathcal{S}_{m}}$ is
+\begin{displaymath}
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{8} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\0 & 0 & \frac{5}{4} & 3 & 1 & 0 & 0 & 0\\0 & \frac{1}{32} & \frac{5}{8} & 5 & 5 & 1 & 0 & 0\\0 & - \frac{7}{128} & \frac{11}{32} & \frac{45}{8} & \frac{55}{4} & \frac{15}{2} & 1 & 0\\0 & \frac{1}{128} & - \frac{7}{128} & \frac{161}{32} & \frac{105}{4} & \frac{245}{8} & \frac{21}{2} & 1\end{matrix}\right]
+\end{displaymath}
+finally, $e^{\mathcal{S}_{m}}$ is
+\begin{displaymath}
+e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{5}{2} & 3 & 1 & 0 & 0 & 0 & 0\\0 & \frac{21}{2} & 16 & 6 & 1 & 0 & 0 & 0\\0 & \frac{203}{3} & \frac{235}{2} & 55 & 10 & 1 & 0 & 0\\0 & \frac{14681}{24} & 1176 & \frac{1245}{2} & 140 & 15 & 1 & 0\\0 & \frac{22018}{3} & \frac{367745}{24} & 8911 & \frac{4515}{2} & \frac{595}{2} & 21 & 1\end{matrix}\right]
 \end{displaymath}
 evaluating corresponding $g$ polynomials on $\mathcal{C}_{m}$, as required.
 
