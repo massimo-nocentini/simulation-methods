@@ -372,7 +372,7 @@ Also, it is interesting the application of function $f(z)=e^{\alpha z}$ to the m
 \begin{displaymath}
 H = \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 2 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 3 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 4 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 5 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 6 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 7 & 0\end{matrix}\right]
 \end{displaymath}
-It is required to recompute the generalized Langrange base
+It requires the generalized Langrange base
 \begin{displaymath}
 \begin{split}
 &\left\{\Phi_{ 1, 1 }{\left (z \right )} = 1, \Phi_{ 1, 2 }{\left (z \right )} = z, \Phi_{ 1, 3 }{\left (z \right )} = \frac{z^{2}}{2},\right. \\
@@ -387,12 +387,12 @@ g{\left (z \right )} &= \frac{\alpha^{7} z^{7}}{5040} + \frac{\alpha^{6} z^{6}}{
 &+ \frac{\alpha^{3} z^{3}}{6} + \frac{\alpha^{2} z^{2}}{2} + \alpha z + 1
 \end{split}
 \end{displaymath}
-therefore $e^{\alpha H}$ is the matrix
+therefore $g(H)=e^{\alpha H}$ is the matrix
 \begin{displaymath}
 \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\alpha & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\alpha^{2} & 2 \alpha & 1 & 0 & 0 & 0 & 0 & 0\\\alpha^{3} & 3 \alpha^{2} & 3 \alpha & 1 & 0 & 0 & 0 & 0\\\alpha^{4} & 4 \alpha^{3} & 6 \alpha^{2} & 4 \alpha & 1 & 0 & 0 & 0\\\alpha^{5} & 5 \alpha^{4} & 10 \alpha^{3} & 10 \alpha^{2} & 5 \alpha & 1 & 0 & 0\\\alpha^{6} & 6 \alpha^{5} & 15 \alpha^{4} & 20 \alpha^{3} & 15 \alpha^{2} & 6 \alpha & 1 & 0\\\alpha^{7} & 7 \alpha^{6} & 21 \alpha^{5} & 35 \alpha^{4} & 35 \alpha^{3} & 21 \alpha^{2} & 7 \alpha & 1\end{matrix}\right]
 \end{displaymath}
-yielding the identity $e^{\alpha H} = \mathcal{P}_{m}^{\alpha}$.
-
+yielding the identity $e^{\alpha H} = \mathcal{P}_{m}^{\alpha}$;
+moreover $e^{(\alpha+\beta) H} = \mathcal{P}_{m}^{\alpha}\mathcal{P}_{m}^{\beta} = \mathcal{P}_{m}^{\alpha+\beta}$ also holds.
 
 
 \subsection{Catalan array $\mathcal{C}$}
