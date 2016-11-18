@@ -71,7 +71,8 @@ matrix $\mathcal{R}_{m}$ where $m=8$:
 \end{displaymath}
 Above equations can be compressed in matrix notation:
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0 & 0\\- \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0\\\frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0\\- \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0\\\frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0\\- \frac{1}{5040} & \frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1\end{matrix}\right] 
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0 & 0\\- \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0\\\frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0\\- \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0\\\frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0\\- \frac{1}{5040} & \frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1\end{matrix}\right] 
+\left[\begin{matrix}1 &   &   &   &   &   &   &  \\-1 & 1 &   &   &   &   &   &  \\\frac{1}{2} & -1 & 1 &   &   &   &   &  \\- \frac{1}{6} & \frac{1}{2} & -1 & 1 &   &   &   &  \\\frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 &   &   &  \\- \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 &   &  \\\frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 &  \\- \frac{1}{5040} & \frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1\end{matrix}\right] 
 \end{displaymath}
 which is a \emph{Toeplitz matrix}, multiplied on the right by the vector 
 $$\left[\begin{matrix}1\,z\,\frac{z^{2}}{2!}\,\frac{z^{3}}{3!}\,\frac{z^{4}}{4!}\,\frac{z^{5}}{5!}\,\frac{z^{6}}{6!}\,\frac{z^{7}}{7!}\end{matrix}\right]^{T}$$
@@ -391,23 +392,28 @@ g{\left (z \right )} = \frac{z^{7}}{7} - \frac{7 z^{6}}{6} + \frac{21 z^{5}}{5} 
 
 Let $m=8$ and define
 \begin{displaymath}
-\mathcal{P}_{m}=\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\1 & 3 & 3 & 1 & 0 & 0 & 0 & 0\\1 & 4 & 6 & 4 & 1 & 0 & 0 & 0\\1 & 5 & 10 & 10 & 5 & 1 & 0 & 0\\1 & 6 & 15 & 20 & 15 & 6 & 1 & 0\\1 & 7 & 21 & 35 & 35 & 21 & 7 & 1\end{matrix}\right]
+%\mathcal{P}_{m}=\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\1 & 3 & 3 & 1 & 0 & 0 & 0 & 0\\1 & 4 & 6 & 4 & 1 & 0 & 0 & 0\\1 & 5 & 10 & 10 & 5 & 1 & 0 & 0\\1 & 6 & 15 & 20 & 15 & 6 & 1 & 0\\1 & 7 & 21 & 35 & 35 & 21 & 7 & 1\end{matrix}\right]
+\mathcal{P}_{m}=\left[\begin{matrix}1 &   &   &   &   &   &   &  \\1 & 1 &   &   &   &   &   &  \\1 & 2 & 1 &   &   &   &   &  \\1 & 3 & 3 & 1 &   &   &   &  \\1 & 4 & 6 & 4 & 1 &   &   &  \\1 & 5 & 10 & 10 & 5 & 1 &   &  \\1 & 6 & 15 & 20 & 15 & 6 & 1 &  \\1 & 7 & 21 & 35 & 35 & 21 & 7 & 1\end{matrix}\right]
 \end{displaymath}
 therefore $\mathcal{P}_{m}^{-1}$ is
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\1 & -2 & 1 & 0 & 0 & 0 & 0 & 0\\-1 & 3 & -3 & 1 & 0 & 0 & 0 & 0\\1 & -4 & 6 & -4 & 1 & 0 & 0 & 0\\-1 & 5 & -10 & 10 & -5 & 1 & 0 & 0\\1 & -6 & 15 & -20 & 15 & -6 & 1 & 0\\-1 & 7 & -21 & 35 & -35 & 21 & -7 & 1\end{matrix}\right]
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\1 & -2 & 1 & 0 & 0 & 0 & 0 & 0\\-1 & 3 & -3 & 1 & 0 & 0 & 0 & 0\\1 & -4 & 6 & -4 & 1 & 0 & 0 & 0\\-1 & 5 & -10 & 10 & -5 & 1 & 0 & 0\\1 & -6 & 15 & -20 & 15 & -6 & 1 & 0\\-1 & 7 & -21 & 35 & -35 & 21 & -7 & 1\end{matrix}\right]
+\left[\begin{matrix}1 &   &   &   &   &   &   &  \\-1 & 1 &   &   &   &   &   &  \\1 & -2 & 1 &   &   &   &   &  \\-1 & 3 & -3 & 1 &   &   &   &  \\1 & -4 & 6 & -4 & 1 &   &   &  \\-1 & 5 & -10 & 10 & -5 & 1 &   &  \\1 & -6 & 15 & -20 & 15 & -6 & 1 &  \\-1 & 7 & -21 & 35 & -35 & 21 & -7 & 1\end{matrix}\right]
 \end{displaymath}
 $\mathcal{P}_{m}^{r}$ is
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\r & 1 & 0 & 0 & 0 & 0 & 0 & 0\\r^{2} & 2 r & 1 & 0 & 0 & 0 & 0 & 0\\r^{3} & 3 r^{2} & 3 r & 1 & 0 & 0 & 0 & 0\\r^{4} & 4 r^{3} & 6 r^{2} & 4 r & 1 & 0 & 0 & 0\\r^{5} & 5 r^{4} & 10 r^{3} & 10 r^{2} & 5 r & 1 & 0 & 0\\r^{6} & 6 r^{5} & 15 r^{4} & 20 r^{3} & 15 r^{2} & 6 r & 1 & 0\\r^{7} & 7 r^{6} & 21 r^{5} & 35 r^{4} & 35 r^{3} & 21 r^{2} & 7 r & 1\end{matrix}\right]
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\r & 1 & 0 & 0 & 0 & 0 & 0 & 0\\r^{2} & 2 r & 1 & 0 & 0 & 0 & 0 & 0\\r^{3} & 3 r^{2} & 3 r & 1 & 0 & 0 & 0 & 0\\r^{4} & 4 r^{3} & 6 r^{2} & 4 r & 1 & 0 & 0 & 0\\r^{5} & 5 r^{4} & 10 r^{3} & 10 r^{2} & 5 r & 1 & 0 & 0\\r^{6} & 6 r^{5} & 15 r^{4} & 20 r^{3} & 15 r^{2} & 6 r & 1 & 0\\r^{7} & 7 r^{6} & 21 r^{5} & 35 r^{4} & 35 r^{3} & 21 r^{2} & 7 r & 1\end{matrix}\right]
+\left[\begin{matrix}1 &   &   &   &   &   &   &  \\r & 1 &   &   &   &   &   &  \\r^{2} & 2 r & 1 &   &   &   &   &  \\r^{3} & 3 r^{2} & 3 r & 1 &   &   &   &  \\r^{4} & 4 r^{3} & 6 r^{2} & 4 r & 1 &   &   &  \\r^{5} & 5 r^{4} & 10 r^{3} & 10 r^{2} & 5 r & 1 &   &  \\r^{6} & 6 r^{5} & 15 r^{4} & 20 r^{3} & 15 r^{2} & 6 r & 1 &  \\r^{7} & 7 r^{6} & 21 r^{5} & 35 r^{4} & 35 r^{3} & 21 r^{2} & 7 r & 1\end{matrix}\right]
 \end{displaymath}
 $\sqrt{\mathcal{P}_{m}}$ is
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{1}{8} & \frac{3}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{1}{16} & \frac{1}{2} & \frac{3}{2} & 2 & 1 & 0 & 0 & 0\\\frac{1}{32} & \frac{5}{16} & \frac{5}{4} & \frac{5}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{1}{64} & \frac{3}{16} & \frac{15}{16} & \frac{5}{2} & \frac{15}{4} & 3 & 1 & 0\\\frac{1}{128} & \frac{7}{64} & \frac{21}{32} & \frac{35}{16} & \frac{35}{8} & \frac{21}{4} & \frac{7}{2} & 1\end{matrix}\right]
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{1}{8} & \frac{3}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{1}{16} & \frac{1}{2} & \frac{3}{2} & 2 & 1 & 0 & 0 & 0\\\frac{1}{32} & \frac{5}{16} & \frac{5}{4} & \frac{5}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{1}{64} & \frac{3}{16} & \frac{15}{16} & \frac{5}{2} & \frac{15}{4} & 3 & 1 & 0\\\frac{1}{128} & \frac{7}{64} & \frac{21}{32} & \frac{35}{16} & \frac{35}{8} & \frac{21}{4} & \frac{7}{2} & 1\end{matrix}\right]
+\left[\begin{matrix}1 &   &   &   &   &   &   &  \\\frac{1}{2} & 1 &   &   &   &   &   &  \\\frac{1}{4} & 1 & 1 &   &   &   &   &  \\\frac{1}{8} & \frac{3}{4} & \frac{3}{2} & 1 &   &   &   &  \\\frac{1}{16} & \frac{1}{2} & \frac{3}{2} & 2 & 1 &   &   &  \\\frac{1}{32} & \frac{5}{16} & \frac{5}{4} & \frac{5}{2} & \frac{5}{2} & 1 &   &  \\\frac{1}{64} & \frac{3}{16} & \frac{15}{16} & \frac{5}{2} & \frac{15}{4} & 3 & 1 &  \\\frac{1}{128} & \frac{7}{64} & \frac{21}{32} & \frac{35}{16} & \frac{35}{8} & \frac{21}{4} & \frac{7}{2} & 1\end{matrix}\right]
 \end{displaymath}
 finally, $e^{\mathcal{P}_{m}}$ is
 \begin{displaymath}
-e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\2 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\5 & 6 & 3 & 1 & 0 & 0 & 0 & 0\\15 & 20 & 12 & 4 & 1 & 0 & 0 & 0\\52 & 75 & 50 & 20 & 5 & 1 & 0 & 0\\203 & 312 & 225 & 100 & 30 & 6 & 1 & 0\\877 & 1421 & 1092 & 525 & 175 & 42 & 7 & 1\end{matrix}\right]
+%e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\2 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\5 & 6 & 3 & 1 & 0 & 0 & 0 & 0\\15 & 20 & 12 & 4 & 1 & 0 & 0 & 0\\52 & 75 & 50 & 20 & 5 & 1 & 0 & 0\\203 & 312 & 225 & 100 & 30 & 6 & 1 & 0\\877 & 1421 & 1092 & 525 & 175 & 42 & 7 & 1\end{matrix}\right]
+e \left[\begin{matrix}1 &   &   &   &   &   &   &  \\1 & 1 &   &   &   &   &   &  \\2 & 2 & 1 &   &   &   &   &  \\5 & 6 & 3 & 1 &   &   &   &  \\15 & 20 & 12 & 4 & 1 &   &   &  \\52 & 75 & 50 & 20 & 5 & 1 &   &  \\203 & 312 & 225 & 100 & 30 & 6 & 1 &  \\877 & 1421 & 1092 & 525 & 175 & 42 & 7 & 1\end{matrix}\right]
 \end{displaymath}
 such matrix is known as $A056857$ in the OEIS, there we found
 the interesting relation $e^{\mathcal{P}_{m}}=e\left(S_{m}\cdot P\cdot S_{m}^{-1}\right)$,
@@ -415,7 +421,8 @@ where $S_{m}$ is the matrix of Stirling numbers of the second kind, defined in a
 
 Also, it is interesting the application of function $f(z)=e^{\alpha z}$ to the matrix $H$ defined as
 \begin{displaymath}
-H = \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 2 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 3 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 4 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 5 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 6 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 7 & 0\end{matrix}\right]
+%H = \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 2 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 3 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 4 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 5 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 6 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 7 & 0\end{matrix}\right]
+H = \left[\begin{matrix} 0 &   &   &   &   &   &   &  \\1 & 0   &   &   &   &   &   &  \\  & 2 &  0  &   &   &   &   &  \\  &   & 3 &  0  &   &   &   &  \\  &   &   & 4 &  0  &   &   &  \\  &   &   &   & 5 &  0  &   &  \\  &   &   &   &   & 6 &  0  &  \\  &   &   &   &   &   & 7 &  0 \end{matrix}\right]
 \end{displaymath}
 It requires the generalized Langrange base
 \begin{displaymath}
@@ -434,7 +441,8 @@ g{\left (z \right )} &= \frac{\alpha^{7} z^{7}}{5040} + \frac{\alpha^{6} z^{6}}{
 \end{displaymath}
 therefore $g(H)=e^{\alpha H}$ is the matrix
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\alpha & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\alpha^{2} & 2 \alpha & 1 & 0 & 0 & 0 & 0 & 0\\\alpha^{3} & 3 \alpha^{2} & 3 \alpha & 1 & 0 & 0 & 0 & 0\\\alpha^{4} & 4 \alpha^{3} & 6 \alpha^{2} & 4 \alpha & 1 & 0 & 0 & 0\\\alpha^{5} & 5 \alpha^{4} & 10 \alpha^{3} & 10 \alpha^{2} & 5 \alpha & 1 & 0 & 0\\\alpha^{6} & 6 \alpha^{5} & 15 \alpha^{4} & 20 \alpha^{3} & 15 \alpha^{2} & 6 \alpha & 1 & 0\\\alpha^{7} & 7 \alpha^{6} & 21 \alpha^{5} & 35 \alpha^{4} & 35 \alpha^{3} & 21 \alpha^{2} & 7 \alpha & 1\end{matrix}\right]
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\alpha & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\alpha^{2} & 2 \alpha & 1 & 0 & 0 & 0 & 0 & 0\\\alpha^{3} & 3 \alpha^{2} & 3 \alpha & 1 & 0 & 0 & 0 & 0\\\alpha^{4} & 4 \alpha^{3} & 6 \alpha^{2} & 4 \alpha & 1 & 0 & 0 & 0\\\alpha^{5} & 5 \alpha^{4} & 10 \alpha^{3} & 10 \alpha^{2} & 5 \alpha & 1 & 0 & 0\\\alpha^{6} & 6 \alpha^{5} & 15 \alpha^{4} & 20 \alpha^{3} & 15 \alpha^{2} & 6 \alpha & 1 & 0\\\alpha^{7} & 7 \alpha^{6} & 21 \alpha^{5} & 35 \alpha^{4} & 35 \alpha^{3} & 21 \alpha^{2} & 7 \alpha & 1\end{matrix}\right]
+\left[\begin{matrix}1 &   &   &   &   &   &   &  \\\alpha & 1 &   &   &   &   &   &  \\\alpha^{2} & 2 \alpha & 1 &   &   &   &   &  \\\alpha^{3} & 3 \alpha^{2} & 3 \alpha & 1 &   &   &   &  \\\alpha^{4} & 4 \alpha^{3} & 6 \alpha^{2} & 4 \alpha & 1 &   &   &  \\\alpha^{5} & 5 \alpha^{4} & 1  \alpha^{3} & 1  \alpha^{2} & 5 \alpha & 1 &   &  \\\alpha^{6} & 6 \alpha^{5} & 15 \alpha^{4} & 2  \alpha^{3} & 15 \alpha^{2} & 6 \alpha & 1 &  \\\alpha^{7} & 7 \alpha^{6} & 21 \alpha^{5} & 35 \alpha^{4} & 35 \alpha^{3} & 21 \alpha^{2} & 7 \alpha & 1\end{matrix}\right]
 \end{displaymath}
 yielding the identity $e^{\alpha H} = \mathcal{P}_{m}^{\alpha}$;
 moreover, $e^{(\alpha+\beta) H} = \mathcal{P}_{m}^{\alpha+\beta} = \mathcal{P}_{m}^{\alpha}\mathcal{P}_{m}^{\beta} $ also holds.
@@ -445,29 +453,35 @@ Finally, $\log{\mathcal{P}_{m}}=H$ as required.
 
 Let $m=8$ and define
 \begin{displaymath}
-\mathcal{C}_{m}=\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\2 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\5 & 5 & 3 & 1 & 0 & 0 & 0 & 0\\14 & 14 & 9 & 4 & 1 & 0 & 0 & 0\\42 & 42 & 28 & 14 & 5 & 1 & 0 & 0\\132 & 132 & 90 & 48 & 20 & 6 & 1 & 0\\429 & 429 & 297 & 165 & 75 & 27 & 7 & 1\end{matrix}\right]
+%\mathcal{C}_{m}=\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\2 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\5 & 5 & 3 & 1 & 0 & 0 & 0 & 0\\14 & 14 & 9 & 4 & 1 & 0 & 0 & 0\\42 & 42 & 28 & 14 & 5 & 1 & 0 & 0\\132 & 132 & 90 & 48 & 20 & 6 & 1 & 0\\429 & 429 & 297 & 165 & 75 & 27 & 7 & 1\end{matrix}\right]
+\mathcal{C}_{m}=\left[\begin{matrix}1 &   &   &   &   &   &   &  \\1 & 1 &   &   &   &   &   &  \\2 & 2 & 1 &   &   &   &   &  \\5 & 5 & 3 & 1 &   &   &   &  \\14 & 14 & 9 & 4 & 1 &   &   &  \\42 & 42 & 28 & 14 & 5 & 1 &   &  \\132 & 132 & 9  & 48 & 2  & 6 & 1 &  \\429 & 429 & 297 & 165 & 75 & 27 & 7 & 1\end{matrix}\right]
 \end{displaymath}
 therefore $\mathcal{C}_{m}^{-1}$ is
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & -2 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 1 & -3 & 1 & 0 & 0 & 0 & 0\\0 & 0 & 3 & -4 & 1 & 0 & 0 & 0\\0 & 0 & -1 & 6 & -5 & 1 & 0 & 0\\0 & 0 & 0 & -4 & 10 & -6 & 1 & 0\\0 & 0 & 0 & 1 & -10 & 15 & -7 & 1\end{matrix}\right]
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & -2 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 1 & -3 & 1 & 0 & 0 & 0 & 0\\0 & 0 & 3 & -4 & 1 & 0 & 0 & 0\\0 & 0 & -1 & 6 & -5 & 1 & 0 & 0\\0 & 0 & 0 & -4 & 10 & -6 & 1 & 0\\0 & 0 & 0 & 1 & -10 & 15 & -7 & 1\end{matrix}\right]
+\left[\begin{matrix}1 &   &   &   &   &   &   &  \\-1 & 1 &   &   &   &   &   &  \\  & -2 & 1 &   &   &   &   &  \\  & 1 & -3 & 1 &   &   &   &  \\  &   & 3 & -4 & 1 &   &   &  \\  &   & -1 & 6 & -5 & 1 &   &  \\  &   &   & -4 & 1  & -6 & 1 &  \\  &   &   & 1 & -1  & 15 & -7 & 1\end{matrix}\right]
 \end{displaymath}
 since $\mathcal{C}_{m}^{r}$ is too big we report $\mathcal{C}_{m}^{r}\textbf{e}_{1}$ 
 \begin{displaymath}
 \hspace{-1.5cm}
+%the following is the complete matrix expression
 %\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\r & 1 & 0 & 0 & 0 & 0 & 0 & 0\\r \left(r + 1\right) & 2 r & 1 & 0 & 0 & 0 & 0 & 0\\\frac{r}{2} \left(2 r^{2} + 5 r + 3\right) & r \left(3 r + 2\right) & 3 r & 1 & 0 & 0 & 0 & 0\\\frac{r}{3} \left(3 r^{3} + 13 r^{2} + 18 r + 8\right) & r \left(4 r^{2} + 7 r + 3\right) & 3 r \left(2 r + 1\right) & 4 r & 1 & 0 & 0 & 0\\\frac{r}{12} \left(12 r^{4} + 77 r^{3} + 178 r^{2} + 175 r + 62\right) & \frac{r}{3} \left(15 r^{3} + 47 r^{2} + 48 r + 16\right) & \frac{r}{2} \left(20 r^{2} + 27 r + 9\right) & 2 r \left(5 r + 2\right) & 5 r & 1 & 0 & 0\\\frac{r}{30} \left(30 r^{5} + 261 r^{4} + 875 r^{3} + 1405 r^{2} + 1075 r + 314\right) & \frac{r}{6} \left(36 r^{4} + 171 r^{3} + 298 r^{2} + 225 r + 62\right) & r \left(15 r^{3} + 37 r^{2} + 30 r + 8\right) & 2 r \left(10 r^{2} + 11 r + 3\right) & 5 r \left(3 r + 1\right) & 6 r & 1 & 0\\\frac{r}{60} \left(60 r^{6} + 669 r^{5} + 3002 r^{4} + 6900 r^{3} + 8510 r^{2} + 5301 r + 1298\right) & \frac{r}{60} \left(420 r^{5} + 2754 r^{4} + 7075 r^{3} + 8860 r^{2} + 5375 r + 1256\right) & \frac{r}{4} \left(84 r^{4} + 319 r^{3} + 448 r^{2} + 275 r + 62\right) & \frac{r}{3} \left(105 r^{3} + 214 r^{2} + 144 r + 32\right) & \frac{5 r}{2} \left(14 r^{2} + 13 r + 3\right) & 3 r \left(7 r + 2\right) & 7 r & 1\end{matrix}\right]
 \left[\begin{matrix}1 \\r \\r \left(r + 1\right) \\\frac{r}{2} \left(2 r^{2} + 5 r + 3\right) \\\frac{r}{3} \left(3 r^{3} + 13 r^{2} + 18 r + 8\right) \\\frac{r}{12} \left(12 r^{4} + 77 r^{3} + 178 r^{2} + 175 r + 62\right) \\\frac{r}{30} \left(30 r^{5} + 261 r^{4} + 875 r^{3} + 1405 r^{2} + 1075 r + 314\right) \\\frac{r}{60} \left(60 r^{6} + 669 r^{5} + 3002 r^{4} + 6900 r^{3} + 8510 r^{2} + 5301 r + 1298\right) \end{matrix}\right]
 \end{displaymath}
 $\sqrt{\mathcal{C}_{m}}$ is
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{3}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{3}{2} & \frac{7}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{55}{16} & \frac{15}{4} & 3 & 2 & 1 & 0 & 0 & 0\\\frac{545}{64} & \frac{143}{16} & \frac{55}{8} & \frac{9}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{709}{32} & \frac{727}{32} & \frac{273}{16} & 11 & \frac{25}{4} & 3 & 1 & 0\\\frac{15249}{256} & \frac{3855}{64} & \frac{2853}{64} & \frac{455}{16} & \frac{65}{4} & \frac{33}{4} & \frac{7}{2} & 1\end{matrix}\right]
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{3}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{3}{2} & \frac{7}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{55}{16} & \frac{15}{4} & 3 & 2 & 1 & 0 & 0 & 0\\\frac{545}{64} & \frac{143}{16} & \frac{55}{8} & \frac{9}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{709}{32} & \frac{727}{32} & \frac{273}{16} & 11 & \frac{25}{4} & 3 & 1 & 0\\\frac{15249}{256} & \frac{3855}{64} & \frac{2853}{64} & \frac{455}{16} & \frac{65}{4} & \frac{33}{4} & \frac{7}{2} & 1\end{matrix}\right]
+\left[\begin{matrix}1 &   &   &   &   &   &   &  \\\frac{1}{2} & 1 &   &   &   &   &   &  \\\frac{3}{4} & 1 & 1 &   &   &   &   &  \\\frac{3}{2} & \frac{7}{4} & \frac{3}{2} & 1 &   &   &   &  \\\frac{55}{16} & \frac{15}{4} & 3 & 2 & 1 &   &   &  \\\frac{545}{64} & \frac{143}{16} & \frac{55}{8} & \frac{9}{2} & \frac{5}{2} & 1 &   &  \\\frac{7 9}{32} & \frac{727}{32} & \frac{273}{16} & 11 & \frac{25}{4} & 3 & 1 &  \\\frac{15249}{256} & \frac{3855}{64} & \frac{2853}{64} & \frac{455}{16} & \frac{65}{4} & \frac{33}{4} & \frac{7}{2} & 1\end{matrix}\right]
 \end{displaymath}
 $e^{\mathcal{C}_{m}}$ is
 \begin{displaymath}
-e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\3 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{23}{2} & 8 & 3 & 1 & 0 & 0 & 0 & 0\\\frac{154}{3} & 37 & 15 & 4 & 1 & 0 & 0 & 0\\\frac{1027}{4} & \frac{572}{3} & \frac{163}{2} & 24 & 5 & 1 & 0 & 0\\\frac{7046}{5} & \frac{6439}{6} & 478 & 150 & 35 & 6 & 1 & 0\\\frac{502481}{60} & \frac{390899}{60} & \frac{12005}{4} & \frac{2965}{3} & \frac{495}{2} & 48 & 7 & 1\end{matrix}\right]
+%e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\3 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{23}{2} & 8 & 3 & 1 & 0 & 0 & 0 & 0\\\frac{154}{3} & 37 & 15 & 4 & 1 & 0 & 0 & 0\\\frac{1027}{4} & \frac{572}{3} & \frac{163}{2} & 24 & 5 & 1 & 0 & 0\\\frac{7046}{5} & \frac{6439}{6} & 478 & 150 & 35 & 6 & 1 & 0\\\frac{502481}{60} & \frac{390899}{60} & \frac{12005}{4} & \frac{2965}{3} & \frac{495}{2} & 48 & 7 & 1\end{matrix}\right]
+e \left[\begin{matrix}1 &   &   &   &   &   &   &  \\1 & 1 &   &   &   &   &   &  \\3 & 2 & 1 &   &   &   &   &  \\\frac{23}{2} & 8 & 3 & 1 &   &   &   &  \\\frac{154}{3} & 37 & 15 & 4 & 1 &   &   &  \\\frac{1 27}{4} & \frac{572}{3} & \frac{163}{2} & 24 & 5 & 1 &   &  \\\frac{7 46}{5} & \frac{6439}{6} & 478 & 15  & 35 & 6 & 1 &  \\\frac{5 2481}{6 } & \frac{39 899}{6 } & \frac{12  5}{4} & \frac{2965}{3} & \frac{495}{2} & 48 & 7 & 1\end{matrix}\right]
 \end{displaymath}
 finally, $\log{\mathcal{C}_{m}}$ is
 \begin{displaymath}
-\left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 2 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{3}{2} & 2 & 3 & 0 & 0 & 0 & 0 & 0\\\frac{8}{3} & 3 & 3 & 4 & 0 & 0 & 0 & 0\\\frac{31}{6} & \frac{16}{3} & \frac{9}{2} & 4 & 5 & 0 & 0 & 0\\\frac{157}{15} & \frac{31}{3} & 8 & 6 & 5 & 6 & 0 & 0\\\frac{649}{30} & \frac{314}{15} & \frac{31}{2} & \frac{32}{3} & \frac{15}{2} & 6 & 7 & 0\end{matrix}\right]
+%\left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 2 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{3}{2} & 2 & 3 & 0 & 0 & 0 & 0 & 0\\\frac{8}{3} & 3 & 3 & 4 & 0 & 0 & 0 & 0\\\frac{31}{6} & \frac{16}{3} & \frac{9}{2} & 4 & 5 & 0 & 0 & 0\\\frac{157}{15} & \frac{31}{3} & 8 & 6 & 5 & 6 & 0 & 0\\\frac{649}{30} & \frac{314}{15} & \frac{31}{2} & \frac{32}{3} & \frac{15}{2} & 6 & 7 & 0\end{matrix}\right]
+\left[\begin{matrix}  &   &   &   &   &   &   &  \\1 &   &   &   &   &   &   &  \\1 & 2 &   &   &   &   &   &  \\\frac{3}{2} & 2 & 3 &   &   &   &   &  \\\frac{8}{3} & 3 & 3 & 4 &   &   &   &  \\\frac{31}{6} & \frac{16}{3} & \frac{9}{2} & 4 & 5 &   &   &  \\\frac{157}{15} & \frac{31}{3} & 8 & 6 & 5 & 6 &   &  \\\frac{649}{3 } & \frac{314}{15} & \frac{31}{2} & \frac{32}{3} & \frac{15}{2} & 6 & 7 &  \end{matrix}\right]
 \end{displaymath}
 evaluating corresponding $g$ polynomials on $\mathcal{C}_{m}$, as required.
 
@@ -475,12 +489,13 @@ evaluating corresponding $g$ polynomials on $\mathcal{C}_{m}$, as required.
 
 Let $m=8$ and define
 \begin{displaymath}
-\mathcal{S}_{m} = \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 3 & 1 & 0 & 0 & 0 & 0\\0 & 1 & 7 & 6 & 1 & 0 & 0 & 0\\0 & 1 & 15 & 25 & 10 & 1 & 0 & 0\\0 & 1 & 31 & 90 & 65 & 15 & 1 & 0\\0 & 1 & 63 & 301 & 350 & 140 & 21 & 1\end{matrix}\right]
+%\mathcal{S}_{m} = \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 3 & 1 & 0 & 0 & 0 & 0\\0 & 1 & 7 & 6 & 1 & 0 & 0 & 0\\0 & 1 & 15 & 25 & 10 & 1 & 0 & 0\\0 & 1 & 31 & 90 & 65 & 15 & 1 & 0\\0 & 1 & 63 & 301 & 350 & 140 & 21 & 1\end{matrix}\right]
+\mathcal{S}_{m} = \left[\begin{matrix}1 &   &   &   &   &   &   &  \\  & 1 &   &   &   &   &   &  \\  & 1 & 1 &   &   &   &   &  \\  & 1 & 3 & 1 &   &   &   &  \\  & 1 & 7 & 6 & 1 &   &   &  \\  & 1 & 15 & 25 & 1  & 1 &   &  \\  & 1 & 31 & 9  & 65 & 15 & 1 &  \\  & 1 & 63 & 3 1 & 35  & 14  & 21 & 1\end{matrix}\right]
 \end{displaymath}
 therefore $\mathcal{S}_{m}^{-1}$ is
 \begin{displaymath}
-%\quad\quad\quad\quad\quad\quad
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & -1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 2 & -3 & 1 & 0 & 0 & 0 & 0\\0 & -6 & 11 & -6 & 1 & 0 & 0 & 0\\0 & 24 & -50 & 35 & -10 & 1 & 0 & 0\\0 & -120 & 274 & -225 & 85 & -15 & 1 & 0\\0 & 720 & -1764 & 1624 & -735 & 175 & -21 & 1\end{matrix}\right]
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & -1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 2 & -3 & 1 & 0 & 0 & 0 & 0\\0 & -6 & 11 & -6 & 1 & 0 & 0 & 0\\0 & 24 & -50 & 35 & -10 & 1 & 0 & 0\\0 & -120 & 274 & -225 & 85 & -15 & 1 & 0\\0 & 720 & -1764 & 1624 & -735 & 175 & -21 & 1\end{matrix}\right]
+\left[\begin{matrix}1 &   &   &   &   &   &   &  \\  & 1 &   &   &   &   &   &  \\  & -1 & 1 &   &   &   &   &  \\  & 2 & -3 & 1 &   &   &   &  \\  & -6 & 11 & -6 & 1 &   &   &  \\  & 24 & -5  & 35 & -1  & 1 &   &  \\  & -12  & 274 & -225 & 85 & -15 & 1 &  \\  & 72  & -1764 & 1624 & -735 & 175 & -21 & 1\end{matrix}\right]
 \end{displaymath}
 since $\mathcal{S}_{m}^{r}$ is too big we report $\mathcal{S}_{m}^{r}\textbf{e}_{2}$ 
 \begin{displaymath}
@@ -490,15 +505,18 @@ since $\mathcal{S}_{m}^{r}$ is too big we report $\mathcal{S}_{m}^{r}\textbf{e}_
 \end{displaymath}
 $\sqrt{\mathcal{S}_{m}}$ is
 \begin{displaymath}
-\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{8} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\0 & 0 & \frac{5}{4} & 3 & 1 & 0 & 0 & 0\\0 & \frac{1}{32} & \frac{5}{8} & 5 & 5 & 1 & 0 & 0\\0 & - \frac{7}{128} & \frac{11}{32} & \frac{45}{8} & \frac{55}{4} & \frac{15}{2} & 1 & 0\\0 & \frac{1}{128} & - \frac{7}{128} & \frac{161}{32} & \frac{105}{4} & \frac{245}{8} & \frac{21}{2} & 1\end{matrix}\right]
+%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{8} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\0 & 0 & \frac{5}{4} & 3 & 1 & 0 & 0 & 0\\0 & \frac{1}{32} & \frac{5}{8} & 5 & 5 & 1 & 0 & 0\\0 & - \frac{7}{128} & \frac{11}{32} & \frac{45}{8} & \frac{55}{4} & \frac{15}{2} & 1 & 0\\0 & \frac{1}{128} & - \frac{7}{128} & \frac{161}{32} & \frac{105}{4} & \frac{245}{8} & \frac{21}{2} & 1\end{matrix}\right]
+\left[\begin{matrix}1 &   &   &   &   &   &   &  \\  & 1 &   &   &   &   &   &  \\  & \frac{1}{2} & 1 &   &   &   &   &  \\  & \frac{1}{8} & \frac{3}{2} & 1 &   &   &   &  \\  & 0   & \frac{5}{4} & 3 & 1 &   &   &  \\  & \frac{1}{32} & \frac{5}{8} & 5 & 5 & 1 &   &  \\  & - \frac{7}{128} & \frac{11}{32} & \frac{45}{8} & \frac{55}{4} & \frac{15}{2} & 1 &  \\  & \frac{1}{128} & - \frac{7}{128} & \frac{161}{32} & \frac{1 5}{4} & \frac{245}{8} & \frac{21}{2} & 1\end{matrix}\right]
 \end{displaymath}
 $e^{\mathcal{S}_{m}}$ is
 \begin{displaymath}
-e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{5}{2} & 3 & 1 & 0 & 0 & 0 & 0\\0 & \frac{21}{2} & 16 & 6 & 1 & 0 & 0 & 0\\0 & \frac{203}{3} & \frac{235}{2} & 55 & 10 & 1 & 0 & 0\\0 & \frac{14681}{24} & 1176 & \frac{1245}{2} & 140 & 15 & 1 & 0\\0 & \frac{22018}{3} & \frac{367745}{24} & 8911 & \frac{4515}{2} & \frac{595}{2} & 21 & 1\end{matrix}\right]
+%e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{5}{2} & 3 & 1 & 0 & 0 & 0 & 0\\0 & \frac{21}{2} & 16 & 6 & 1 & 0 & 0 & 0\\0 & \frac{203}{3} & \frac{235}{2} & 55 & 10 & 1 & 0 & 0\\0 & \frac{14681}{24} & 1176 & \frac{1245}{2} & 140 & 15 & 1 & 0\\0 & \frac{22018}{3} & \frac{367745}{24} & 8911 & \frac{4515}{2} & \frac{595}{2} & 21 & 1\end{matrix}\right]
+e \left[\begin{matrix}1 &   &   &   &   &   &   &  \\  & 1 &   &   &   &   &   &  \\  & 1 & 1 &   &   &   &   &  \\  & \frac{5}{2} & 3 & 1 &   &   &   &  \\  & \frac{21}{2} & 16 & 6 & 1 &   &   &  \\  & \frac{2 3}{3} & \frac{235}{2} & 55 & 1  & 1 &   &  \\  & \frac{14681}{24} & 1176 & \frac{1245}{2} & 14  & 15 & 1 &  \\  & \frac{22 18}{3} & \frac{367745}{24} & 8911 & \frac{4515}{2} & \frac{595}{2} & 21 & 1\end{matrix}\right]
 \end{displaymath}
 finally, $\log{\mathcal{S}_{m}}$ is
 \begin{displaymath}
-\left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & - \frac{1}{2} & 3 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{2} & -2 & 6 & 0 & 0 & 0 & 0\\0 & - \frac{2}{3} & \frac{5}{2} & -5 & 10 & 0 & 0 & 0\\0 & \frac{11}{12} & -4 & \frac{15}{2} & -10 & 15 & 0 & 0\\0 & - \frac{3}{4} & \frac{77}{12} & -14 & \frac{35}{2} & - \frac{35}{2} & 21 & 0\end{matrix}\right]
+%\left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & - \frac{1}{2} & 3 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{2} & -2 & 6 & 0 & 0 & 0 & 0\\0 & - \frac{2}{3} & \frac{5}{2} & -5 & 10 & 0 & 0 & 0\\0 & \frac{11}{12} & -4 & \frac{15}{2} & -10 & 15 & 0 & 0\\0 & - \frac{3}{4} & \frac{77}{12} & -14 & \frac{35}{2} & - \frac{35}{2} & 21 & 0\end{matrix}\right]
+\left[\begin{matrix}  &   &   &   &   &   &   &  \\  &   &   &   &   &   &   &  \\  & 1 &   &   &   &   &   &  \\  & - \frac{1}{2} & 3 &   &   &   &   &  \\  & \frac{1}{2} & -2 & 6 &   &   &   &  \\  & - \frac{2}{3} & \frac{5}{2} & -5 & 1  &   &   &  \\  & \frac{11}{12} & -4 & \frac{15}{2} & -1  & 15 &   &  \\  & - \frac{3}{4} & \frac{77}{12} & -14 & \frac{35}{2} & - \frac{35}{2} & 21 &  \end{matrix}\right]
 \end{displaymath}
 evaluating corresponding $g$ polynomials on $\mathcal{S}_{m}$, as required.
 
