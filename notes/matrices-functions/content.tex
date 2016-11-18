@@ -73,8 +73,8 @@ Above equations can be compressed in matrix notation:
 \begin{displaymath}
 \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0 & 0\\- \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0\\\frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0\\- \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0\\\frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0\\- \frac{1}{5040} & \frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1\end{matrix}\right] 
 \end{displaymath}
-multiplied on the right by the vector $\left[\begin{matrix}1\,z\,\frac{z^{2}}{2!}\,\frac{z^{3}}{3!}\,\frac{z^{4}}{4!}\,\frac{z^{5}}{5!}\,\frac{z^{6}}{6!}\,\frac{z^{7}}{7!}\end{matrix}\right]^{T}$
-; the coefficient matrix is a \emph{Toeplitz matrix}.
+which is a \emph{Toeplitz matrix}, multiplied on the right by the vector 
+$$\left[\begin{matrix}1\,z\,\frac{z^{2}}{2!}\,\frac{z^{3}}{3!}\,\frac{z^{4}}{4!}\,\frac{z^{5}}{5!}\,\frac{z^{6}}{6!}\,\frac{z^{7}}{7!}\end{matrix}\right]^{T}$$
 
 
 \section{$f(z)=\frac{1}{z}$}
@@ -252,24 +252,6 @@ compactly using Kroneker delta in the inner sum's starting:
 \end{split}
 \end{equation}
 
-\iffalse %  {{{
-Finding closed expressions for the inner sum and independent coefficient yields:
-\begin{equation}
-\begin{split}
-  g(z) &= \frac{2 }{4^{m}(2 m - 1)}\binom{2 m}{m}\sum_{k=1}^{m-1}{\frac{ \left(k - m\right) }{\left(2 k - 1\right) }{\binom{m}{k}} { (-z)^{k}}} \\
-       &+ \frac{2 m }{4^{m}(2 m - 1)}{\binom{2 m}{m}}
-\end{split}
-\end{equation}
-we can put the coefficient back inside sum, so the final expression is:
-\begin{displaymath}
-\begin{split}
-  g(z) &= \frac{2 }{4^{m}(2 m - 1)}\binom{2 m}{m}\sum_{k=0}^{m-1}{\frac{ \left(k - m\right) }{\left(2 k - 1\right) }{\binom{m}{k}} { (-z)^{k}}} \\
-\end{split}
-\end{displaymath}
-namely $\sqrt{\mathcal{R}_{m}}=g(\mathcal{R}_{m})$ for any proper, finite Riordan matrix $\mathcal{R}_{m}$.
-
-\fi
-% }}}
 
 For the sake of clarity, here is $g$ polynomial where $m=8$ and relaxing $\lambda=1$ hypothesis:
 \begin{displaymath}
@@ -339,6 +321,56 @@ choosing $\alpha=1$ yields:
 $$ g{\left (z \right )} = e \left(\frac{z^{7}}{5040} + \frac{z^{5}}{240} + \frac{z^{4}}{72} + \frac{z^{3}}{16} + \frac{11 z^{2}}{60} + \frac{53 z}{144} + \frac{103}{280}\right) $$
 on the other hand, choosing $\alpha=-1$ yields:
 $$ e\,g{\left (z \right )} = - \frac{z^{7}}{5040} + \frac{z^{6}}{360} - \frac{z^{5}}{48} + \frac{z^{4}}{9} - \frac{65 z^{3}}{144} + \frac{163 z^{2}}{120} - \frac{1957 z}{720} + \frac{685}{252} $$
+
+
+\section{$f(z)=\log{z}$}
+
+The general form of $j$th derivative of function $f$ is 
+$$\frac{\partial^{(j)}{f}(z)}{\partial{z}} =\frac{(-1)^{j-1}(j-1)!}{z^{j}}  $$ 
+for $j \geq 1$, therefore
+\begin{displaymath}
+\begin{split}
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+       &= \sum_{j=0}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j+1}(z)} \\
+       &= f(1)\Phi_{11}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j+1}(z)} \\
+\end{split}
+\end{displaymath}
+substitution of known quantities allows us to state the equation
+\begin{equation}
+  g(z) = - \sum_{j=1}^{m-1}{\sum_{k=0}^{j}{\frac{1}{j}{{j}\choose{k}}(-z)^{k}}}
+\end{equation}
+To swap summations, we repeat the same argument given for function $\sqrt{z}$, splitting
+a term due to $k=0$ from the whole summation:
+\begin{equation}
+  g(z) = - \sum_{k=1}^{m-1}{\left(\sum_{j=k}^{m-1}{\frac{1}{j}{{j}\choose{k}}}\right)}(-z)^{k} - H_{m-1} 
+\end{equation}
+where $H_{n}$ is the $n$-th harmonic number; finally, the inner summation admits
+a closed form:
+\begin{equation}
+  g(z) = - \sum_{k=1}^{m-1}\frac{1}{k}{{m-1}\choose{k}}{(-z)^{k}}- H_{m-1} 
+\end{equation}
+
+For the sake of clarity, here is $g$ polynomial where $m=8$ and relaxing $\lambda=1$ hypothesis:
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= \frac{z^{7}}{7 \lambda^{7}} \\
+&+ z^{6} \left(- \frac{1}{6 \lambda^{6}} - \frac{1}{\lambda^{7}}\right) \\
+&+ z^{5} \left(\frac{1}{5 \lambda^{5}} + \frac{1}{\lambda^{6}} + \frac{3}{\lambda^{7}}\right) \\
+&+ z^{4} \left(- \frac{1}{4 \lambda^{4}} - \frac{1}{\lambda^{5}} - \frac{5}{2 \lambda^{6}} - \frac{5}{\lambda^{7}}\right) \\
+&+ z^{3} \left(\frac{1}{3 \lambda^{3}} + \frac{1}{\lambda^{4}} + \frac{2}{\lambda^{5}} + \frac{10}{3 \lambda^{6}} + \frac{5}{\lambda^{7}}\right) \\
+&+ z^{2} \left(- \frac{1}{2 \lambda^{2}} - \frac{1}{\lambda^{3}} - \frac{3}{2 \lambda^{4}} - \frac{2}{\lambda^{5}} - \frac{5}{2 \lambda^{6}} - \frac{3}{\lambda^{7}}\right) \\
+&+ z \left(\frac{1}{\lambda} + \frac{1}{\lambda^{2}} + \frac{1}{\lambda^{3}} + \frac{1}{\lambda^{4}} + \frac{1}{\lambda^{5}} + \frac{1}{\lambda^{6}} + \frac{1}{\lambda^{7}}\right) \\
+&+ \log{\left (\lambda \right )} - \frac{1}{\lambda} - \frac{1}{2 \lambda^{2}} - \frac{1}{3 \lambda^{3}} - \frac{1}{4 \lambda^{4}} - \frac{1}{5 \lambda^{5}} - \frac{1}{6 \lambda^{6}} - \frac{1}{7 \lambda^{7}}
+\end{split}
+\end{displaymath}
+restoring $\lambda=1$:
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= \frac{z^{7}}{7} - \frac{7 z^{6}}{6} + \frac{21 z^{5}}{5} - \frac{35 z^{4}}{4} \\
+&+ \frac{35 z^{3}}{3} - \frac{21 z^{2}}{2} + 7 z - \frac{363}{140}
+\end{split}
+\end{displaymath}
+
 
 \section{Case studies}
 
