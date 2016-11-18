@@ -85,8 +85,8 @@ therefore
 \begin{displaymath}
 \begin{split}
   g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=1}^{m}{ \left. \frac{(-1)^{j-1}(j-1)!}{z^{j}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=1}^{m}{ \left. \frac{1}{z^{j}} \right|_{z=1}(-1)^{j-1}(j-1)!\Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. \frac{(-1)^{j-1}(j-1)!}{z^{j}} \right|_{z=1}\Phi_{1j}(z)} \\
+       %&= \sum_{j=1}^{m}{ \left. \frac{1}{z^{j}} \right|_{z=1}(-1)^{j-1}(j-1)!\Phi_{1j}(z)} \\
        &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{(-1)^{j-1}(j-1)!\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}} \\
 \end{split}
 \end{displaymath}
@@ -149,8 +149,8 @@ where $(r)_{(j)} = r(r-1)\cdots(r-j+1)$ is the falling factorial, therefore
 \begin{displaymath}
 \begin{split}
   g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=1}^{m}{ \left. (r)_{(j-1)} z^{r-j+1} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=1}^{m}{ \left. z^{r-j+1} \right|_{z=\lambda_{1}}(r)_{(j-1)} \Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. (r)_{(j-1)} z^{r-j+1} \right|_{z=1}\Phi_{1j}(z)} \\
+       %&= \sum_{j=1}^{m}{ \left. z^{r-j+1} \right|_{z=\lambda_{1}}(r)_{(j-1)} \Phi_{1j}(z)} \\
        &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{\frac{(r)_{(j-1)}}{(j-1)_{(j-1)}}\frac{(j-1)!(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}} \\
 \end{split}
 \end{displaymath}
@@ -224,8 +224,8 @@ for $j \geq 1$, therefore
 \begin{displaymath}
 \begin{split}
   g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=0}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j+1}(z)} \\
-       &= f(1)\Phi_{11}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j+1}(z)} \\
+       &= \sum_{j=0}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
+       &= f(1)\Phi_{11}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
 \end{split}
 \end{displaymath}
 Observing that $\Phi_{11}(z)=1$ and
@@ -234,21 +234,23 @@ Observing that $\Phi_{11}(z)=1$ and
 \end{displaymath}
 it allows us to state the equation
 \begin{equation}
-  g(z) = 1 +\frac{1}{2} \sum_{j=1}^{m-1}{\sum_{k=0}^{j}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}}
+  g(z) = 1 - \frac{1}{2} \sum_{j=1}^{m-1}{\sum_{k=0}^{j}{\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}}
 \end{equation}
 To swap summations, for covering the same set of pairs $(j, k)$ it is required that 
 $j\in \lbrace 1, \ldots, m-1 \rbrace$ for both $k=0$ and $k=1$, therefore we split
 the outer sum over $k$ extracting the very first term due to $k=0$:
 \begin{equation}
 \begin{split}
-  g(z) &= 1 +\frac{1}{2} \sum_{k=1}^{m-1}{\sum_{j=k}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
-       &+ \frac{1}{2}\sum_{j=1}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}}
+  g(z) &= 1 \\
+       &- \frac{1}{2} \sum_{k=1}^{m-1}{\left(\sum_{j=k}^{m-1}{\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}}}\right)(-z)^{k}} \\
+       &- \frac{1}{2}\sum_{j=1}^{m-1}{\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}}
 \end{split}
 \end{equation}
-compactly using Kroneker delta in the inner sum's starting:
+compactly, using Kroneker delta in the inner sum's starting:
 \begin{equation}
 \begin{split}
-  g(z) &= 1 +\frac{1}{2} \sum_{k=0}^{m-1}{\sum_{j=k+\delta_{k0}}^{m-1}{-\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}} (-z)^{k}}} \\
+  g(z) &= 1 \\
+  &- \frac{1}{2} \sum_{k=0}^{m-1}{\left(\sum_{j=k+\delta_{k0}}^{m-1}{\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}}}\right)(-z)^{k}} \\
 \end{split}
 \end{equation}
 
@@ -284,8 +286,8 @@ therefore
 \begin{displaymath}
 \begin{split}
   g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=1}^{m}{ \left. \alpha^{j-1} e^{\alpha z} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=1}^{m}{ \left. e^{\alpha z} \right|_{z=\lambda_{1}}\alpha^{j-1} \Phi_{1j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. \alpha^{j-1} e^{\alpha z} \right|_{z=1}\Phi_{1j}(z)} \\
+       %&= \sum_{j=1}^{m}{ \left. e^{\alpha z} \right|_{z=\lambda_{1}}\alpha^{j-1} \Phi_{1j}(z)} \\
        &= e^{\alpha}\sum_{j=1}^{m}{\sum_{k=0}^{j-1}{\frac{\alpha^{j-1}}{(j-1)!}  \frac{(j-1)!(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}}\\
 \end{split}
 \end{displaymath}
@@ -312,15 +314,27 @@ g{\left (z \right )} &= e^{\alpha}\left(\frac{\alpha^{7} z^{7}}{5040}\right. \\
 &+ \frac{\alpha^{5} z^{5}}{240} \left(\alpha^{2} - 2 \alpha + 2\right) \\
 &+ \frac{\alpha^{4} z^{4}}{144} \left(- \alpha^{3} + 3 \alpha^{2} - 6 \alpha + 6\right) \\
 &+ \frac{\alpha^{3} z^{3}}{144} \left(\alpha^{4} - 4 \alpha^{3} + 12 \alpha^{2} - 24 \alpha + 24\right) \\
-&+ \frac{\alpha^{2} z^{2}}{240} \left(- \alpha^{5} + 5 \alpha^{4} - 20 \alpha^{3} + 60 \alpha^{2} - 120 \alpha + 120\right) \\
-&+ \frac{\alpha z}{720} \left(\alpha^{6} - 6 \alpha^{5} + 30 \alpha^{4} - 120 \alpha^{3} + 360 \alpha^{2} - 720 \alpha + 720\right) \\
+&+ \frac{\alpha^{2} z^{2}}{240} \left(- \alpha^{5} + 5 \alpha^{4} - 20 \alpha^{3} \right.\\
+&+ \left. 60 \alpha^{2} - 120 \alpha + 120\right) \\
+&+ \frac{\alpha z}{720} \left(\alpha^{6} - 6 \alpha^{5} + 30 \alpha^{4} - 120 \alpha^{3} \right.\\
+&+ \left. 360 \alpha^{2} - 720 \alpha + 720\right) \\
 &- \left.\frac{\alpha^{7}}{5040} + \frac{\alpha^{6}}{720} - \frac{\alpha^{5}}{120} + \frac{\alpha^{4}}{24} - \frac{\alpha^{3}}{6} + \frac{\alpha^{2}}{2} -\alpha + 1\right) 
 \end{split}
 \end{displaymath}
 choosing $\alpha=1$ yields:
-$$ g{\left (z \right )} = e \left(\frac{z^{7}}{5040} + \frac{z^{5}}{240} + \frac{z^{4}}{72} + \frac{z^{3}}{16} + \frac{11 z^{2}}{60} + \frac{53 z}{144} + \frac{103}{280}\right) $$
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= e \left(\frac{z^{7}}{5040} + \frac{z^{5}}{240} + \frac{z^{4}}{72} \right.\\
+                     &+ \left.\frac{z^{3}}{16} + \frac{11 z^{2}}{60} + \frac{53 z}{144} + \frac{103}{280}\right)
+\end{split}
+\end{displaymath}
 on the other hand, choosing $\alpha=-1$ yields:
-$$ e\,g{\left (z \right )} = - \frac{z^{7}}{5040} + \frac{z^{6}}{360} - \frac{z^{5}}{48} + \frac{z^{4}}{9} - \frac{65 z^{3}}{144} + \frac{163 z^{2}}{120} - \frac{1957 z}{720} + \frac{685}{252} $$
+\begin{displaymath}
+\begin{split}
+g{\left (z \right )} &= \frac{1}{e} \left( - \frac{z^{7}}{5040} + \frac{z^{6}}{360} - \frac{z^{5}}{48} + \frac{z^{4}}{9}\right. \\
+                     &- \left.\frac{65 z^{3}}{144} + \frac{163 z^{2}}{120} - \frac{1957 z}{720} + \frac{685}{252}\right)
+\end{split}
+\end{displaymath}
 
 
 \section{$f(z)=\log{z}$}
@@ -331,8 +345,8 @@ for $j \geq 1$, therefore
 \begin{displaymath}
 \begin{split}
   g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=0}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j+1}(z)} \\
-       &= f(1)\Phi_{11}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j+1}(z)} \\
+       &= \sum_{j=0}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
+       &= f(1)\Phi_{11}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
 \end{split}
 \end{displaymath}
 substitution of known quantities allows us to state the equation
@@ -424,8 +438,9 @@ therefore $g(H)=e^{\alpha H}$ is the matrix
 \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\alpha & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\alpha^{2} & 2 \alpha & 1 & 0 & 0 & 0 & 0 & 0\\\alpha^{3} & 3 \alpha^{2} & 3 \alpha & 1 & 0 & 0 & 0 & 0\\\alpha^{4} & 4 \alpha^{3} & 6 \alpha^{2} & 4 \alpha & 1 & 0 & 0 & 0\\\alpha^{5} & 5 \alpha^{4} & 10 \alpha^{3} & 10 \alpha^{2} & 5 \alpha & 1 & 0 & 0\\\alpha^{6} & 6 \alpha^{5} & 15 \alpha^{4} & 20 \alpha^{3} & 15 \alpha^{2} & 6 \alpha & 1 & 0\\\alpha^{7} & 7 \alpha^{6} & 21 \alpha^{5} & 35 \alpha^{4} & 35 \alpha^{3} & 21 \alpha^{2} & 7 \alpha & 1\end{matrix}\right]
 \end{displaymath}
 yielding the identity $e^{\alpha H} = \mathcal{P}_{m}^{\alpha}$;
-moreover $e^{(\alpha+\beta) H} = \mathcal{P}_{m}^{\alpha}\mathcal{P}_{m}^{\beta} = \mathcal{P}_{m}^{\alpha+\beta}$ also holds.
+moreover $e^{(\alpha+\beta) H} = \mathcal{P}_{m}^{\alpha+\beta} = \mathcal{P}_{m}^{\alpha}\mathcal{P}_{m}^{\beta} $ also holds.
 
+Finally, $\log{\mathcal{P}_{m}}=H$ as required.
 
 \subsection{Catalan array $\mathcal{C}$}
 
@@ -446,9 +461,13 @@ $\sqrt{\mathcal{C}_{m}}$ is
 \begin{displaymath}
 \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{3}{4} & 1 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{3}{2} & \frac{7}{4} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\\frac{55}{16} & \frac{15}{4} & 3 & 2 & 1 & 0 & 0 & 0\\\frac{545}{64} & \frac{143}{16} & \frac{55}{8} & \frac{9}{2} & \frac{5}{2} & 1 & 0 & 0\\\frac{709}{32} & \frac{727}{32} & \frac{273}{16} & 11 & \frac{25}{4} & 3 & 1 & 0\\\frac{15249}{256} & \frac{3855}{64} & \frac{2853}{64} & \frac{455}{16} & \frac{65}{4} & \frac{33}{4} & \frac{7}{2} & 1\end{matrix}\right]
 \end{displaymath}
-finally, $e^{\mathcal{C}_{m}}$ is
+$e^{\mathcal{C}_{m}}$ is
 \begin{displaymath}
 e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\3 & 2 & 1 & 0 & 0 & 0 & 0 & 0\\\frac{23}{2} & 8 & 3 & 1 & 0 & 0 & 0 & 0\\\frac{154}{3} & 37 & 15 & 4 & 1 & 0 & 0 & 0\\\frac{1027}{4} & \frac{572}{3} & \frac{163}{2} & 24 & 5 & 1 & 0 & 0\\\frac{7046}{5} & \frac{6439}{6} & 478 & 150 & 35 & 6 & 1 & 0\\\frac{502481}{60} & \frac{390899}{60} & \frac{12005}{4} & \frac{2965}{3} & \frac{495}{2} & 48 & 7 & 1\end{matrix}\right]
+\end{displaymath}
+finally, $\log{\mathcal{C}_{m}}$ is
+\begin{displaymath}
+\left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 2 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{3}{2} & 2 & 3 & 0 & 0 & 0 & 0 & 0\\\frac{8}{3} & 3 & 3 & 4 & 0 & 0 & 0 & 0\\\frac{31}{6} & \frac{16}{3} & \frac{9}{2} & 4 & 5 & 0 & 0 & 0\\\frac{157}{15} & \frac{31}{3} & 8 & 6 & 5 & 6 & 0 & 0\\\frac{649}{30} & \frac{314}{15} & \frac{31}{2} & \frac{32}{3} & \frac{15}{2} & 6 & 7 & 0\end{matrix}\right]
 \end{displaymath}
 evaluating corresponding $g$ polynomials on $\mathcal{C}_{m}$, as required.
 
@@ -465,6 +484,7 @@ therefore $\mathcal{S}_{m}^{-1}$ is
 \end{displaymath}
 since $\mathcal{S}_{m}^{r}$ is too big we report $\mathcal{S}_{m}^{r}\textbf{e}_{2}$ 
 \begin{displaymath}
+\hspace{-1cm}
 %\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & r & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{r}{2} \left(3 r - 1\right) & 3 r & 1 & 0 & 0 & 0 & 0\\0 & \frac{r}{2} \left(6 r^{2} - 5 r + 1\right) & r \left(9 r - 2\right) & 6 r & 1 & 0 & 0 & 0\\0 & \frac{r}{6} \left(45 r^{3} - 65 r^{2} + 30 r - 4\right) & \frac{5 r}{2} \left(12 r^{2} - 7 r + 1\right) & 5 r \left(6 r - 1\right) & 10 r & 1 & 0 & 0\\0 & \frac{r}{24} \left(540 r^{4} - 1155 r^{3} + 890 r^{2} - 273 r + 22\right) & \frac{r}{2} \left(225 r^{3} - 235 r^{2} + 80 r - 8\right) & \frac{15 r}{2} \left(20 r^{2} - 9 r + 1\right) & 5 r \left(15 r - 2\right) & 15 r & 1 & 0\\0 & \frac{r}{24} \left(1890 r^{5} - 5481 r^{4} + 6125 r^{3} - 3129 r^{2} + 637 r - 18\right) & \frac{7 r}{24} \left(1620 r^{4} - 2565 r^{3} + 1490 r^{2} - 351 r + 22\right) & \frac{7 r}{2} \left(225 r^{3} - 185 r^{2} + 50 r - 4\right) & \frac{35 r}{2} \left(30 r^{2} - 11 r + 1\right) & \frac{35 r}{2} \left(9 r - 1\right) & 21 r & 1\end{matrix}\right]
 \left[\begin{matrix} 0 \\ 1 \\ r \\ \frac{r}{2} \left(3 r - 1\right) \\ \frac{r}{2} \left(6 r^{2} - 5 r + 1\right) \\ \frac{r}{6} \left(45 r^{3} - 65 r^{2} + 30 r - 4\right) \\ \frac{r}{24} \left(540 r^{4} - 1155 r^{3} + 890 r^{2} - 273 r + 22\right) \\ \frac{r}{24} \left(1890 r^{5} - 5481 r^{4} + 6125 r^{3} - 3129 r^{2} + 637 r - 18\right) \end{matrix}\right]
 \end{displaymath}
@@ -472,9 +492,13 @@ $\sqrt{\mathcal{S}_{m}}$ is
 \begin{displaymath}
 \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{2} & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{8} & \frac{3}{2} & 1 & 0 & 0 & 0 & 0\\0 & 0 & \frac{5}{4} & 3 & 1 & 0 & 0 & 0\\0 & \frac{1}{32} & \frac{5}{8} & 5 & 5 & 1 & 0 & 0\\0 & - \frac{7}{128} & \frac{11}{32} & \frac{45}{8} & \frac{55}{4} & \frac{15}{2} & 1 & 0\\0 & \frac{1}{128} & - \frac{7}{128} & \frac{161}{32} & \frac{105}{4} & \frac{245}{8} & \frac{21}{2} & 1\end{matrix}\right]
 \end{displaymath}
-finally, $e^{\mathcal{S}_{m}}$ is
+$e^{\mathcal{S}_{m}}$ is
 \begin{displaymath}
 e \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{5}{2} & 3 & 1 & 0 & 0 & 0 & 0\\0 & \frac{21}{2} & 16 & 6 & 1 & 0 & 0 & 0\\0 & \frac{203}{3} & \frac{235}{2} & 55 & 10 & 1 & 0 & 0\\0 & \frac{14681}{24} & 1176 & \frac{1245}{2} & 140 & 15 & 1 & 0\\0 & \frac{22018}{3} & \frac{367745}{24} & 8911 & \frac{4515}{2} & \frac{595}{2} & 21 & 1\end{matrix}\right]
+\end{displaymath}
+finally, $\log{\mathcal{S}_{m}}$ is
+\begin{displaymath}
+\left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & - \frac{1}{2} & 3 & 0 & 0 & 0 & 0 & 0\\0 & \frac{1}{2} & -2 & 6 & 0 & 0 & 0 & 0\\0 & - \frac{2}{3} & \frac{5}{2} & -5 & 10 & 0 & 0 & 0\\0 & \frac{11}{12} & -4 & \frac{15}{2} & -10 & 15 & 0 & 0\\0 & - \frac{3}{4} & \frac{77}{12} & -14 & \frac{35}{2} & - \frac{35}{2} & 21 & 0\end{matrix}\right]
 \end{displaymath}
 evaluating corresponding $g$ polynomials on $\mathcal{S}_{m}$, as required.
 
