@@ -59,3 +59,24 @@ def riordan_matrix_by_recurrence(dim, rec, init={(0,0):1}, ctor=zeros, post=expa
     if callable(post): R = R.applyfunc(post)
 
     return lambda n, k: R[n, k]
+
+def diagonal_matrix(seq, default=0):
+    
+    def D(n, k):
+        return seq[n] if n == k else default 
+
+    return D        
+
+def frobenius_matrix(seq):
+
+    m = len(seq)
+    def F(n, k):
+        return 1 if n+1 == k else -seq[-1-k] if n == m-1 else 0
+
+    return F
+
+
+
+
+
+
