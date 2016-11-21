@@ -75,7 +75,12 @@ def frobenius_matrix(seq):
 
     return F
 
+def unit_vector(i, offset=-1):
 
+    def U(n, k):
+        return 1 if n == i+offset else 0
+     
+    return U
 
 
 
