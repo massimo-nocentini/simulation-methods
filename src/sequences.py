@@ -1,7 +1,7 @@
 
 from functools import lru_cache
 
-from sympy import Symbol, Integer, poly, Eq, expand, zeros
+from sympy import Symbol, Integer, poly, Eq, expand, zeros, symbols
 
 def convolution(sequences, variable=Symbol('t'), op=max):
     
@@ -82,6 +82,41 @@ def unit_vector(i, offset=-1):
      
     return U
 
+def Asequence_(M):
 
+    A = zeros(M.rows-1, M.cols-1)
+    t = symbols('t')
+    funz1 = M[0,0]
+
+    for i in range(A.rows):
+        current_row = M[i+1,:]
+        funz2 = sum(current_row[j]*t**(i-j) for j in range(i+2))
+        funz = (funz2/funz1).series(t, n=A.cols).removeO()
+        for j in range(A.cols):
+            A[i, j]=funz.coeff(t, n=j)
+        funz1=funz2
+
+    return A#[1:,:-1]
+
+def Asequence(M):
+
+    A = zeros(M.rows-1, M.cols)
+    t = symbols('t')
+    current_row_poly = M[0,0]
+
+    for i in range(A.rows):
+
+        next_row_poly = sum(M[i+1,j]*t**(i+1-j) for j in range(i+2))
+        div_poly = (next_row_poly/current_row_poly).series(t, n=A.cols).removeO()
+
+        for j in range(A.cols):
+            A[i, j] = div_poly.coeff(t, n=j)
+
+        current_row_poly = next_row_poly
+
+    return A
+
+def production_matrix_ordinary(M):
+    return M[:-1, :-1]**(-1) * M[1:,:-1]
 
 
