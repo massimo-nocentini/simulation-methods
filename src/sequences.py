@@ -1,7 +1,7 @@
 
 from functools import lru_cache
 
-from sympy import Symbol, Integer, poly, Eq, expand, zeros, symbols
+from sympy import Symbol, Integer, poly, Eq, expand, zeros, symbols, Matrix, factorial
 
 def convolution(sequences, variable=Symbol('t'), op=max):
     
@@ -116,7 +116,15 @@ def Asequence(M):
 
     return A
 
-def production_matrix_ordinary(M):
-    return M[:-1, :-1]**(-1) * M[1:,:-1]
+def production_matrix(M, exp=False):
+    U = Matrix(M.rows, M.cols, lambda i, j: 1 if i+1 == j else 0)
+    pm = M**(-1) * U * M
+    pm = pm[:-1, :-1]
+    if exp:
+        for n in range(pm.rows):
+            for k in range(pm.cols):
+                pm[n, k] = pm[n, k] / (factorial(n)/factorial(k))
+    return pm
+
 
 
