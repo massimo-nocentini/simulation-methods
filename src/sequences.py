@@ -116,15 +116,22 @@ def Asequence(M):
 
     return A
 
+def one(i):
+    return 1
+
 def production_matrix(M, exp=False):
-    U = Matrix(M.rows, M.cols, lambda i, j: 1 if i+1 == j else 0)
-    pm = M**(-1) * U * M
-    pm = pm[:-1, :-1]
-    if exp:
-        for n in range(pm.rows):
-            for k in range(pm.cols):
-                pm[n, k] = pm[n, k] / (factorial(n)/factorial(k))
-    return pm
+    U = Matrix(M.rows, M.cols, rows_shift_matrix(by=1))
+    F = Matrix(M.rows, M.cols, diagonal_func_matrix(f=factorial if exp else one))
+    F_inv = F**(-1)
+    V = F_inv * U * F
+    O = F_inv * M * F
+    O_inv = O**(-1)
+    PM = O_inv * (V * O)
+    return PM[:-1, :-1]
 
+def rows_shift_matrix(by):
+    return lambda i, j: 1 if i + by == j else 0
 
+def diagonal_func_matrix(f):
+    return lambda i, j: f(i) if i == j else 0
 
