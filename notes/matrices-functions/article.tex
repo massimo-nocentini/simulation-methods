@@ -1,6 +1,6 @@
 
 % article example for classicthesis.sty
-\documentclass[8pt,a4paper,twocolumn]{article} % KOMA-Script article scrartcl
+\documentclass[8pt,a4paper,onecolumn]{article} % KOMA-Script article scrartcl
 \usepackage{lipsum}
 \usepackage{url}
 \usepackage[nochapters]{classicthesis} % nochapters
@@ -8,6 +8,7 @@
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{euler}
+\usepackage[T1]{fontenc}
 %\usepackage{caption}
 \usepackage{acronym}
 %\usepackage{bm}
@@ -30,9 +31,11 @@
     \maketitle
     
     \begin{abstract}
-        \noindent This note collect instantiations of function matrix theory to matrices
-        in the Riordan group. Actually, these results applies to any square matrix
-        with only one eigenvalue $\lambda$ of multiplicity $m \in\mathbb{N}$.
+
+        \noindent This note collects results about Riordan arrays in the
+        framework of \textit{matrices functions}.  Actually, the following
+        methodology applies to any square matrix with \textit{exactly one}
+        eigenvalue $\lambda$ of \textit{algebraic} multiplicity $m \in\mathbb{N}$.
 
     \end{abstract}
        
