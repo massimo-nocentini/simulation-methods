@@ -1,7 +1,8 @@
 
 from functools import lru_cache
+from itertools import product
 
-from sympy import Symbol, Integer, poly, Eq, expand, zeros, symbols, Matrix, factorial
+from sympy import Symbol, Integer, poly, Eq, expand, zeros, symbols, Matrix, factorial, IndexedBase, solve
 
 def convolution(sequences, variable=Symbol('t'), op=max):
     
@@ -120,13 +121,21 @@ def one(i):
     return 1
 
 def production_matrix(M, exp=False):
+    """
+    Returns the production matrix of the given RA `M`.
+
+    Implementation according to Barry's book ``RA: a Primer'', page 215.
+
+    """
+
     U = Matrix(M.rows, M.cols, rows_shift_matrix(by=1))
     F = Matrix(M.rows, M.cols, diagonal_func_matrix(f=factorial if exp else one))
     F_inv = F**(-1)
     V = F_inv * U * F
     O = F_inv * M * F
     O_inv = O**(-1)
-    PM = O_inv * (V * O)
+    PM = F * O_inv * V * O * F_inv
+    PM = F_inv * PM * F if exp else PM
     return PM[:-1, :-1]
 
 def rows_shift_matrix(by):
@@ -134,4 +143,42 @@ def rows_shift_matrix(by):
 
 def diagonal_func_matrix(f):
     return lambda i, j: f(i) if i == j else 0
+
+def is_ordinary_RA(M, show_witness=False):
+
+    PM = production_matrix(M)
+
+    is_ord = True
+    witness = []
+    for i in range(2, PM.cols):
+        if not (PM[:1-i, 1] == PM[i-1:, i]):
+            is_ord = False
+            witness.append(PM[:, i]) # for the witness we return the entire column
+
+    return (is_ord, witness) if show_witness else is_ord
+
+
+def is_exponential_RA(M, show_witness=False):
+
+    C = production_matrix(M, exp=True) 
+
+    diagonals = { d: [C[j+d,j] for j in range(1,C.rows-d)] 
+                  for d in range(C.rows-2) }
+
+    k = IndexedBase('k')
+    sols = {}
+    for d, l in diagonals.items():
+        eqs = []
+        unknowns = []
+        for i in range(len(l)-1):
+            a, b = l[i], l[i+1]
+            k_d = k[d]
+            eq = Eq(k_d, a-b)
+            unknowns.append(k_d)
+            eqs.append(eq)
+        sols[d] = solve(eqs, unknowns)
+
+    is_exp = all(len(offsets) == 1 for d, offsets in sols.items())
+
+    return (is_exp, diagonals, sols) if show_witness else is_exp
 
