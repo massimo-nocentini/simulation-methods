@@ -2,18 +2,20 @@
 from functools import lru_cache
 from itertools import product
 
-from sympy import Symbol, Integer, poly, Eq, expand, zeros, symbols, Matrix, factorial, IndexedBase, solve
+from sympy import Symbol, Integer, poly, Eq, expand, zeros, symbols, Matrix, factorial, IndexedBase, solve, simplify
 
-def convolution(sequences, variable=Symbol('t'), op=max):
+from commons import *
+
+def convolution(sequences, t):
     
     if not sequences: return Integer(0)
     
-    t = variable
-    l = op(map(lambda s: poly(s.rhs, t).degree(), sequences))+1
+    l = max(map(lambda s: poly(s.rhs, t).degree(), sequences))+1
     
     def convolve(a, b):
         
-        new = sum(sum(a.coeff(t, j)*b.coeff(t, i-j) for j in range(i+1)) * t**i for i in range(l))
+        new = sum(sum(a.coeff(t, j)*b.coeff(t, i-j) for j in range(i+1)) * t**i 
+                  for i in range(l))
         p = poly(new, t).args[0]
         return sum(p.coeff(t, i)*t**i for i in range(l))
     
@@ -28,15 +30,49 @@ def convolution(sequences, variable=Symbol('t'), op=max):
     return Eq(conv_def, conv)
 
 
-def riordan_matrix_by_convolution(d, h, t):
+def riordan_matrix_by_convolution(d, h):
+
+    t = symbols('t')
+
+    with lift_to_Lambda(d, return_eq=True) as D, \
+         lift_to_Lambda(h, return_eq=True) as H:
+        d_eq, h_eq = D(t), H(t)
 
     @lru_cache(maxsize=None)
     def column(j):
-        return convolution([column(j-1), h], t) if j else d
+        return convolution([column(j-1), h_eq], t) if j else d_eq
         #return convolution([d] + [h]*j, t)
 
     return lambda i, j: column(j).rhs.coeff(t, i).expand()
 
+def riordan_matrix_by_AZ_sequences(dim, seqs, init={(0,0):1}, ctor=zeros, post=expand, lattice=None):
+    
+    if not lattice: lattice = [(n, k) for n in range(1, dim) for k in range(n+1)]
+
+    Zseq, Aseq = seqs
+    t = symbols('t')
+
+    with lift_to_Lambda(Zseq) as Z, lift_to_Lambda(Aseq) as A:
+        Z_series = Z(t).series(t, n=dim).removeO()
+        A_series = A(t).series(t, n=dim).removeO()
+    
+    R = ctor(dim)
+    
+    for cell, i in init.items(): R[cell] = i
+    
+    for n, k in lattice:
+
+        if k:
+            v = sum(R[n-1, j] * A_series.coeff(t, n=i) for i, j in enumerate(range(k-1, dim)))
+        else:
+            v = sum(R[n-1, j] * Z_series.coeff(t, n=j) for j in range(dim))
+        
+        R[n, k] = v
+
+    
+    if callable(post): R = R.applyfunc(post)
+
+    return lambda n, k: R[n, k]
 
 
 def riordan_matrix_by_recurrence(dim, rec, init={(0,0):1}, ctor=zeros, post=expand, lattice=None):
@@ -67,6 +103,13 @@ def diagonal_matrix(seq, default=0):
         return seq[n] if n == k else default 
 
     return D        
+
+def identity_matrix():
+
+    def I(n, k):
+        return 1 if n == k else 0
+
+    return I
 
 def frobenius_matrix(seq):
 
@@ -136,7 +179,8 @@ def production_matrix(M, exp=False):
     O_inv = O**(-1)
     PM = F * O_inv * V * O * F_inv
     PM = F_inv * PM * F if exp else PM
-    return PM[:-1, :-1]
+    PM = PM[:-1, :-1]
+    return PM.applyfunc(simplify)
 
 def rows_shift_matrix(by):
     return lambda i, j: 1 if i + by == j else 0
@@ -160,6 +204,7 @@ def is_ordinary_RA(M, show_witness=False):
 
 def is_exponential_RA(M, show_witness=False):
 
+    P = production_matrix(M, exp=False) 
     C = production_matrix(M, exp=True) 
 
     diagonals = { d: [C[j+d,j] for j in range(1,C.rows-d)] 
@@ -173,6 +218,7 @@ def is_exponential_RA(M, show_witness=False):
         for i in range(len(l)-1):
             a, b = l[i], l[i+1]
             k_d = k[d]
+            #eq = Eq(k_d, (a-b) / P[d, 1])
             eq = Eq(k_d, a-b)
             unknowns.append(k_d)
             eqs.append(eq)
