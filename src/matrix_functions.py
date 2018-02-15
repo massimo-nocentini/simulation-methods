@@ -13,9 +13,6 @@ lamda_indexed = IndexedBase(r'\lambda')
 mul_indexed = IndexedBase(r'm')
 #}}}
 
-@contextmanager
-def lift_to_Lambda(eq, return_eq=False):
-    yield Lambda(eq.lhs.args, eq if return_eq else eq.rhs)
 
 @contextmanager
 def lift_to_matrix_function(f_def):
