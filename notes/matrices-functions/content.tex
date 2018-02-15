@@ -63,6 +63,18 @@ for $l\in \lbrace 1, \ldots, \nu \rbrace$ for $r \in \lbrace 1, \ldots, m_{l}
 \ldots, \nu\rbrace$ then $\left\lbrace \Phi_{ij}\in\prod_{m-1} \right\rbrace$
 reduces to the usual Lagrange base.
 
+Evaluating polynomial $g$ on matrix $A$ yield:
+\begin{displaymath}
+\begin{split}
+g(A) &= \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(A) }}\\
+    &= \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}Z_{ij} }}\\
+    &= \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\frac{1}{(j-1)!}{Z_{i1}(A-\lambda_{i}I)^{j-1}} }}\\
+\end{split}
+\end{displaymath}
+where matrix $Z_{ij}=\Phi_{ij}(A)$, for $i\in \lbrace 1, \ldots, \nu \rbrace$
+and $j \in \lbrace 0, \ldots, m_{i}-1 \rbrace$, is a \textit{component matrix}
+of $A$. 
+
 \section*{Riordan matrices}
 
 In the rest we study functions of \emph{Riordan matrices}. A Riordan matrix
@@ -106,6 +118,16 @@ Above equations can be compressed in matrix notation:
 which is a \emph{Toeplitz matrix}, multiplied on the right by the vector 
 $$\left[\begin{matrix}1\,z\,\frac{z^{2}}{2!}\,\frac{z^{3}}{3!}\,\frac{z^{4}}{4!}\,\frac{z^{5}}{5!}\,\frac{z^{6}}{6!}\,\frac{z^{7}}{7!}\end{matrix}\right]^{T}$$
 
+Finally, consider the definition of polynomial $g$ that takes the same values of a 
+function $f$:
+\begin{displaymath}
+    g(\mathcal{R}_{m}) = \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\frac{1}{(j-1)!}{(\mathcal{R}_{m}-\lambda_{1}I)^{j-1}} }
+                       = \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=1}\frac{1}{(j-1)!}{(\mathcal{R}_{m}-I)^{j-1}} }
+\end{displaymath}
+here the difficult part lies on the nature of $(\mathcal{R}_{m}-I)^{j-1}$
+matrix because \textit{subtraction} is not a well defined operation in the
+Riordan group; therefore, how can it be defined?  Moreover, is it a Riordan
+matrix in all case?
 
 \section{$f(z)=\frac{1}{z}$}
 
@@ -578,6 +600,23 @@ Defining structure of Riordan matrices entails many useful properties, such as:
     of $h$ satisfying $\bar{h}(h(t))=t$;
 \item the set of these matrices is a \emph{group} with matrix-matrix product as operation.    
 \end{itemize}
+
+\subsection*{Facts about component matrices}
+
+\begin{itemize}
+\item they are linearly independent and don't depend on function $f$;
+\item they commute respect the product, $Z_{ij}Z_{kr}= Z_{kr}Z_{ij}$;
+\item $Z_{ij}Z_{kr}=O$ if $i\neq k$;
+\item $Z_{i1}Z_{ij}=Z_{ij}$ if $j > 0 $;
+\item $Z_{i2}Z_{ij}=jZ_{i,j+1}$ if $j > 0 $;
+\item $Z_{ij}=\frac{Z_{i2}^{j-1}}{(j-1)!}$ if $j > 1 $;
+\item $Z_{i2}^{m_{i}}=O$ for $i\in\lbrace 1,\ldots,\nu\rbrace$;
+\item $I = \sum_{i=1}^{\nu}{Z_{i1}}$ from $f(z)=1$;
+\item $Z_{i2} = Z_{i1}(A-\lambda_{i}I)$ from $f(z)=z-\lambda_{i}$, for
+        $i\in\lbrace 1,\ldots,\nu\rbrace$.
+\end{itemize}
+
+
 
 \subsection*{Matrices}
 \rotatebox{90}{$
