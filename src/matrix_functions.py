@@ -134,6 +134,31 @@ def component_matrices(matrix, Phi_polys, Z=IndexedBase('Z')):
     return Z_matrices
 
 
+def M_space(cmatrices, x=IndexedBase('x')):
+
+    def M_S(v):
+
+        M_space = {}
+
+        for (i, j), Z_eq in cmatrices.items():
+
+            m = Z_eq.rhs.rows
+
+            if i not in M_space: 
+                M_space[i] = {}
+
+            Z_i1 = cmatrices[i,1].rhs 
+            Z_i2 = cmatrices[i,2].rhs if (i,2) in cmatrices else zeros(m, m)
+
+            x_ij = Z_i2**(j-1) * Z_i1 * v
+
+            M_space[i][j] = Eq(x[i,j], x_ij, evaluate=False)
+
+        return M_space
+
+    return M_S
+
+
 
 
 

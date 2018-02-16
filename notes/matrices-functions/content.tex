@@ -65,15 +65,17 @@ reduces to the usual Lagrange base.
 
 Evaluating polynomial $g$ on matrix $A$ yield:
 \begin{displaymath}
-\begin{split}
-g(A) &= \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(A) }}\\
-    &= \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}Z_{ij} }}\\
-    &= \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\frac{1}{(j-1)!}{Z_{i1}(A-\lambda_{i}I)^{j-1}} }}\\
-\end{split}
+g(A) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(A) }}
+     = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}Z_{ij} }}
 \end{displaymath}
 where matrix $Z_{ij}=\Phi_{ij}(A)$, for $i\in \lbrace 1, \ldots, \nu \rbrace$
 and $j \in \lbrace 0, \ldots, m_{i}-1 \rbrace$, is a \textit{component matrix}
-of $A$. 
+of $A$. Moreover, we can rewrite it according to facts reported in the appendix:
+\begin{displaymath}
+g(A) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\frac{1}{(j-1)!}{Z_{i1}(A-\lambda_{i}I)^{j-1}} }}
+\end{displaymath}
+
+We are now ready to apply this framework to matrices in the Riordan group.
 
 \section*{Riordan matrices}
 
