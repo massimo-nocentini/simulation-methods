@@ -123,12 +123,18 @@ def g_poly(f_eq, eigendata, Phi_polys, matrix_form=False):
     return Eq(g(z), g_poly.expand().collect(z))
 
 
-def component_matrices(matrix, Phi_polys):
-
+def component_matrices(matrix, Phi_polys, Z=IndexedBase('Z')):
+    
     Z_matrices = {}
     
     for (i, j), cp in Phi_polys.items():
         with lift_to_matrix_function(cp) as cp_fn:
-            Z_matrices[i, j] = cp_fn(matrix)
+            Z_matrices[i, j] = Eq(Z[i, j], cp_fn(matrix), evaluate=False)
     
     return Z_matrices
+
+
+
+
+
+
