@@ -158,8 +158,50 @@ def M_space(cmatrices, x=IndexedBase('x')):
 
     return M_S
 
+def generalized_eigenvectors_matrices(M_space, X=IndexedBase('X')):
 
+    Xs = {}
 
+    for i, M_i in M_space.items():
+        m = M_i[1].rhs.rows # at least, an eigenvalue should exist so take the first
+        X_i = Matrix(m, m, lambda n, k: M_i[k+1].rhs[n, 0])
+        Xs[i] = Eq(X[i], X_i, evaluate=False)
 
+    return Xs
 
+def generalized_eigenvectors_relations(eigendata):
+
+    data, eigenvals, multiplicities = eigendata
+
+    def GER(A, M_space, instantiate_eigenvalues=False):
+    
+        eqs = {}
+        for i, (λ, m_λ) in data.items():
+
+            eig, mul = (eigenvals[λ] if instantiate_eigenvalues else λ), multiplicities[m_λ]
+            Jordan_chain = M_space[i]
+
+            eqs[i] = {}
+            for j in range(1, mul):
+                x_ij, x_i_succj = Jordan_chain[j].rhs, Jordan_chain[j+1].rhs
+                x_ij_eig = x_ij.applyfunc(lambda x: x * eig)
+                eqs[i][j] = Eq(A*x_ij, x_ij_eig + x_i_succj)
+
+            x_i_mul = Jordan_chain[mul].rhs
+            x_i_mul_eig = x_i_mul.applyfunc(lambda x: x * eig)
+            eqs[i][mul] = Eq(A*x_i_mul, x_i_mul_eig)
+        
+        if instantiate_eigenvalues:
+            assert all(boolean
+                       for i, M_i in eqs.items() 
+                       for j, boolean in M_i.items())
+        else:
+            assert all(Eq(lhs.subs(eigenvals), rhs.subs(eigenvals)) 
+                       for i, M_i in eqs.items() 
+                       for j, eq in M_i.items()
+                       for lhs, rhs in [(eq.lhs, eq.rhs)])
+
+        return eqs
+
+    return GER
 
