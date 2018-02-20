@@ -13,4 +13,3 @@ def lift_to_Lambda(eq, return_eq=False, lhs_handler=lambda args: []):
             lhs.args if isinstance(lhs, Function) else 
             lhs_handler(lhs))
     yield Lambda(args, eq if return_eq else eq.rhs)
-

@@ -164,39 +164,88 @@ def generalized_eigenvectors_matrices(M_space, X=IndexedBase('X')):
 
     for i, M_i in M_space.items():
         m = M_i[1].rhs.rows # at least, an eigenvalue should exist so take the first
-        X_i = Matrix(m, m, lambda n, k: M_i[k+1].rhs[n, 0])
+        X_i = Matrix(m, len(M_i), lambda n, k: M_i[k+1].rhs[n, 0])
         Xs[i] = Eq(X[i], X_i, evaluate=False)
 
     return Xs
+
+
+def Jordan_normalform(eigendata, matrices, syms=symbols('X J')):
+
+    data, eigenvals, multiplicities = eigendata
+    A, M_space, blocks = matrices
+    X, J = syms
+
+    X_cols = sum(len(M_i) for i, M_i in M_space.items())
+    Xmatrix = zeros(A.cols, X_cols)
+
+    J_cols = sum(len(J_i) for i, J_i in blocks.items())
+    Jmatrix = zeros(X_cols, J_cols)
+
+    row, col = 0, 0
+    for i, (λ, m_λ) in data.items():
+
+        M_i = M_space[i]
+        J_i = blocks[i]
+
+        assert M_i.keys() == J_i.keys()
+
+        for j in M_i.keys():
+            Xmatrix[:, col] = M_i[j].rhs
+            Jmatrix[row:row+multiplicities[m_λ], col] = J_i[j]
+            col += 1
+
+        row += multiplicities[m_λ]
+
+    Xeq = Eq(X, Xmatrix, evaluate=False)
+    Jeq = Eq(J, Jmatrix, evaluate=False)
+
+    return Xeq, Jeq
+
+
+def Jordan_blocks(eigendata, J=IndexedBase('J')):
+
+    data, eigenvals, multiplicities = eigendata
+
+    blocks = { i: { j: Matrix(m, 1, lambda n,k: λ if n+1 == j else 
+                                                1 if n == j else 
+                                                0) for j in range(1, m+1) }
+               for i, (λ, m_λ) in data.items()
+               for m in [multiplicities[m_λ]] # binding
+             }
+
+    return blocks
+
 
 def generalized_eigenvectors_relations(eigendata):
 
     data, eigenvals, multiplicities = eigendata
 
-    def GER(A, M_space, instantiate_eigenvalues=False):
-    
+    def GER(A, M_space, post=simplify, check=True):
+
         eqs = {}
         for i, (λ, m_λ) in data.items():
 
-            eig, mul = (eigenvals[λ] if instantiate_eigenvalues else λ), multiplicities[m_λ]
+            eig, mul = eigenvals[λ], multiplicities[m_λ]
             Jordan_chain = M_space[i]
 
             eqs[i] = {}
             for j in range(1, mul):
                 x_ij, x_i_succj = Jordan_chain[j].rhs, Jordan_chain[j+1].rhs
-                x_ij_eig = x_ij.applyfunc(lambda x: x * eig)
-                eqs[i][j] = Eq(A*x_ij, x_ij_eig + x_i_succj)
+                x_ij_eig = x_ij.applyfunc(lambda x: x * λ)
+                eq = Eq(A*x_ij, x_ij_eig + x_i_succj)
+                eqs[i][j] = Eq(eq.lhs.applyfunc(post), eq.rhs.applyfunc(post), evaluate=False)
 
             x_i_mul = Jordan_chain[mul].rhs
-            x_i_mul_eig = x_i_mul.applyfunc(lambda x: x * eig)
-            eqs[i][mul] = Eq(A*x_i_mul, x_i_mul_eig)
-        
-        if instantiate_eigenvalues:
-            assert all(boolean
-                       for i, M_i in eqs.items() 
-                       for j, boolean in M_i.items())
-        else:
-            assert all(Eq(lhs.subs(eigenvals), rhs.subs(eigenvals)) 
+            x_i_mul_eig = x_i_mul.applyfunc(lambda x: x * λ)
+            eq = Eq(A*x_i_mul, x_i_mul_eig)
+            eqs[i][mul] = Eq(eq.lhs.applyfunc(post), eq.rhs.applyfunc(post), evaluate=False)
+
+        if check:
+            def S(i):
+                return i.subs(eigenvals).simplify()
+
+            assert all(lhs.applyfunc(S) == rhs.applyfunc(S)
                        for i, M_i in eqs.items() 
                        for j, eq in M_i.items()
                        for lhs, rhs in [(eq.lhs, eq.rhs)])
