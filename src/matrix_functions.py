@@ -123,13 +123,14 @@ def g_poly(f_eq, eigendata, Phi_polys, matrix_form=False):
     return Eq(g(z), g_poly.expand().collect(z))
 
 
-def component_matrices(matrix, Phi_polys, Z=IndexedBase('Z')):
+def component_matrices(matrix, Phi_polys, Z=IndexedBase('Z'), post=factor):
     
     Z_matrices = {}
     
     for (i, j), cp in Phi_polys.items():
         with lift_to_matrix_function(cp) as cp_fn:
-            Z_matrices[i, j] = Eq(Z[i, j], cp_fn(matrix), evaluate=False)
+            Z_ij = cp_fn(matrix).applyfunc(post)
+            Z_matrices[i, j] = Eq(Z[i, j], Z_ij , evaluate=False)
     
     return Z_matrices
 
@@ -238,7 +239,7 @@ def generalized_eigenvectors_relations(eigendata):
 
             x_i_mul = Jordan_chain[mul].rhs
             x_i_mul_eig = x_i_mul.applyfunc(lambda x: x * λ)
-            eq = Eq(A*x_i_mul, x_i_mul_eig)
+            eq = Eq(A*x_i_mul, x_i_mul_eig, evaluate=False)
             eqs[i][mul] = Eq(eq.lhs.applyfunc(post), eq.rhs.applyfunc(post), evaluate=False)
 
         if check:
@@ -253,4 +254,25 @@ def generalized_eigenvectors_relations(eigendata):
         return eqs
 
     return GER
+
+def split_X_matrix(X, v, factor=False, normalization=one):
+
+    split = []
+    factorized = []
+    for i in range(X.rows):
+        indicator_i = {v[j]:v[i] if j == i else 0 for j in range(X.rows)}
+        X_i = Matrix(X.rows, X.cols, lambda n, k: X[n,k].subs(indicator_i))
+        X_i_factorized = Mul(Matrix(X.rows, X.cols, lambda n, k: X_i[n,k]/(v[i]*normalization(k))),
+                             Matrix(X.rows, X.cols, lambda n, k: v[i]*normalization(k) if n==k else 0),
+                             evaluate=False)
+
+        assert X_i == X_i_factorized.args[0]*X_i_factorized.args[1]
+
+        split.append(X_i)
+        factorized.append(X_i_factorized)
+
+    assert X == sum(split, zeros(X.rows, X.cols))
+
+    return factorized if factor else split 
+
 

@@ -1,10 +1,13 @@
 
 from functools import lru_cache
 from itertools import product
+from collections import namedtuple
 
 from sympy import Symbol, Integer, poly, Eq, expand, zeros, symbols, Matrix, factorial, IndexedBase, solve, simplify
 
 from commons import *
+
+nature = namedtuple('nature', ['is_ordinary', 'is_exponential'])
 
 def convolution(sequences, t):
     
@@ -126,22 +129,6 @@ def unit_vector(i, offset=-1):
      
     return U
 
-def Asequence_(M):
-
-    A = zeros(M.rows-1, M.cols-1)
-    t = symbols('t')
-    funz1 = M[0,0]
-
-    for i in range(A.rows):
-        current_row = M[i+1,:]
-        funz2 = sum(current_row[j]*t**(i-j) for j in range(i+2))
-        funz = (funz2/funz1).series(t, n=A.cols).removeO()
-        for j in range(A.cols):
-            A[i, j]=funz.coeff(t, n=j)
-        funz1=funz2
-
-    return A#[1:,:-1]
-
 def Asequence(M):
 
     A = zeros(M.rows-1, M.cols)
@@ -188,43 +175,32 @@ def rows_shift_matrix(by):
 def diagonal_func_matrix(f):
     return lambda i, j: f(i) if i == j else 0
 
-def is_ordinary_RA(M, show_witness=False):
-
-    PM = production_matrix(M)
-
-    is_ord = True
-    witness = []
-    for i in range(2, PM.cols):
-        if not (PM[:1-i, 1] == PM[i-1:, i]):
-            is_ord = False
-            witness.append(PM[:, i]) # for the witness we return the entire column
-
-    return (is_ord, witness) if show_witness else is_ord
-
-
-def is_exponential_RA(M, show_witness=False):
+def inspect(M):
 
     P = production_matrix(M, exp=False) 
     C = production_matrix(M, exp=True) 
 
+    is_ord = all(P[:1-i, 1] == P[i-1:, i] for i in range(2, P.cols))
+
     diagonals = { d: [C[j+d,j] for j in range(1,C.rows-d)] 
-                  for d in range(C.rows-2) }
+                  for d in range(C.rows-3) }
 
-    k = IndexedBase('k')
-    sols = {}
-    for d, l in diagonals.items():
-        eqs = []
-        unknowns = []
-        for i in range(len(l)-1):
-            a, b = l[i], l[i+1]
-            k_d = k[d]
-            #eq = Eq(k_d, (a-b) / P[d, 1])
-            eq = Eq(k_d, a-b)
-            unknowns.append(k_d)
-            eqs.append(eq)
-        sols[d] = solve(eqs, unknowns)
+    is_exp = all(map(is_arithmetic_progression, diagonals.values()))
 
-    is_exp = all(len(offsets) == 1 for d, offsets in sols.items())
+    return nature(is_ord, is_exp)
 
-    return (is_exp, diagonals, sols) if show_witness else is_exp
+
+def is_arithmetic_progression(prog):
+
+    steps = len(prog)-1
+    for _ in range(steps):
+        prog = [(b-a).simplify() for a, b in zip(prog, prog[1:])]
+
+    assert len(prog) == 1
+
+    return prog[0] == 0
+
+
+
+
 
