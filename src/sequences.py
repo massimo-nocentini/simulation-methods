@@ -33,13 +33,15 @@ def convolution(sequences, t):
     return Eq(conv_def, conv)
 
 
-def riordan_matrix_by_convolution(d, h):
+def riordan_matrix_by_convolution(dim, d, h):
 
     t = symbols('t')
 
     with lift_to_Lambda(d, return_eq=True) as D, \
          lift_to_Lambda(h, return_eq=True) as H:
         d_eq, h_eq = D(t), H(t)
+        d_eq = Eq(d_eq.lhs, d_eq.rhs.series(t, n=dim).removeO())
+        h_eq = Eq(h_eq.lhs, h_eq.rhs.series(t, n=dim).removeO())
 
     @lru_cache(maxsize=None)
     def column(j):

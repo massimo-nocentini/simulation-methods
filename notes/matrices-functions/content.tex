@@ -59,9 +59,31 @@ system with $m$ constraints:
 \end{displaymath}
 for $l\in \lbrace 1, \ldots, \nu \rbrace$ for $r \in \lbrace 1, \ldots, m_{l}
 \rbrace$, where $\delta$ is the Kroneker delta, defined as $\delta_{ij}=1
-\leftrightarrow i=j$.  Observe that if $m_{l}=1$ for all $l\in\lbrace 1,
-\ldots, \nu\rbrace$ then $\left\lbrace \Phi_{ij}\in\prod_{m-1} \right\rbrace$
-reduces to the usual Lagrange base.
+\leftrightarrow i=j$.  Observe that if $m_{l}=1$  then $\left\lbrace \Phi_{ij}\in\prod_{m-1} \right\rbrace$
+reduces to the usual Lagrange base, for all $l\in\lbrace 1, \ldots, \nu\rbrace$;
+for the sake of clarity, if $\nu=4$ then the polynomials $\left\lbrace \Phi_{i1}\in\prod_{3}:i\in\lbrace1,\ldots,4\rbrace \right\rbrace$
+defined as follows
+\begin{displaymath}
+\begin{split}
+\Phi_{ 1, 1 }{\left (z \right )} &= \frac{\left(z - \lambda_{2}\right)
+\left(z - \lambda_{3}\right) \left(z - \lambda_{4}\right)}{\left(\lambda_{1} -
+\lambda_{2}\right) \left(\lambda_{1} - \lambda_{3}\right) \left(\lambda_{1} -
+\lambda_{4}\right)} \\ 
+\Phi_{ 2, 1 }{\left (z \right )} &= - \frac{\left(z -
+\lambda_{1}\right) \left(z - \lambda_{3}\right) \left(z -
+\lambda_{4}\right)}{\left(\lambda_{1} - \lambda_{2}\right) \left(\lambda_{2} -
+\lambda_{3}\right) \left(\lambda_{2} - \lambda_{4}\right)} \\ 
+\Phi_{ 3, 1 }{\left (z \right )} &= \frac{\left(z - \lambda_{1}\right) \left(z -
+\lambda_{2}\right) \left(z - \lambda_{4}\right)}{\left(\lambda_{1} -
+\lambda_{3}\right) \left(\lambda_{2} - \lambda_{3}\right) \left(\lambda_{3} -
+\lambda_{4}\right)} \\ 
+\Phi_{ 4, 1 }{\left (z \right )} &= - \frac{\left(z -
+\lambda_{1}\right) \left(z - \lambda_{2}\right) \left(z -
+\lambda_{3}\right)}{\left(\lambda_{1} - \lambda_{4}\right) \left(\lambda_{2} -
+\lambda_{4}\right) \left(\lambda_{3} - \lambda_{4}\right)}\\
+\end{split}
+\end{displaymath}
+are a Lagrange base respect to eigenvalues $\lambda_{1}, \lambda_{2},\lambda_{3},\lambda_{4}$.
 
 Evaluating polynomial $g$ on matrix $A$ yield:
 \begin{displaymath}
