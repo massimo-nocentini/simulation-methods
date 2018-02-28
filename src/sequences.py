@@ -203,6 +203,25 @@ def is_arithmetic_progression(prog):
     return prog[0] == 0
 
 
+def compositional_inverse(h_eq, y=symbols('y'), check=True):
+
+    spec, body = h_eq.lhs, h_eq.rhs
+    t, = spec.args
+
+    sols = solve(Eq(y, body), t)
+    for sol in sols:
+        L = Lambda(y, sol)
+        if L(0) == 0:
+
+            # partialmethod(L(body), post) # TODO
+            if check: assert L(body).simplify() == t
+
+            h_bar = Function(r'\bar{{ {} }}'.format(str(spec.func)))
+            eq = Eq(h_bar(y), sol.factor())
+            return eq
+
+    raise ValueError
+
 
 
 

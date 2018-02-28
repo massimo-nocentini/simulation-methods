@@ -21,12 +21,13 @@ def lift_to_matrix_function(f_def):
        
         z, *rest = f_def.lhs.args
         gpp, *_ = poly_from_expr(f_def.rhs, z)
+        coeffs = dict(gpp.terms())
 
         I = eye(matrix.rows)
-        Z = f_def.rhs.coeff(z, gpp.degree())*I
+        Z = coeffs.get((gpp.degree(),), 0)*I # pay attention to tuple `(gpp.degree(),)`
 
         for d in range(gpp.degree()-1, -1, -1): 
-            Z = Z*matrix + f_def.rhs.coeff(z, d)*I
+            Z = Z*matrix + coeffs.get((d,), 0)*I
 
         return Z.applyfunc(post) if callable(post) else Z
 
