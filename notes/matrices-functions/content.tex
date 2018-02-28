@@ -5,8 +5,8 @@ Let $A\in\mathbb{C}^{m\times m}$ be a matrix and denote with $\sigma(A)$ the
 spectrum of $A$, namely the set of $A$'s eigenvalues
 \begin{displaymath}
 \sigma(A) = \left\lbrace \lambda_{i}:
-A\textbf{v}_{i}=\lambda_{i}\textbf{v}_{i} \, \text{for} \, 1\leq i\leq \nu\wedge
-\textbf{v}_{i}\in\mathbb{C}^{m}\right\rbrace 
+A\boldsymbol{v}_{i}=\lambda_{i}\boldsymbol{v}_{i} \, \text{for} \, 1\leq i\leq \nu\wedge
+\boldsymbol{v}_{i}\in\mathbb{C}^{m}\right\rbrace 
 \end{displaymath}
 with multiplicities $\lbrace m_{i}: 1\leq i\leq \nu\rbrace$ respectively, such
 that $ \sum_{i=1}^{\nu}{m_{i}}=m$.
@@ -47,21 +47,21 @@ Given a function $f$ defined on $\sigma(A)$, we aim to define a polynomial $g$
 such that $f$ and $g$ take the same values on $\sigma(A)$, to compute $f(A)$
 via $g(A)$; moreover, $g$ is an \emph{Hermite interpolating polynomial} which
 can be written using the base of \textit{generalized Lagrange polynomials}
-$\left\lbrace \Phi_{ij}\in\prod_{m-1} \right\rbrace$. Formally:
+$\left\lbrace \Phi_{i,j}\in\prod_{m-1} \right\rbrace$. Formally:
 \begin{displaymath}
 g(z) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.
-\frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(z) }}
+\frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{i,j}(z) }}
 \end{displaymath}
-where each polynomial $\Phi_{ij}$ is implicitly defined as the solution of the
+where each polynomial $\Phi_{i,j}$ is implicitly defined as the solution of the
 system with $m$ constraints:
 \begin{displaymath}
-    \left. \frac{\partial^{(r-1)}{\Phi_{ij}}}{\partial{z}} \right|_{z=\lambda_{l}} = \delta_{il}\delta_{jr}
+    \left. \frac{\partial^{(r-1)}{\Phi_{i,j}}}{\partial{z}} \right|_{z=\lambda_{l}} = \delta_{i,l}\delta_{j,r}
 \end{displaymath}
 for $l\in \lbrace 1, \ldots, \nu \rbrace$ for $r \in \lbrace 1, \ldots, m_{l}
-\rbrace$, where $\delta$ is the Kroneker delta, defined as $\delta_{ij}=1
-\leftrightarrow i=j$.  Observe that if $m_{l}=1$  then $\left\lbrace \Phi_{ij}\in\prod_{m-1} \right\rbrace$
+\rbrace$, where $\delta$ is the Kroneker delta, defined as $\delta_{i,j}=1
+\leftrightarrow i=j$.  Observe that if $m_{l}=1$  then $\left\lbrace \Phi_{i,j}\in\prod_{m-1} \right\rbrace$
 reduces to the usual Lagrange base, for all $l\in\lbrace 1, \ldots, \nu\rbrace$;
-for the sake of clarity, if $\nu=4$ then the polynomials $\left\lbrace \Phi_{i1}\in\prod_{3}:i\in\lbrace1,\ldots,4\rbrace \right\rbrace$
+for the sake of clarity, if $\nu=4$ then the polynomials $\left\lbrace \Phi_{i,1}\in\prod_{3}:i\in\lbrace1,\ldots,4\rbrace \right\rbrace$
 defined as follows
 \begin{displaymath}
 \begin{split}
@@ -84,17 +84,33 @@ defined as follows
 \end{split}
 \end{displaymath}
 are a Lagrange base respect to eigenvalues $\lambda_{1}, \lambda_{2},\lambda_{3},\lambda_{4}$.
+On the other hand, if $\nu=1$ then there is one eigenvalue $\lambda_{1}$ only, with algebraic multiplicity $m_{1}=m$; for the sake of clarity again,
+for $m=8$ the polynomials $\left\lbrace \Phi_{1,j}\in\prod_{7}:j\in\lbrace1,\ldots,8\rbrace \right\rbrace$ defined as follows
+\begin{equation}
+\begin{array}{c}
+\Phi_{ 1, 1 }{\left (z \right )} = 1 \\ 
+\Phi_{ 1, 2 }{\left (z \right )} = z - \lambda_{1} \\ 
+\Phi_{ 1, 3 }{\left (z \right )} = \frac{z^{2}}{2} - z \lambda_{1} + \frac{\lambda_{1}^{2}}{2}\\ 
+\Phi_{ 1, 4 }{\left (z \right )} = \frac{z^{3}}{6} - \frac{z^{2} \lambda_{1}}{2} + \frac{z \lambda_{1}^{2}}{2} - \frac{\lambda_{1}^{3}}{6} \\ 
+\Phi_{ 1, 5 }{\left (z \right )} = \frac{z^{4}}{24} - \frac{z^{3} \lambda_{1}}{6} + \frac{z^{2} \lambda_{1}^{2}}{4} - \frac{z \lambda_{1}^{3}}{6} + \frac{\lambda_{1}^{4}}{24} \\ 
+\Phi_{ 1, 6 }{\left (z \right )} = \frac{z^{5}}{120} - \frac{z^{4} \lambda_{1}}{24} + \frac{z^{3} \lambda_{1}^{2}}{12} - \frac{z^{2} \lambda_{1}^{3}}{12} + \frac{z \lambda_{1}^{4}}{24} - \frac{\lambda_{1}^{5}}{120} \\
+\Phi_{ 1, 7 }{\left (z \right )} = \frac{z^{6}}{720} - \frac{z^{5} \lambda_{1}}{120} + \frac{z^{4} \lambda_{1}^{2}}{48} - \frac{z^{3} \lambda_{1}^{3}}{36} + \frac{z^{2} \lambda_{1}^{4}}{48} - \frac{z \lambda_{1}^{5}}{120} + \frac{\lambda_{1}^{6}}{720} \\ 
+\Phi_{ 1, 8 }{\left (z \right )} = \frac{z^{7}}{5040} - \frac{z^{6} \lambda_{1}}{720} + \frac{z^{5} \lambda_{1}^{2}}{240} - \frac{z^{4} \lambda_{1}^{3}}{144} + \frac{z^{3} \lambda_{1}^{4}}{144} - \frac{z^{2} \lambda_{1}^{5}}{240} + \frac{z \lambda_{1}^{6}}{720} - \frac{\lambda_{1}^{7}}{5040}\\
+\end{array}
+\label{eq:generalized-Lagrange-base}
+\end{equation}
+are a \textit{generalized} Lagrange base respect to eigenvalue $\lambda_{1}$.
 
 Evaluating polynomial $g$ on matrix $A$ yield:
 \begin{displaymath}
-g(A) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{ij}(A) }}
-     = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}Z_{ij} }}
+g(A) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{i,j}(A) }}
+     = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}Z_{ij}^{[A]} }}
 \end{displaymath}
-where matrix $Z_{ij}=\Phi_{ij}(A)$, for $i\in \lbrace 1, \ldots, \nu \rbrace$
+where matrix $Z_{ij}^{[A]}=\Phi_{i,j}(A)$, for $i\in \lbrace 1, \ldots, \nu \rbrace$
 and $j \in \lbrace 0, \ldots, m_{i}-1 \rbrace$, is a \textit{component matrix}
 of $A$. Moreover, we can rewrite it according to facts reported in the appendix:
 \begin{displaymath}
-g(A) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\frac{1}{(j-1)!}{Z_{i1}(A-\lambda_{i}I)^{j-1}} }}
+g(A) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\frac{1}{(j-1)!}{Z_{i1}^{[A]}(A-\lambda_{i}I)^{j-1}} }}
 \end{displaymath}
 
 We are now ready to apply this framework to matrices in the Riordan group.
@@ -111,15 +127,28 @@ h)$.
 
 From here on, we assume that $\mathcal{R}_{m}\in\mathbb{C}^{m\times m}$ is a
 \emph{finite Riordan matrix}, hence $\sigma(\mathcal{R}_{m})= \lbrace
-\lambda_{1} \rbrace$, so $\nu=1$, where $\lambda_{1}=1$ with multiplicity
-$m_{1}=m$;  therefore, the generalized Lagrange base is composed of polynomials
+\lambda_{1} \rbrace$, therefore $\nu=1$ and eigenvalue $\lambda_{1}$ gets
+multiplicity $m_{1}=m$; finally, function $h$ satisfies $h'(0)=1$ usually, so
+$\lambda_{1}=1$ and $\mathcal{R}_{m}$ is called \textit{proper}.
+We proceed by relaxing the condition $\lambda_{1}=1$ in order to use
+$\lambda_{1}$ as a pure symbol: this allows us to spot structures with respect
+to $\lambda_{1}$ and, eventually, perform the substitution to specialize
+symbolic terms.
+
+Polynomials in \autoref{eq:generalized-Lagrange-base} can be rewritten in matrix form:
 \begin{displaymath}
-  \Phi_{1j}(z) = \sum_{k=0}^{j-1}{\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}
+\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\- \lambda_{1} & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{\lambda_{1}^{2}}{2} & - \lambda_{1} & 1 & 0 & 0 & 0 & 0 & 0\\- \frac{\lambda_{1}^{3}}{6} & \frac{\lambda_{1}^{2}}{2} & - \lambda_{1} & 1 & 0 & 0 & 0 & 0\\\frac{\lambda_{1}^{4}}{24} & - \frac{\lambda_{1}^{3}}{6} & \frac{\lambda_{1}^{2}}{2} & - \lambda_{1} & 1 & 0 & 0 & 0\\- \frac{\lambda_{1}^{5}}{120} & \frac{\lambda_{1}^{4}}{24} & - \frac{\lambda_{1}^{3}}{6} & \frac{\lambda_{1}^{2}}{2} & - \lambda_{1} & 1 & 0 & 0\\\frac{\lambda_{1}^{6}}{720} & - \frac{\lambda_{1}^{5}}{120} & \frac{\lambda_{1}^{4}}{24} & - \frac{\lambda_{1}^{3}}{6} & \frac{\lambda_{1}^{2}}{2} & - \lambda_{1} & 1 & 0\\- \frac{\lambda_{1}^{7}}{5040} & \frac{\lambda_{1}^{6}}{720} & - \frac{\lambda_{1}^{5}}{120} & \frac{\lambda_{1}^{4}}{24} & - \frac{\lambda_{1}^{3}}{6} & \frac{\lambda_{1}^{2}}{2} & - \lambda_{1} & 1\end{matrix}\right] \left[\begin{matrix}1\\z\\\frac{z^{2}}{2!}\\\frac{z^{3}}{3!}\\\frac{z^{4}}{4!}\\\frac{z^{5}}{5!}\\\frac{z^{6}}{6!}\\\frac{z^{7}}{7!}\end{matrix}\right] = \left[\begin{matrix}\phi_{ 1, 1 }{\left (z \right )}\\\phi_{ 1, 2 }{\left (z \right )}\\\phi_{ 1, 3 }{\left (z \right )}\\\phi_{ 1, 4 }{\left (z \right )}\\\phi_{ 1, 5 }{\left (z \right )}\\\phi_{ 1, 6 }{\left (z \right )}\\\phi_{ 1, 7 }{\left (z \right )}\\\phi_{ 1, 8 }{\left (z \right )}\end{matrix}\right]
+\end{displaymath}
+where the generic matrix element $d_{nk}$ at row $n$ and column $k$ is defined by 
+\begin{displaymath}
+    d_{n,k} = \frac{\left(-\lambda_{1}\right)^{n-k}}{\left(n-k\right)!}, \quad k\leq n.
+\end{displaymath}
+therefore, the generalized Lagrange base is composed of polynomials
+\begin{displaymath}
+  \Phi_{1,j}(z) = \sum_{k=0}^{j-1}{\frac{(-\lambda_{1})^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}
 \end{displaymath}
 
-For the sake of clarity we show polynomials $\Phi_{1j}$ for $j\in \lbrace
-1,\ldots,m \rbrace$ relative to any finite Riordan matrix $\mathcal{R}_{m}$
-where $m=8$:
+For the sake of clarity, restoring the condition $\lambda_{1}=1$ we have the following polynomials
 \begin{displaymath}
 \begin{array}{c}
  \Phi_{ 1, 1 }{\left (z \right )} = 1\\
@@ -130,17 +159,53 @@ where $m=8$:
  \Phi_{ 1, 6 }{\left (z \right )} = \frac{z^{5}}{120} - \frac{z^{4}}{24} + \frac{z^{3}}{12} - \frac{z^{2}}{12} + \frac{z}{24} - \frac{1}{120}\\
  \Phi_{ 1, 7 }{\left (z \right )} = \frac{z^{6}}{720} - \frac{z^{5}}{120} + \frac{z^{4}}{48} - \frac{z^{3}}{36} + \frac{z^{2}}{48} - \frac{z}{120} + \frac{1}{720}\\
  \Phi_{ 1, 8 }{\left (z \right )} = \frac{z^{7}}{5040} - \frac{z^{6}}{720} + \frac{z^{5}}{240} - \frac{z^{4}}{144} + \frac{z^{3}}{144} - \frac{z^{2}}{240} + \frac{z}{720} - \frac{1}{5040}\\
- %\Phi_{ 1, 9 }{\left (z \right )} = \frac{z^{8}}{40320} - \frac{z^{7}}{5040} + \frac{z^{6}}{1440} - \frac{z^{5}}{720} + \frac{z^{4}}{576} - \frac{z^{3}}{720} + \frac{z^{2}}{1440} - \frac{z}{5040} + \frac{1}{40320}\\
- %\Phi_{ 1, 10 }{\left (z \right )} = \frac{z^{9}}{362880} - \frac{z^{8}}{40320} + \frac{z^{7}}{10080} - \frac{z^{6}}{4320} + \frac{z^{5}}{2880} - \frac{z^{4}}{2880} + \frac{z^{3}}{4320} - \frac{z^{2}}{10080} + \frac{z}{40320} - \frac{1}{362880}\\
 \end{array}
 \end{displaymath}
-Above equations can be compressed in matrix notation:
+for \textit{any} proper Riordan array $\mathcal{R}_{8}$.
+
+\subsection{A matrix characterization of Hermite interpolating polynomials}
+
+Observe that the matrix is a minor of dimension $m$ of the ordinary Riordan
+array $\left(e^{-\lambda_{1}t}, t\right)$. Since the multiplying vector is a
+chunk of the series expansion of $e^{zt}$, by the fundamental theorem of
+Riordan arrays
 \begin{displaymath}
-%\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0 & 0\\- \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0 & 0\\\frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0 & 0\\- \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0 & 0\\\frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 & 0\\- \frac{1}{5040} & \frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1\end{matrix}\right] 
-\left[\begin{matrix}1 &   &   &   &   &   &   &  \\-1 & 1 &   &   &   &   &   &  \\\frac{1}{2} & -1 & 1 &   &   &   &   &  \\- \frac{1}{6} & \frac{1}{2} & -1 & 1 &   &   &   &  \\\frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 &   &   &  \\- \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 &   &  \\\frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1 &  \\- \frac{1}{5040} & \frac{1}{720} & - \frac{1}{120} & \frac{1}{24} & - \frac{1}{6} & \frac{1}{2} & -1 & 1\end{matrix}\right] 
+\left(e^{-\lambda_{1}t}, t\right)e^{zt} = e^{-\lambda_{1}t} \left(e^{zt}\circ_{t} t \right) =  e^{-\lambda_{1}t} e^{zt} = e^{t(z - \lambda_{1})} = \Phi_{1}(t, z)
 \end{displaymath}
-which is a \emph{Toeplitz matrix}, multiplied on the right by the vector 
-$$\left[\begin{matrix}1\,z\,\frac{z^{2}}{2!}\,\frac{z^{3}}{3!}\,\frac{z^{4}}{4!}\,\frac{z^{5}}{5!}\,\frac{z^{6}}{6!}\,\frac{z^{7}}{7!}\end{matrix}\right]^{T}$$
+where $\Phi_{1}(t, z)$ expands with respect to $t$ as follows
+\begin{displaymath}
+\begin{split}
+\Phi_{1}(t, z) &= 1 \\
+               &+ t \left(z - \lambda_{1}\right) \\
+               &+ t^{2} \left(\frac{z^{2}}{2} - z \lambda_{1} + \frac{\lambda_{1}^{2}}{2}\right) \\
+               &+ t^{3} \left(\frac{z^{3}}{6} - \frac{z^{2} \lambda_{1}}{2} + \frac{z \lambda_{1}^{2}}{2} - \frac{\lambda_{1}^{3}}{6}\right) \\
+               &+ t^{4} \left(\frac{z^{4}}{24} - \frac{z^{3} \lambda_{1}}{6} + \frac{z^{2} \lambda_{1}^{2}}{4} - \frac{z \lambda_{1}^{3}}{6} + \frac{\lambda_{1}^{4}}{24}\right) \\
+               &+ t^{5} \left(\frac{z^{5}}{120} - \frac{z^{4} \lambda_{1}}{24} + \frac{z^{3} \lambda_{1}^{2}}{12} - \frac{z^{2} \lambda_{1}^{3}}{12} + \frac{z \lambda_{1}^{4}}{24} - \frac{\lambda_{1}^{5}}{120}\right)\\
+               &+ t^{6} \left(\frac{z^{6}}{720} - \frac{z^{5} \lambda_{1}}{120} + \frac{z^{4} \lambda_{1}^{2}}{48} - \frac{z^{3} \lambda_{1}^{3}}{36} + \frac{z^{2} \lambda_{1}^{4}}{48} - \frac{z \lambda_{1}^{5}}{120} + \frac{\lambda_{1}^{6}}{720}\right)\\
+               &+ t^{7} \left(\frac{z^{7}}{5040} - \frac{z^{6} \lambda_{1}}{720} + \frac{z^{5} \lambda_{1}^{2}}{240} - \frac{z^{4} \lambda_{1}^{3}}{144} + \frac{z^{3} \lambda_{1}^{4}}{144} - \frac{z^{2} \lambda_{1}^{5}}{240} + \frac{z \lambda_{1}^{6}}{720} - \frac{\lambda_{1}^{7}}{5040}\right) \\
+               &+ \mathcal{O}\left(t^{8}\right)\\
+\end{split}
+\end{displaymath}
+so $\Phi_{1, j}(z) = [t^{j}]\Phi_{1}(t, z)$ for $j \in  \lbrace 1,\ldots, m_{1} \rbrace$.\\\\
+In this setting, the formal definition of an interpolating polynomial $g$ specializes to
+\begin{displaymath}
+g(z) = \sum_{j=1}^{m_{1}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j}(z) } = \boldsymbol{1}^{T}\,D_{f}\, E_{\lambda_{1}} \,\boldsymbol{z}
+\end{displaymath}
+where $D_{f}$ is a matrix with derivatives of function $f$ on the main diagonal
+\begin{displaymath}
+D_{f} = 
+\left[
+    \begin{array}{ccccc}
+        \left.f(t)\right|_{t=\lambda_{1}} & \\
+                                          &  \ddots \\
+                                          &         & \left.\frac{\partial^{i}}{\partial t^{i}}f(t)\right|_{t=\lambda_{1}} \\
+                                          &         &                                                                       & \ddots \\
+                                          &         &                                                                       &        &  \left.\frac{\partial^{m_{1}-1}}{\partial t^{m_{1}-1}}f(t)\right|_{t=\lambda_{1}} \\
+    \end{array}
+\right]
+\end{displaymath}
+for $i\in  \lbrace 1,\ldots,m_{1}-2 \rbrace$.
+
 
 Finally, consider the definition of polynomial $g$ that takes the same values of a 
 function $f$:
@@ -160,9 +225,9 @@ $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = \frac{(-1)^{j}j!}{z^{j+1}}$$
 therefore
 \begin{displaymath}
 \begin{split}
-  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=1}^{m}{ \left. \frac{(-1)^{j-1}(j-1)!}{z^{j}} \right|_{z=1}\Phi_{1j}(z)} \\
-       %&= \sum_{j=1}^{m}{ \left. \frac{1}{z^{j}} \right|_{z=1}(-1)^{j-1}(j-1)!\Phi_{1j}(z)} \\
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. \frac{(-1)^{j-1}(j-1)!}{z^{j}} \right|_{z=1}\Phi_{1,j}(z)} \\
+       %&= \sum_{j=1}^{m}{ \left. \frac{1}{z^{j}} \right|_{z=1}(-1)^{j-1}(j-1)!\Phi_{1,j}(z)} \\
        &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{(-1)^{j-1}(j-1)!\frac{(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}} \\
 \end{split}
 \end{displaymath}
@@ -222,9 +287,9 @@ $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = (r)_{(j)} z^{r-j}$$
 where $(r)_{(j)} = r(r-1)\cdots(r-j+1)$ is the falling factorial, therefore
 \begin{displaymath}
 \begin{split}
-  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=1}^{m}{ \left. (r)_{(j-1)} z^{r-j+1} \right|_{z=1}\Phi_{1j}(z)} \\
-       %&= \sum_{j=1}^{m}{ \left. z^{r-j+1} \right|_{z=\lambda_{1}}(r)_{(j-1)} \Phi_{1j}(z)} \\
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. (r)_{(j-1)} z^{r-j+1} \right|_{z=1}\Phi_{1,j}(z)} \\
+       %&= \sum_{j=1}^{m}{ \left. z^{r-j+1} \right|_{z=\lambda_{1}}(r)_{(j-1)} \Phi_{1,j}(z)} \\
        &= \sum_{j=1}^{m}{\sum_{k=0}^{j-1}{\frac{(r)_{(j-1)}}{(j-1)_{(j-1)}}\frac{(j-1)!(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}} \\
 \end{split}
 \end{displaymath}
@@ -295,12 +360,12 @@ $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} =\frac{(-1)^{j-1}}{2}\frac{(j-1)!}{4^
 for $j \geq 1$, therefore
 \begin{displaymath}
 \begin{split}
-  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j}(z)} \\
        &= \sum_{j=0}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
-       &= f(1)\Phi_{11}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
+       &= f(1)\Phi_{1,1}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
 \end{split}
 \end{displaymath}
-Observing that $\Phi_{11}(z)=1$ and
+Observing that $\Phi_{1,1}(z)=1$ and
 \begin{displaymath}
   \Phi_{1,j+1}(z) = \sum_{k=0}^{j}{\frac{(-1)^{j-k}}{(j-k)!}\frac{z^{k}}{k!}}
 \end{displaymath}
@@ -317,7 +382,7 @@ the outer sum over $k$ extracting the very first term due to $k=0$:
 \end{equation}
 compactly, using Kroneker delta in the inner sum's starting:
 \begin{equation}
-  g(z) = 1 - \frac{1}{2} \sum_{k=0}^{m-1}{\left(\sum_{j=k+\delta_{k0}}^{m-1}{\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}}}\right)(-z)^{k}} \\
+  g(z) = 1 - \frac{1}{2} \sum_{k=0}^{m-1}{\left(\sum_{j=k+\delta_{k,0}}^{m-1}{\frac{1}{j 4^{j-1}} {{2(j-1)}\choose{j-1}}{{j}\choose{k}}}\right)(-z)^{k}} \\
 \end{equation}
 
 For the sake of clarity, here is $g$ polynomial where $m=8$ and relaxing $\lambda=1$ hypothesis:
@@ -345,9 +410,9 @@ $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = \alpha^{j} e^{\alpha z}$$
 therefore
 \begin{displaymath}
 \begin{split}
-  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
-       &= \sum_{j=1}^{m}{ \left. \alpha^{j-1} e^{\alpha z} \right|_{z=1}\Phi_{1j}(z)} \\
-       %&= \sum_{j=1}^{m}{ \left. e^{\alpha z} \right|_{z=\lambda_{1}}\alpha^{j-1} \Phi_{1j}(z)} \\
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j}(z)} \\
+       &= \sum_{j=1}^{m}{ \left. \alpha^{j-1} e^{\alpha z} \right|_{z=1}\Phi_{1,j}(z)} \\
+       %&= \sum_{j=1}^{m}{ \left. e^{\alpha z} \right|_{z=\lambda_{1}}\alpha^{j-1} \Phi_{1,j}(z)} \\
        &= e^{\alpha}\sum_{j=1}^{m}{\sum_{k=0}^{j-1}{\frac{\alpha^{j-1}}{(j-1)!}  \frac{(j-1)!(-1)^{j-1-k}}{(j-1-k)!}\frac{z^{k}}{k!}}}\\
 \end{split}
 \end{displaymath}
@@ -400,9 +465,9 @@ $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} =\frac{(-1)^{j-1}(j-1)!}{z^{j}}  $$
 for $j \geq 1$, therefore
 \begin{displaymath}
 \begin{split}
-  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1j}(z)} \\
+  g(z) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j}(z)} \\
        &= \sum_{j=0}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
-       &= f(1)\Phi_{11}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
+       &= f(1)\Phi_{1,1}(z) + \sum_{j=1}^{m-1}{ \left. \frac{\partial^{(j)}{f}}{\partial{z}} \right|_{z=1}\Phi_{1,j+1}(z)} \\
 \end{split}
 \end{displaymath}
 substitution of known quantities allows us to state the equation
@@ -520,7 +585,7 @@ therefore $\mathcal{C}_{m}^{-1}$ is
 %\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & -2 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 1 & -3 & 1 & 0 & 0 & 0 & 0\\0 & 0 & 3 & -4 & 1 & 0 & 0 & 0\\0 & 0 & -1 & 6 & -5 & 1 & 0 & 0\\0 & 0 & 0 & -4 & 10 & -6 & 1 & 0\\0 & 0 & 0 & 1 & -10 & 15 & -7 & 1\end{matrix}\right]
 \left[\begin{matrix}1 &   &   &   &   &   &   &  \\-1 & 1 &   &   &   &   &   &  \\  & -2 & 1 &   &   &   &   &  \\  & 1 & -3 & 1 &   &   &   &  \\  &   & 3 & -4 & 1 &   &   &  \\  &   & -1 & 6 & -5 & 1 &   &  \\  &   &   & -4 & 1  & -6 & 1 &  \\  &   &   & 1 & -1  & 15 & -7 & 1\end{matrix}\right]
 \end{displaymath}
-since $\mathcal{C}_{m}^{r}$ is too big we report $\mathcal{C}_{m}^{r}\textbf{e}_{1}$ 
+since $\mathcal{C}_{m}^{r}$ is too big we report $\mathcal{C}_{m}^{r}\boldsymbol{e}_{1}$ 
 \begin{displaymath}
 \hspace{-1.5cm}
 %the following is the complete matrix expression
@@ -556,7 +621,7 @@ therefore $\mathcal{S}_{m}^{-1}$ is
 %\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & -1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 2 & -3 & 1 & 0 & 0 & 0 & 0\\0 & -6 & 11 & -6 & 1 & 0 & 0 & 0\\0 & 24 & -50 & 35 & -10 & 1 & 0 & 0\\0 & -120 & 274 & -225 & 85 & -15 & 1 & 0\\0 & 720 & -1764 & 1624 & -735 & 175 & -21 & 1\end{matrix}\right]
 \left[\begin{matrix}1 &   &   &   &   &   &   &  \\  & 1 &   &   &   &   &   &  \\  & -1 & 1 &   &   &   &   &  \\  & 2 & -3 & 1 &   &   &   &  \\  & -6 & 11 & -6 & 1 &   &   &  \\  & 24 & -5  & 35 & -1  & 1 &   &  \\  & -12  & 274 & -225 & 85 & -15 & 1 &  \\  & 72  & -1764 & 1624 & -735 & 175 & -21 & 1\end{matrix}\right]
 \end{displaymath}
-since $\mathcal{S}_{m}^{r}$ is too big we report $\mathcal{S}_{m}^{r}\textbf{e}_{2}$ 
+since $\mathcal{S}_{m}^{r}$ is too big we report $\mathcal{S}_{m}^{r}\boldsymbol{e}_{2}$ 
 \begin{displaymath}
 \hspace{-1cm}
 %\left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & r & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{r}{2} \left(3 r - 1\right) & 3 r & 1 & 0 & 0 & 0 & 0\\0 & \frac{r}{2} \left(6 r^{2} - 5 r + 1\right) & r \left(9 r - 2\right) & 6 r & 1 & 0 & 0 & 0\\0 & \frac{r}{6} \left(45 r^{3} - 65 r^{2} + 30 r - 4\right) & \frac{5 r}{2} \left(12 r^{2} - 7 r + 1\right) & 5 r \left(6 r - 1\right) & 10 r & 1 & 0 & 0\\0 & \frac{r}{24} \left(540 r^{4} - 1155 r^{3} + 890 r^{2} - 273 r + 22\right) & \frac{r}{2} \left(225 r^{3} - 235 r^{2} + 80 r - 8\right) & \frac{15 r}{2} \left(20 r^{2} - 9 r + 1\right) & 5 r \left(15 r - 2\right) & 15 r & 1 & 0\\0 & \frac{r}{24} \left(1890 r^{5} - 5481 r^{4} + 6125 r^{3} - 3129 r^{2} + 637 r - 18\right) & \frac{7 r}{24} \left(1620 r^{4} - 2565 r^{3} + 1490 r^{2} - 351 r + 22\right) & \frac{7 r}{2} \left(225 r^{3} - 185 r^{2} + 50 r - 4\right) & \frac{35 r}{2} \left(30 r^{2} - 11 r + 1\right) & \frac{35 r}{2} \left(9 r - 1\right) & 21 r & 1\end{matrix}\right]
@@ -613,9 +678,9 @@ where $f_{n}$ is the $n$-th Fibonacci number within sequence A000045 in the OEIS
 
 Defining structure of Riordan matrices entails many useful properties, such as:
 \begin{itemize} 
-\item matrix-vector product $\mathcal{R}\cdot \textbf{a}$ is defined as 
+\item matrix-vector product $\mathcal{R}\cdot \boldsymbol{a}$ is defined as 
     $ d(t)A(h(t))$, where $A$ is a formal power series
-    with coefficients belonging to vector $\textbf{a}$ and $\mathcal{R}=(d, h)$;
+    with coefficients belonging to vector $\boldsymbol{a}$ and $\mathcal{R}=(d, h)$;
 \item matrix-matrix product $\mathcal{R}\cdot \mathcal{W}$ is defined as 
     $(d(t)g(h(t)), l(h(t)))$, where $\mathcal{R}=(d, h)$ and $\mathcal{W}=(g, l)$;
 \item identity matrix $I$ is $(1, t)$;
