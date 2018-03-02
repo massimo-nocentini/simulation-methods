@@ -1,5 +1,5 @@
 
-\section*{Basic definitions}
+\section{Basic definitions}
 
 Let $A\in\mathbb{C}^{m\times m}$ be a matrix and denote with $\sigma(A)$ the
 spectrum of $A$, namely the set of $A$'s eigenvalues
@@ -100,7 +100,6 @@ for $m=8$ the polynomials $\left\lbrace \Phi_{1,j}\in\prod_{7}:j\in\lbrace1,\ldo
 \label{eq:generalized-Lagrange-base}
 \end{equation}
 are a \textit{generalized} Lagrange base respect to eigenvalue $\lambda_{1}$.
-
 Evaluating polynomial $g$ on matrix $A$ yield:
 \begin{displaymath}
 g(A) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{i}}\Phi_{i,j}(A) }}
@@ -115,7 +114,7 @@ g(A) = \sum_{i=1}^{\nu}{\sum_{j=1}^{m_{i}}{ \left.  \frac{\partial^{(j-1)}{f}}{\
 
 We are now ready to apply this framework to matrices in the Riordan group.
 
-\section*{Riordan matrices}
+\section{Riordan matrices}
 
 In the rest we study functions of \emph{Riordan matrices}. A Riordan matrix
 $\mathcal{R}=(d_{n,k}\in\mathbb{C})_{n,k\in\mathbb{N}}$ is an infinite, lower
@@ -163,7 +162,7 @@ For the sake of clarity, restoring the condition $\lambda_{1}=1$ we have the fol
 \end{displaymath}
 for \textit{any} proper Riordan array $\mathcal{R}_{8}$.
 
-\subsection{A matrix characterization of Hermite interpolating polynomials}
+\subsection{A Riordan array characterization of Hermite interpolating polynomials}
 
 Observe that the matrix is a minor of dimension $m$ of the ordinary Riordan
 array $\left(e^{-\lambda_{1}t}, t\right)$. Since the multiplying vector is a
@@ -186,7 +185,7 @@ where $\Phi_{1}(t, z)$ expands with respect to $t$ as follows
                &+ \mathcal{O}\left(t^{8}\right)\\
 \end{split}
 \end{displaymath}
-so $\Phi_{1, j}(z) = [t^{j}]\Phi_{1}(t, z)$ for $j \in  \lbrace 1,\ldots, m_{1} \rbrace$.\\\\
+so $\Phi_{1, j}(z) = [t^{j}]\Phi_{1}(t, z)$ for $j \in  \lbrace 1,\ldots, m_{1} \rbrace$.
 In this setting, the formal definition of an interpolating polynomial $g$ specializes to
 \begin{displaymath}
 g(z) = \sum_{j=1}^{m_{1}}{ \left.  \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\Phi_{1,j}(z) } = \boldsymbol{1}^{T}\,D_{f}\, E_{\lambda_{1}} \,\boldsymbol{z}
@@ -206,19 +205,35 @@ D_{f} =
 \end{displaymath}
 for $i\in  \lbrace 1,\ldots,m_{1}-2 \rbrace$.
 
+\subsection{A component matrices characterization of Hermite interpolating polynomials}
 
-Finally, consider the definition of polynomial $g$ that takes the same values of a 
-function $f$:
+Polynomials $\Phi_{ 1, 1 }$ and $\Phi_{ 1, 2 }$ have interesting properties
+when evaluated at a Riordan array $\mathcal{R}_{m}$, formally
 \begin{displaymath}
-    g(\mathcal{R}_{m}) = \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\frac{1}{(j-1)!}{(\mathcal{R}_{m}-\lambda_{1}I)^{j-1}} }
-                       = \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=1}\frac{1}{(j-1)!}{(\mathcal{R}_{m}-I)^{j-1}} }
+ Z_{1,1}^{[\mathcal{R}_{m}]} = \Phi_{ 1, 1 }{\left (\mathcal{R}_{m} \right )} = I \quad\quad\quad
+ Z_{1,2}^{[\mathcal{R}_{m}]} = \Phi_{ 1, 2 }{\left (\mathcal{R}_{m} \right )} = \mathcal{R}_{m} - I
+\end{displaymath}
+According to these facts, consider again the definition of polynomial $g$ that takes the same values of a function $f$:
+\begin{displaymath}
+\begin{split}
+    g(\mathcal{R}_{m}) &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=\lambda_{1}}\frac{1}{(j-1)!}{Z_{1,1}^{[\mathcal{R}_{m}]} (\mathcal{R}_{m}-\lambda_{1}I)^{j-1}} }\\
+                       &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=1}\frac{1}{(j-1)!}{(\mathcal{R}_{m}-I)^{j-1}} }\\
+                       &= \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=1}\frac{1}{(j-1)!}{\left(Z_{1,2}^{[\mathcal{R}_{m}]}\right)^{j-1}} }\\
+                       &= g_{e}\left(Z_{1,2}^{[\mathcal{R}_{m}]}\right)\\
+\end{split}
+\end{displaymath}
+where polynomial $g_{e}$ is a kind of exponential generating function
+\begin{displaymath}
+    g_{e}\left(z\right) = \sum_{j=1}^{m}{ \left. \frac{\partial^{(j-1)}{f}}{\partial{z}} \right|_{z=1}\frac{z^{j-1}}{(j-1)!}}
 \end{displaymath}
 here the difficult part lies on the nature of $(\mathcal{R}_{m}-I)^{j-1}$
 matrix because \textit{subtraction} is not a well defined operation in the
 Riordan group; therefore, how can it be defined?  Moreover, is it a Riordan
 matrix in all case?
 
-\section{$f(z)=\frac{1}{z}$}
+\section{Functions}
+
+\subsection{$f(z)=\frac{1}{z}$}
 
 The general form of $j$th derivative of function $f$ is 
 $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = \frac{(-1)^{j}j!}{z^{j+1}}$$ 
@@ -269,7 +284,32 @@ g{\left (z \right )} &= - \frac{z^{7}}{\lambda^{8}} \\
 &+ \frac{1}{\lambda} + \frac{1}{\lambda^{2}} + \frac{1}{\lambda^{3}} + \frac{1}{\lambda^{4}} + \frac{1}{\lambda^{5}} + \frac{1}{\lambda^{6}} + \frac{1}{\lambda^{7}} + \frac{1}{\lambda^{8}}
 \end{split}
 \end{displaymath}
-restoring $\lambda=1$ yields \[g{\left (z \right )} = - z^{7} + 8 z^{6} - 28 z^{5} + 56 z^{4} - 70 z^{3} + 56 z^{2} - 28 z + 8\]
+restoring $\lambda=1$ yields \[g{\left (z \right )} = - z^{7} + 8 z^{6} - 28 z^{5} + 56 z^{4} - 70 z^{3} + 56 z^{2} - 28 z + 8\].
+
+Using Riordan array characterization we have 
+\begin{displaymath}
+D_{\frac{1}{z}}E_{\lambda_{1}} = \left[\begin{matrix}\frac{1}{\lambda_{1}} & 0 & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{\lambda_{1}} & - \frac{1}{\lambda_{1}^{2}} & 0 & 0 & 0 & 0 & 0 & 0\\\frac{1}{\lambda_{1}} & - \frac{2}{\lambda_{1}^{2}} & \frac{2}{\lambda_{1}^{3}} & 0 & 0 & 0 & 0 & 0\\\frac{1}{\lambda_{1}} & - \frac{3}{\lambda_{1}^{2}} & \frac{6}{\lambda_{1}^{3}} & - \frac{6}{\lambda_{1}^{4}} & 0 & 0 & 0 & 0\\\frac{1}{\lambda_{1}} & - \frac{4}{\lambda_{1}^{2}} & \frac{12}{\lambda_{1}^{3}} & - \frac{24}{\lambda_{1}^{4}} & \frac{24}{\lambda_{1}^{5}} & 0 & 0 & 0\\\frac{1}{\lambda_{1}} & - \frac{5}{\lambda_{1}^{2}} & \frac{20}{\lambda_{1}^{3}} & - \frac{60}{\lambda_{1}^{4}} & \frac{120}{\lambda_{1}^{5}} & - \frac{120}{\lambda_{1}^{6}} & 0 & 0\\\frac{1}{\lambda_{1}} & - \frac{6}{\lambda_{1}^{2}} & \frac{30}{\lambda_{1}^{3}} & - \frac{120}{\lambda_{1}^{4}} & \frac{360}{\lambda_{1}^{5}} & - \frac{720}{\lambda_{1}^{6}} & \frac{720}{\lambda_{1}^{7}} & 0\\\frac{1}{\lambda_{1}} & - \frac{7}{\lambda_{1}^{2}} & \frac{42}{\lambda_{1}^{3}} & - \frac{210}{\lambda_{1}^{4}} & \frac{840}{\lambda_{1}^{5}} & - \frac{2520}{\lambda_{1}^{6}} & \frac{5040}{\lambda_{1}^{7}} & - \frac{5040}{\lambda_{1}^{8}}\end{matrix}\right]
+\end{displaymath}
+generated by the production matrix
+\begin{displaymath}
+\left[\begin{matrix}1 & - \frac{1}{\lambda_{1}} & 0 & 0 & 0 & 0 & 0\\0 & 1 & - \frac{2}{\lambda_{1}} & 0 & 0 & 0 & 0\\0 & 0 & 1 & - \frac{3}{\lambda_{1}} & 0 & 0 & 0\\0 & 0 & 0 & 1 & - \frac{4}{\lambda_{1}} & 0 & 0\\0 & 0 & 0 & 0 & 1 & - \frac{5}{\lambda_{1}} & 0\\0 & 0 & 0 & 0 & 0 & 1 & - \frac{6}{\lambda_{1}}\\0 & 0 & 0 & 0 & 0 & 0 & 1\end{matrix}\right]
+\end{displaymath}
+so the matrix satisfies the recurrence relation 
+\begin{displaymath}
+\begin{split}
+d_{0,0}&=\frac{1}{\lambda_{1}}\\
+d_{n,0}&=d_{n-1, 0}                                    \\
+d_{n,k}&=-\frac{k}{\lambda_{1}}d_{n-1, k-1} + d_{n-1,k}, \quad k > 0\\
+\end{split}
+\end{displaymath}
+finally,
+\begin{displaymath}
+D_{\frac{1}{z}}E_{\lambda_{1}}\boldsymbol{z} = \left[\begin{matrix}\frac{1}{\lambda_{1}}\\- \frac{1}{\lambda_{1}^{2}} \left(z - \lambda_{1}\right)\\\frac{1}{\lambda_{1}^{3}} \left(z - \lambda_{1}\right)^{2}\\- \frac{1}{\lambda_{1}^{4}} \left(z - \lambda_{1}\right)^{3}\\\frac{1}{\lambda_{1}^{5}} \left(z - \lambda_{1}\right)^{4}\\- \frac{1}{\lambda_{1}^{6}} \left(z - \lambda_{1}\right)^{5}\\\frac{1}{\lambda_{1}^{7}} \left(z - \lambda_{1}\right)^{6}\\- \frac{1}{\lambda_{1}^{8}} \left(z - \lambda_{1}\right)^{7}\end{matrix}\right]
+\end{displaymath}
+therefore restoring $\lambda_{1}=1$ yields the polynomial
+\[g{\left (z \right )} = \boldsymbol{1}^{T}D_{\frac{1}{z}}E_{\lambda_{1}}\boldsymbol{z} = - \left(z - 1\right)^{7} + \left(z - 1\right)^{6} - \left(z - 1\right)^{5} + \left(z - 1\right)^{4} - \left(z - 1\right)^{3} + \left(z - 1\right)^{2} - (z-1) + 1\]
+that evaluated at a Riordan array $\mathcal{R}_{8}$
+\[g{\left (\mathcal{R}_{8} \right )} =  - \left(Z_{1,2}^{[\mathcal{R}_{8}]}\right)^{7} + \left(Z_{1,2}^{[\mathcal{R}_{8}]}\right)^{6} - \left(Z_{1,2}^{[\mathcal{R}_{8}]}\right)^{5} + \left(Z_{1,2}^{[\mathcal{R}_{8}]}\right)^{4} - \left(Z_{1,2}^{[\mathcal{R}_{8}]}\right)^{3} + \left(Z_{1,2}^{[\mathcal{R}_{8}]}\right)^{2} - \left(Z_{1,2}^{[\mathcal{R}_{8}]}\right) + I\]
 
 A computation observation concerns the evaluation of $g(\mathcal{R}_{m})$, which should be carried out as
 \begin{displaymath}
@@ -280,7 +320,7 @@ identity matrix. Such approach requires $m-2$ matrix products and $m-1$ addition
 
 
 
-\section{$f(z)=z^{r}$}
+\subsection{$f(z)=z^{r}$}
 
 The general form of $j$th derivative of function $f$ is 
 $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = (r)_{(j)} z^{r-j}$$ 
@@ -353,7 +393,7 @@ g{\left (z \right )} &= 8 {\binom{r}{8}} \left( \frac{z^{7}}{r - 7} - \frac{7 z^
 respectively.
 
 
-\section{$f(z)=\sqrt{z}$}
+\subsection{$f(z)=\sqrt{z}$}
 
 The general form of $j$th derivative of function $f$ is 
 $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} =\frac{(-1)^{j-1}}{2}\frac{(j-1)!}{4^{j-1}}{{2(j-1)}\choose{j-1}}\frac{1}{z^{\frac{2(j-1)+1}{2}}} $$ 
@@ -403,7 +443,7 @@ restoring $\lambda=1$:
 g{\left (z \right )} = \frac{33 z^{7}}{2048} - \frac{273 z^{6}}{2048} + \frac{1001 z^{5}}{2048} - \frac{2145 z^{4}}{2048} + \frac{3003 z^{3}}{2048} - \frac{3003 z^{2}}{2048} + \frac{3003 z}{2048} + \frac{429}{2048}
 \end{displaymath}
 
-\section{$f(z)=e^{\alpha z}$}
+\subsection{$f(z)=e^{\alpha z}$}
 
 The general form of $j$th derivative of function $f$ is 
 $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} = \alpha^{j} e^{\alpha z}$$ 
@@ -458,7 +498,7 @@ g{\left (z \right )} = \frac{1}{e} \left( - \frac{z^{7}}{5040} + \frac{z^{6}}{36
 \end{displaymath}
 
 
-\section{$f(z)=\log{z}$}
+\subsection{$f(z)=\log{z}$}
 
 The general form of $j$th derivative of function $f$ is 
 $$\frac{\partial^{(j)}{f}(z)}{\partial{z}} =\frac{(-1)^{j-1}(j-1)!}{z^{j}}  $$ 
@@ -672,9 +712,9 @@ For the sake of clarity, choose $r=8$ to obtain
     \end{displaymath}
 where $f_{n}$ is the $n$-th Fibonacci number within sequence A000045 in the OEIS.
 
-\section*{Appendix}
+\section{Appendix}
 
-\subsection*{Facts about Riordan matrices}
+\subsection{Facts about Riordan matrices}
 
 Defining structure of Riordan matrices entails many useful properties, such as:
 \begin{itemize} 
@@ -690,7 +730,7 @@ Defining structure of Riordan matrices entails many useful properties, such as:
 \item the set of these matrices is a \emph{group} with matrix-matrix product as operation.    
 \end{itemize}
 
-\subsection*{Facts about component matrices}
+\subsection{Facts about component matrices}
 
 \begin{itemize}
 \item they are linearly independent and don't depend on function $f$;
