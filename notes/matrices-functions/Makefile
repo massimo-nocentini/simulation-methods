@@ -3,8 +3,8 @@ compile:
 	lualatex article.tex
 
 clean:
-	rm *.aux 
-	rm *.log
-	rm *.out
-	rm *.toc
-	rm *.pdf
+	rm -f *.aux 
+	rm -f *.log
+	rm -f *.out
+	rm -f *.toc
+	rm -f *.pdf
