@@ -136,7 +136,7 @@ def component_matrices(matrix, Phi_polys, Z=IndexedBase('Z'), post=factor):
     return Z_matrices
 
 
-def M_space(cmatrices, x=IndexedBase('x')):
+def M_space(cmatrices, x=IndexedBase(r'\boldsymbol{x}')):
 
     def M_S(v):
 
