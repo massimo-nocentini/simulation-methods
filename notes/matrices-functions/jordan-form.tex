@@ -1,0 +1,90 @@
+
+Consider a vector $\boldsymbol{v}\in\mathbb{C}^{m}$ and define subspaces
+\begin{displaymath}
+\mathcal{M}_{i} = \left\lbrace \boldsymbol{x}_{i,j} \triangleq Z_{i,2}^{j-1}\,Z_{i,1}\,\boldsymbol{v}: j\in\lbrace1,\ldots,m_{i}\rbrace\right\rbrace, \quad i\in \lbrace 1,\ldots,\nu \rbrace
+\end{displaymath}
+where $dim(\mathcal{M}_{i})=m_{i}$; moreover, vectors $\boldsymbol{x}_{i,j}$ are
+linearly independent, therefore $\mathcal{M}_{q}\cap\mathcal{M}_{w}=\emptyset$
+if $q\neq w$, and satisfy the recurrence relation
+\begin{displaymath}
+\begin{split}
+\boldsymbol{x}_{i,j+1} &= Z_{i,2}^{j}\,Z_{i,1}\,\boldsymbol{v} = Z_{i,2}\,Z_{i,2}^{j-1}\,Z_{i,1}\,\boldsymbol{v} =  Z_{i,2}\,\boldsymbol{x}_{i,j}=A\,\boldsymbol{x}_{i,j} - \lambda_{i}\,\boldsymbol{x}_{i,j}, \quad j\in \lbrace 1,\ldots,m_{i}-1 \rbrace  \\
+Z_{i,2}\,\boldsymbol{x}_{i,m_{i}} &=  Z_{i,2}\,Z_{i,2}^{m_{i}-1}\,Z_{i,1}\,\boldsymbol{v} = Z_{i,2}^{m_{i}}\,Z_{i,1}\,\boldsymbol{v} = \boldsymbol{0},\quad Z_{i,2}^{m_{i}}=O
+\end{split}
+\end{displaymath}
+or rather
+\begin{displaymath}
+\begin{split}
+A\,\boldsymbol{x}_{i,j} &= \lambda_{i}\,\boldsymbol{x}_{i,j} + \boldsymbol{x}_{i,j+1} , \quad j\in \lbrace 1,\ldots,m_{i}-1 \rbrace  \\
+A\,\boldsymbol{x}_{i,m_{i}} &= \lambda_{i}\,\boldsymbol{x}_{i,m_{i}} \\
+\end{split}
+\end{displaymath}
+which can be rewritten in matrix notation as $A\,X_{i} = X_{i}\,J_{i}$ where
+\begin{displaymath}
+X_{i} = \left[\boldsymbol{x}_{i,1},\ldots,\boldsymbol{x}_{i,m_{i}} \right]\in\mathcal{C}^{m\times m_{i}} \quad\quad
+J_{i} = \left[ \begin{array}{cccc}
+    \lambda_{i} \\
+    1 & \lambda_{i} \\
+      & \ddots & \ddots \\
+      & & 1 &\lambda_{i} \\
+\end{array} \right] \in\mathcal{C}^{m_{i}\times m_{i}}
+\end{displaymath}
+Under this point of view, vectors $\boldsymbol{x}_{i,j}$, $j\in \lbrace
+1,\ldots,m_{i} \rbrace$, are called \textit{generalized eigenvectors}
+($\boldsymbol{x}_{i,m_{i}}$ is an eigenvector, as usual) relative
+to the eigenvalue $\lambda_{i}$ of matrix $A$; moreover, $J_{i}$ is called
+\textit{Jordan block}, for $i\in \lbrace 1,\ldots,\nu \rbrace$. 
+
+Generalizing previous arguments, the \textit{Jordan normal form} of $A$ is
+defined by the relation $A\,X = X\, J$, where
+\begin{displaymath}
+X = \left[X_{1},\ldots,X_{\nu} \right]\in\mathcal{C}^{m\times m} \quad\quad
+J = \left[ \begin{array}{ccc}
+    J_{1} \\
+      & \ddots \\
+      & & J_{\nu} \\
+\end{array} \right] \in\mathcal{C}^{m\times m}
+\end{displaymath}
+with respect to vector $\boldsymbol{v}\in\mathcal{C}^{m}$ which defines
+subspaces $\mathcal{M}_{i}$, for $i\in \lbrace 1,\ldots,\nu \rbrace$; finally,
+if $X$ is non-singular then matrices $A$ and $X^{-1}\,A\,X = J$ are
+    \textit{similar}, $A \sim_{X} J$ in symbols. All this derivations allow us
+    to compute functions of matrices in a easier way, namely $f(A)$ can be
+    computed as follows
+\begin{displaymath}
+\begin{split}
+&X^{-1}\,A\,X = J\\
+&f(X^{-1}\,A\,X) = f(J)\\
+&X^{-1}\,f(A)\,X = f(J)\\
+&f(A) = X\,f(J)\,X^{-1}\\
+\end{split}
+\end{displaymath}
+provided that $A \sim_{X} J$; in words, first find matrices $X$ and $J$, second
+apply $f(J)$, third multiply on both sides. Of these steps remain to
+investigate the application of $f$ to $J$, which is our next task.
+
+
+
+
+\begin{displaymath}
+\begin{split}
+Z_{1,1} &= \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\end{matrix}\right], \quad Z_{1,2} = \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 2 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 3 & 3 & 0 & 0 & 0 & 0 & 0\\1 & 4 & 6 & 4 & 0 & 0 & 0 & 0\\1 & 5 & 10 & 10 & 5 & 0 & 0 & 0\\1 & 6 & 15 & 20 & 15 & 6 & 0 & 0\\1 & 7 & 21 & 35 & 35 & 21 & 7 & 0\end{matrix}\right], \\
+Z_{1,3} &= \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\3 & 3 & 0 & 0 & 0 & 0 & 0 & 0\\7 & 12 & 6 & 0 & 0 & 0 & 0 & 0\\15 & 35 & 30 & 10 & 0 & 0 & 0 & 0\\31 & 90 & 105 & 60 & 15 & 0 & 0 & 0\\63 & 217 & 315 & 245 & 105 & 21 & 0 & 0\end{matrix}\right], \quad Z_{1,4} = \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\6 & 4 & 0 & 0 & 0 & 0 & 0 & 0\\25 & 30 & 10 & 0 & 0 & 0 & 0 & 0\\90 & 150 & 90 & 20 & 0 & 0 & 0 & 0\\301 & 630 & 525 & 210 & 35 & 0 & 0 & 0\end{matrix}\right], \\
+Z_{1,5} &= \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\10 & 5 & 0 & 0 & 0 & 0 & 0 & 0\\65 & 60 & 15 & 0 & 0 & 0 & 0 & 0\\350 & 455 & 210 & 35 & 0 & 0 & 0 & 0\end{matrix}\right], \quad Z_{1,6} = \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\15 & 6 & 0 & 0 & 0 & 0 & 0 & 0\\140 & 105 & 21 & 0 & 0 & 0 & 0 & 0\end{matrix}\right], \\
+Z_{1,7} &= \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\21 & 7 & 0 & 0 & 0 & 0 & 0 & 0\end{matrix}\right], \quad Z_{1,8} = \left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\end{matrix}\right]\\
+\end{split}
+\end{displaymath}
+
+The following are the \textit{generalized eigenvectors} related to Riordan array $\mathcal{P}_{8}$'s component matrices
+\begin{displaymath}
+\begin{split}
+&\boldsymbol{x}_{1,1} = \left[\begin{matrix}\alpha_{0}\\\alpha_{1}\\\alpha_{2}\\\alpha_{3}\\\alpha_{4}\\\alpha_{5}\\\alpha_{6}\\\alpha_{7}\end{matrix}\right], \quad \boldsymbol{x}_{1,2} = \left[\begin{matrix}0\\\alpha_{0}\\\alpha_{0} + 2 \alpha_{1}\\\alpha_{0} + 3 \alpha_{1} + 3 \alpha_{2}\\\alpha_{0} + 4 \alpha_{1} + 6 \alpha_{2} + 4 \alpha_{3}\\\alpha_{0} + 5 \alpha_{1} + 10 \alpha_{2} + 10 \alpha_{3} + 5 \alpha_{4}\\\alpha_{0} + 6 \alpha_{1} + 15 \alpha_{2} + 20 \alpha_{3} + 15 \alpha_{4} + 6 \alpha_{5}\\\alpha_{0} + 7 \alpha_{1} + 21 \alpha_{2} + 35 \alpha_{3} + 35 \alpha_{4} + 21 \alpha_{5} + 7 \alpha_{6}\end{matrix}\right], \\ 
+&\boldsymbol{x}_{1,3} = \left[\begin{matrix}0\\0\\2 \alpha_{0}\\6 \alpha_{0} + 6 \alpha_{1}\\14 \alpha_{0} + 24 \alpha_{1} + 12 \alpha_{2}\\30 \alpha_{0} + 70 \alpha_{1} + 60 \alpha_{2} + 20 \alpha_{3}\\62 \alpha_{0} + 180 \alpha_{1} + 210 \alpha_{2} + 120 \alpha_{3} + 30 \alpha_{4}\\126 \alpha_{0} + 434 \alpha_{1} + 630 \alpha_{2} + 490 \alpha_{3} + 210 \alpha_{4} + 42 \alpha_{5}\end{matrix}\right], \\
+&\boldsymbol{x}_{1,4} = \left[\begin{matrix}0\\0\\0\\6 \alpha_{0}\\36 \alpha_{0} + 24 \alpha_{1}\\150 \alpha_{0} + 180 \alpha_{1} + 60 \alpha_{2}\\540 \alpha_{0} + 900 \alpha_{1} + 540 \alpha_{2} + 120 \alpha_{3}\\1806 \alpha_{0} + 3780 \alpha_{1} + 3150 \alpha_{2} + 1260 \alpha_{3} + 210 \alpha_{4}\end{matrix}\right], \\ 
+&\boldsymbol{x}_{1,5} = \left[\begin{matrix}0\\0\\0\\0\\24 \alpha_{0}\\240 \alpha_{0} + 120 \alpha_{1}\\1560 \alpha_{0} + 1440 \alpha_{1} + 360 \alpha_{2}\\8400 \alpha_{0} + 10920 \alpha_{1} + 5040 \alpha_{2} + 840 \alpha_{3}\end{matrix}\right], \quad \boldsymbol{x}_{1,6} = \left[\begin{matrix}0\\0\\0\\0\\0\\120 \alpha_{0}\\1800 \alpha_{0} + 720 \alpha_{1}\\16800 \alpha_{0} + 12600 \alpha_{1} + 2520 \alpha_{2}\end{matrix}\right], \\
+&\boldsymbol{x}_{1,7} = \left[\begin{matrix}0\\0\\0\\0\\0\\0\\720 \alpha_{0}\\15120 \alpha_{0} + 5040 \alpha_{1}\end{matrix}\right], \quad \boldsymbol{x}_{1,8} = \left[\begin{matrix}0\\0\\0\\0\\0\\0\\0\\5040 \alpha_{0}\end{matrix}\right]\\
+\end{split}
+\end{displaymath}
+where $\boldsymbol{\alpha} = [\alpha_{0}, \ldots, \alpha_{7}]^{T} \in \mathbb{C}^{8}$.
+
+
