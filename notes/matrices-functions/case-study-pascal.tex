@@ -34,9 +34,10 @@ H_{m} = \left[\begin{matrix} 0 &   &   &   &   &   &   &  \\1 & 0   &   &   &   
 \end{displaymath}
 It requires the generalized Lagrange base
 \begin{displaymath}
-\left\{\Phi_{ 1, 1 }{\left (z \right )} = 1, \Phi_{ 1, 2 }{\left (z \right )} = z, \Phi_{ 1, 3 }{\left (z \right )} = \frac{z^{2}}{2},\right.
-\Phi_{ 1, 4 }{\left (z \right )} = \frac{z^{3}}{6}, \Phi_{ 1, 5 }{\left (z \right )} = \frac{z^{4}}{24}, \Phi_{ 1, 6 }{\left (z \right )} = \frac{z^{5}}{120},
-\left.\Phi_{ 1, 7 }{\left (z \right )} = \frac{z^{6}}{720}, \Phi_{ 1, 8 }{\left (z \right )} = \frac{z^{7}}{5040}\right\}
+\begin{split}
+&\left\{\Phi_{ 1, 1 }{\left (z \right )} = 1, \Phi_{ 1, 2 }{\left (z \right )} = z, \Phi_{ 1, 3 }{\left (z \right )} = \frac{z^{2}}{2},\right.  \Phi_{ 1, 4 }{\left (z \right )} = \frac{z^{3}}{6}, \\
+&\Phi_{ 1, 5 }{\left (z \right )} = \frac{z^{4}}{24}, \Phi_{ 1, 6 }{\left (z \right )} = \frac{z^{5}}{120}, \left.\Phi_{ 1, 7 }{\left (z \right )} = \frac{z^{6}}{720}, \Phi_{ 1, 8 }{\left (z \right )} = \frac{z^{7}}{5040}\right\}
+\end{split}
 \end{displaymath}
 to define the interpolating polynomial $g$ as
 \begin{displaymath}
@@ -57,6 +58,11 @@ coefficients symbolic values:
 %\left[\begin{matrix}0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\h_{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & h_{2} & 0 & 0 & 0 & 0 & 0 & 0\\0 & 0 & h_{3} & 0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & h_{4} & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & h_{5} & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0 & h_{6} & 0 & 0\\0 & 0 & 0 & 0 & 0 & 0 & h_{7} & 0\end{matrix}\right]
 \hat{H}_{m} = \left[\begin{matrix}  &   &   &   &   &   &   &  \\h_{1} &   &   &   &   &   &   &  \\  & h_{2} &   &   &   &   &   &  \\  &   & h_{3} &   &   &   &   &  \\  &   &   & h_{4} &   &   &   &  \\  &   &   &   & h_{5} &   &   &  \\  &   &   &   &   & h_{6} &   &  \\  &   &   &   &   &   & h_{7} &  \end{matrix}\right]
 \end{displaymath}
-such that $e^{\alpha\hat{H}_{m}}=\mathcal{P}^{\alpha} \leftrightarrow h_{i}=\frac{i}{\alpha}$, 
+such that $e^{\alpha\hat{H}_{m}}=\mathcal{P}^{\alpha} \leftrightarrow h_{i}=i$, 
 for $i\in \lbrace 1,\ldots,7 \rbrace$, generalizing previous argument; 
-for completeness, we report the whole matrix $e^{\alpha\hat{H}_{m}}$ in the appendix.
+for completeness, we report the whole matrix $e^{\alpha\hat{H}_{m}}$:
+\begin{displaymath}
+\footnotesize
+e^{\alpha\hat{H}_{m}} = \left[\begin{matrix}1 &   &   &   &   &   &   & \\\alpha h_{1} & 1 &   &   &   &   &   & \\\frac{\alpha^{2} }{2}h_{1} h_{2} & \alpha h_{2} & 1 &   &   &   &   & \\\frac{\alpha^{3} }{6}h_{1} h_{2} h_{3} & \frac{\alpha^{2} }{2}h_{2} h_{3} & \alpha h_{3} & 1 &   &   &   & \\\frac{\alpha^{4} }{24}h_{1} h_{2} h_{3} h_{4} & \frac{\alpha^{3} }{6}h_{2} h_{3} h_{4} & \frac{\alpha^{2} }{2}h_{3} h_{4} & \alpha h_{4} & 1 &   &   & \\\frac{\alpha^{5} }{120}h_{1} h_{2} h_{3} h_{4} h_{5} & \frac{\alpha^{4} }{24}h_{2} h_{3} h_{4} h_{5} & \frac{\alpha^{3} }{6}h_{3} h_{4} h_{5} & \frac{\alpha^{2} }{2}h_{4} h_{5} & \alpha h_{5} & 1 &   & \\\frac{\alpha^{6} }{720}h_{1} h_{2} h_{3} h_{4} h_{5} h_{6} & \frac{\alpha^{5} }{120}h_{2} h_{3} h_{4} h_{5} h_{6} & \frac{\alpha^{4} }{24}h_{3} h_{4} h_{5} h_{6} & \frac{\alpha^{3} }{6}h_{4} h_{5} h_{6} & \frac{\alpha^{2} }{2}h_{5} h_{6} & \alpha h_{6} & 1 & \\\frac{\alpha^{7} }{5040}h_{1} h_{2} h_{3} h_{4} h_{5} h_{6} h_{7} & \frac{\alpha^{6} }{720}h_{2} h_{3} h_{4} h_{5} h_{6} h_{7} & \frac{\alpha^{5} }{120}h_{3} h_{4} h_{5} h_{6} h_{7} & \frac{\alpha^{4} }{24}h_{4} h_{5} h_{6} h_{7} & \frac{\alpha^{3} }{6}h_{5} h_{6} h_{7} & \frac{\alpha^{2} }{2}h_{6} h_{7} & \alpha h_{7} & 1\end{matrix}\right]
+\end{displaymath}
+
