@@ -1,5 +1,6 @@
 
 from contextlib import contextmanager
+from functools import lru_cache
 
 from sympy import *
 from sympy.abc import n, i, N, x, lamda, phi, z, j, r, k, a
@@ -33,17 +34,12 @@ def lift_to_matrix_function(f_def):
 
     yield lift
 
-def Phi_poly_ctor(deg, z=Symbol('z'), i=Symbol('i'), j=Symbol('j')):
-    k = symbols('k')
-    Phi = Function(r'\Phi')
-    terms = Sum(phi_abstract_coefficient[i, j, deg-k] * z**k, (k, 0, deg)).doit()
-    return Eq(Phi(z, i, j), terms)
-
 def eigen_data(matrix):
     data = {}
     eigenvals = {}
     multiplicities = {}
-    for i, (eigen_value, multiplicity) in enumerate(matrix.eigenvals().items(), start=1):
+    EVs = matrix.eigenvals() # in this call lies the complexity
+    for i, (eigen_value, multiplicity) in enumerate(EVs.items(), start=1):
         lamda, mul = lamda_indexed[i], mul_indexed[i]
         data[i] = lamda, mul
         eigenvals[lamda] = eigen_value
@@ -51,48 +47,65 @@ def eigen_data(matrix):
 
     return data, eigenvals, multiplicities
 
-def Phi_poly_define(Phi_poly, eigendata):
-    
+
+def Phi_poly_ctor(deg):
+
+    Phi = Function(r'\Phi')
+    z, i, j, k = symbols('z, i, j, k')
+
+    terms = Sum(phi_abstract_coefficient[i, j, deg-k] * z**k, (k, 0, deg)).doit()
+
+    return Eq(Phi(z, i, j), terms)
+
+
+def component_polynomials(eigendata, early_eigenvals_subs=False, verbose_return=False):
+
     data, eigenvals, multiplicities = eigendata
+
+    deg = sum(multiplicities.values()) - 1
+
+    Phi_poly = Phi_poly_ctor(deg)
     z, *_ = Phi_poly.lhs.args
-    
-    def maker(i, j, verbose_return=False):
 
-        Phi_def = Function(r'\Phi_{{ {}, {} }}'.format(i, j))
+    polynomials = {}
 
-        with lift_to_Lambda(Phi_poly) as Phi: 
-            Phi_ij = Phi(z, i, j)
+    for i, (lamda, mul) in data.items():
 
-        eqs = set()
-        for l, (lamda_l, m_l) in data.items():
+        for j in range(1, multiplicities[mul] + 1):
 
-            derivatives = {r:Eq(delta_r(z), Phi_ij.diff(z, r-1))
-                           for r in range(1, multiplicities[m_l]+1)
-                           for delta_r in [Function(r'\delta_{{{}}}'.format(r))]}
+            with lift_to_Lambda(Phi_poly) as Phi: 
+                Phi_ij = Phi(z, i, j)
 
-            for r, der in derivatives.items():
-                with lift_to_Lambda(der) as der_fn:
-                    eqs.add(Eq(der_fn(lamda_l), KroneckerDelta(l, i)*KroneckerDelta(r, j)))
+                @lru_cache(maxsize=None)
+                def Phi_ij_derivative(j):
+                    return Phi_ij_derivative(j-1).diff(z) if j else Phi_ij
 
-        respect_to = [phi_abstract_coefficient[i,j,k] 
-                      for k in range(poly(Phi_ij, z).degree()+1)]
+            eqs = set()
+            for l, (lamda_l, mul_l) in data.items():
 
-        sols = solve(eqs, respect_to)
+                λ_l, m_l = eigenvals[lamda_l] , multiplicities[mul_l]
 
-        lhs = Phi_def(z)
-        rhs = Phi_ij.subs(sols, simultaneous=True).collect(z)
-        baked_poly = Eq(lhs, rhs)
-        return (baked_poly, Eq(lhs, Phi_ij), eqs, sols) if verbose_return else baked_poly
-    
-    return maker
-        
-def component_polynomials(Phi_poly, eigendata):
-    
-    make = Phi_poly_define(Phi_poly, eigendata)
-    data, eigenvals, multiplicities = eigendata
-    polynomials = {(i, j): make(i, j)
-                   for i, (lamda, mul) in data.items()
-                   for j in range(1, multiplicities[mul]+1)}
+                derivatives = {r: Eq(partial_r(z), Phi_ij_derivative(r-1))
+                               for r in range(1, m_l + 1)
+                               for partial_r in [Function(r'\partial^{{({})}}'.format(r))]}
+
+                for r, der_eq in derivatives.items():
+                    with lift_to_Lambda(der_eq) as der_fn:
+                        lhs = der_fn(λ_l if early_eigenvals_subs else lamda_l)
+                        rhs = KroneckerDelta(l, i) * KroneckerDelta(r, j)
+                        eqs.add(Eq(lhs, rhs))
+
+            respect_to = [phi_abstract_coefficient[i,j,k]
+                          for k in range(poly(Phi_ij, z).degree()+1)]
+
+            sols = solve(eqs, respect_to)
+
+            lhs = Function(r'\Phi_{{ {}, {} }}'.format(i, j)).__call__(z)
+            rhs = Phi_ij.subs(sols, simultaneous=True).collect(z)
+            baked_poly = Eq(lhs, rhs)
+            formal_poly = Eq(lhs, Phi_ij)
+
+            polynomials[i,j] = (baked_poly, formal_poly, eqs, sols) if verbose_return else baked_poly
 
     return polynomials
 
@@ -104,23 +117,28 @@ def component_polynomials_riordan(degree):
 
 
 def g_poly(f_eq, eigendata, Phi_polys, matrix_form=False):
-    
+
     data, eigenvals, multiplicities = eigendata
     delta, g = Function(r'\delta'), Function('g')
     Z = IndexedBase('Z')
     z, *rest = f_eq.lhs.args
-    
+
     g_poly = Integer(0)
     
-    for i, (lamda, mul) in data.items():
-        for j in range(1, multiplicities[mul]+1):
-            with lift_to_Lambda(f_eq) as f_fn,\
-                 lift_to_Lambda(Eq(delta(z), f_fn(z).diff(z, j-1))) as der_fn,\
-                 lift_to_Lambda(Phi_polys[i, j]) as Phi:
-                    derivative_term = der_fn(lamda)
-                    Phi_term = Z[i,j] if matrix_form else Phi(z)
-                    g_poly += derivative_term*Phi_term
-    
+    with lift_to_Lambda(f_eq) as f_fn:
+
+        @lru_cache(maxsize=None)
+        def F_derivative(j):
+            return F_derivative(j-1).diff(z) if j else f_fn(z)  
+
+        for i, (lamda, mul) in data.items():
+            for j in range(1, multiplicities[mul]+1):
+                 with lift_to_Lambda(Eq(delta(z), F_derivative(j-1))) as der_fn,\
+                      lift_to_Lambda(Phi_polys[i, j]) as Phi:
+                        derivative_term = der_fn(lamda)
+                        Phi_term = Z[i,j] if matrix_form else Phi(z)
+                        g_poly += derivative_term*Phi_term
+
     return Eq(g(z), g_poly.expand().collect(z))
 
 
