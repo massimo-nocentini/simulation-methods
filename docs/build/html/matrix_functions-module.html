@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to simple’s documentation! &mdash; Simulation Methods 0.0.1 documentation</title>
+  <title>matrix_functions module &mdash; Simulation Methods 0.0.1 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="Simulation Methods 0.0.1 documentation" href="#"/>
-        <link rel="next" title="Title" href="content.html"/> 
+    <link rel="top" title="Simulation Methods 0.0.1 documentation" href="index.html"/>
+        <link rel="prev" title="Generic Riordan Arrays" href="generic-RAs.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +55,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> Simulation Methods
+            <a href="index.html" class="icon icon-home"> Simulation Methods
           
 
           
@@ -90,10 +90,10 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="content.html">Title</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generic-RAs.html">Generic Riordan Arrays</a></li>
-<li class="toctree-l1"><a class="reference internal" href="matrix_functions-module.html">matrix_functions module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">matrix_functions module</a></li>
 </ul>
 
             
@@ -108,7 +108,7 @@
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Simulation Methods</a>
+          <a href="index.html">Simulation Methods</a>
         
       </nav>
 
@@ -136,15 +136,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Docs</a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Welcome to simple&#8217;s documentation!</li>
+      <li>matrix_functions module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/matrix_functions-module.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -157,24 +157,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-simple-s-documentation">
-<h1>Welcome to simple&#8217;s documentation!<a class="headerlink" href="#welcome-to-simple-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="content.html">Title</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generic-RAs.html">Generic Riordan Arrays</a></li>
-<li class="toctree-l1"><a class="reference internal" href="matrix_functions-module.html">matrix_functions module</a></li>
-</ul>
+  <div class="section" id="module-matrix_functions">
+<span id="matrix-functions-module"></span><h1>matrix_functions module<a class="headerlink" href="#module-matrix_functions" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="matrix_functions.Phi_poly_ctor">
+<code class="descclassname">matrix_functions.</code><code class="descname">Phi_poly_ctor</code><span class="sig-paren">(</span><em>deg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matrix_functions.html#Phi_poly_ctor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#matrix_functions.Phi_poly_ctor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ctor.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matrix_functions</span> <span class="k">import</span> <span class="n">Phi_poly_ctor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Phi_poly_ctor</span><span class="p">(</span><span class="n">deg</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span>
+<span class="go">Eq(\Phi(z, i, j), z**3*\phi[i, j, 0] + z**2*\phi[i, j, 1] + z*\phi[i, j, 2] + \phi[i, j, 3])</span>
+</pre></div>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
+<div class="math">
+\[\Phi{\left (z,i,j \right )} = z^{3} \phi_{i,j,0} + z^{2} \phi_{i,j,1} + z \phi_{i,j,2} + \phi_{i,j,3}\]</div>
+</dd></dl>
+
 </div>
 
 
@@ -187,8 +185,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="content.html" class="btn btn-neutral float-right" title="Title" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+        <a href="generic-RAs.html" class="btn btn-neutral" title="Generic Riordan Arrays" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

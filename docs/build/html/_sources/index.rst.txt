@@ -7,12 +7,14 @@ Welcome to simple's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Contents:
 
-   content.rst
-   exp-Pascal.rst
+    content.rst
+    generic-RAs.rst
 
+    matrix_functions-module.rst
+ 
 
 
 Indices and tables

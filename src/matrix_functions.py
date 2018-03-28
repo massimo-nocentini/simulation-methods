@@ -49,6 +49,28 @@ def eigen_data(matrix):
 
 
 def Phi_poly_ctor(deg):
+    '''
+    Ctor.
+
+    .. testcode::
+        :hide:
+
+        from commons import save_latex_repr
+
+
+    >>> from matrix_functions import Phi_poly_ctor
+    >>> p = Phi_poly_ctor(deg=3)
+    >>> p
+    Eq(\Phi(z, i, j), z**3*\phi[i, j, 0] + z**2*\phi[i, j, 1] + z*\phi[i, j, 2] + \phi[i, j, 3])
+
+    .. testcode::
+        :hide:
+
+        save_latex_repr(p, './source/latex-snippets/Phi_poly_ctor-0.rst')
+
+    .. include:: latex-snippets/Phi_poly_ctor-0.rst
+
+    '''
 
     Phi = Function(r'\Phi')
     z, i, j, k = symbols('z, i, j, k')

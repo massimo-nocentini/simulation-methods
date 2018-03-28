@@ -1,0 +1,545 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>matrix_functions &mdash; Simulation Methods 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Simulation Methods 0.0.1 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Simulation Methods
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../content.html">Title</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generic-RAs.html">Generic Riordan Arrays</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matrix_functions-module.html">matrix_functions module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Simulation Methods</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>matrix_functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for matrix_functions</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">lru_cache</span>
+
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sympy.abc</span> <span class="k">import</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">lamda</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">a</span>
+
+<span class="kn">from</span> <span class="nn">commons</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sequences</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="c1">#{{{ generic indexed bases according Brugnano notation</span>
+<span class="n">phi_abstract_coefficient</span> <span class="o">=</span> <span class="n">IndexedBase</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\phi&#39;</span><span class="p">)</span>
+<span class="n">lamda_indexed</span> <span class="o">=</span> <span class="n">IndexedBase</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\lambda&#39;</span><span class="p">)</span>
+<span class="n">mul_indexed</span> <span class="o">=</span> <span class="n">IndexedBase</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="c1">#}}}</span>
+
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">lift_to_matrix_function</span><span class="p">(</span><span class="n">f_def</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">lift</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">simplify</span><span class="p">()):</span>
+       
+        <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="n">f_def</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">args</span>
+        <span class="n">gpp</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">poly_from_expr</span><span class="p">(</span><span class="n">f_def</span><span class="o">.</span><span class="n">rhs</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">coeffs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">gpp</span><span class="o">.</span><span class="n">terms</span><span class="p">())</span>
+
+        <span class="n">I</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">gpp</span><span class="o">.</span><span class="n">degree</span><span class="p">(),),</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">I</span> <span class="c1"># pay attention to tuple `(gpp.degree(),)`</span>
+
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gpp</span><span class="o">.</span><span class="n">degree</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span> 
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">*</span><span class="n">matrix</span> <span class="o">+</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">d</span><span class="p">,),</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">I</span>
+
+        <span class="k">return</span> <span class="n">Z</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">post</span><span class="p">)</span> <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">post</span><span class="p">)</span> <span class="k">else</span> <span class="n">Z</span>
+
+    <span class="k">yield</span> <span class="n">lift</span>
+
+<span class="k">def</span> <span class="nf">eigen_data</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">eigenvals</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">multiplicities</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">EVs</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">eigenvals</span><span class="p">()</span> <span class="c1"># in this call lies the complexity</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">eigen_value</span><span class="p">,</span> <span class="n">multiplicity</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">EVs</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">lamda</span><span class="p">,</span> <span class="n">mul</span> <span class="o">=</span> <span class="n">lamda_indexed</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">mul_indexed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">lamda</span><span class="p">,</span> <span class="n">mul</span>
+        <span class="n">eigenvals</span><span class="p">[</span><span class="n">lamda</span><span class="p">]</span> <span class="o">=</span> <span class="n">eigen_value</span>
+        <span class="n">multiplicities</span><span class="p">[</span><span class="n">mul</span><span class="p">]</span> <span class="o">=</span> <span class="n">multiplicity</span>
+
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span>
+
+
+<div class="viewcode-block" id="Phi_poly_ctor"><a class="viewcode-back" href="../matrix_functions-module.html#matrix_functions.Phi_poly_ctor">[docs]</a><span class="k">def</span> <span class="nf">Phi_poly_ctor</span><span class="p">(</span><span class="n">deg</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Ctor.</span>
+
+<span class="sd">    .. testcode::</span>
+<span class="sd">        :hide:</span>
+
+<span class="sd">        from commons import save_latex_repr</span>
+
+
+<span class="sd">    &gt;&gt;&gt; from matrix_functions import Phi_poly_ctor</span>
+<span class="sd">    &gt;&gt;&gt; p = Phi_poly_ctor(deg=3)</span>
+<span class="sd">    &gt;&gt;&gt; p</span>
+<span class="sd">    Eq(\Phi(z, i, j), z**3*\phi[i, j, 0] + z**2*\phi[i, j, 1] + z*\phi[i, j, 2] + \phi[i, j, 3])</span>
+
+<span class="sd">    .. testcode::</span>
+<span class="sd">        :hide:</span>
+
+<span class="sd">        save_latex_repr(p, &#39;./source/latex-snippets/Phi_poly_ctor-0.rst&#39;)</span>
+
+<span class="sd">    .. include:: latex-snippets/Phi_poly_ctor-0.rst</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">Phi</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\Phi&#39;</span><span class="p">)</span>
+    <span class="n">z</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;z, i, j, k&#39;</span><span class="p">)</span>
+
+    <span class="n">terms</span> <span class="o">=</span> <span class="n">Sum</span><span class="p">(</span><span class="n">phi_abstract_coefficient</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">deg</span><span class="o">-</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">z</span><span class="o">**</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">deg</span><span class="p">))</span><span class="o">.</span><span class="n">doit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">Eq</span><span class="p">(</span><span class="n">Phi</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">terms</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">component_polynomials</span><span class="p">(</span><span class="n">eigendata</span><span class="p">,</span> <span class="n">early_eigenvals_subs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose_return</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+
+    <span class="n">deg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">multiplicities</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="n">Phi_poly</span> <span class="o">=</span> <span class="n">Phi_poly_ctor</span><span class="p">(</span><span class="n">deg</span><span class="p">)</span>
+    <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">Phi_poly</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">args</span>
+
+    <span class="n">polynomials</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">lamda</span><span class="p">,</span> <span class="n">mul</span><span class="p">)</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">multiplicities</span><span class="p">[</span><span class="n">mul</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+            <span class="k">with</span> <span class="n">lift_to_Lambda</span><span class="p">(</span><span class="n">Phi_poly</span><span class="p">)</span> <span class="k">as</span> <span class="n">Phi</span><span class="p">:</span> 
+                <span class="n">Phi_ij</span> <span class="o">=</span> <span class="n">Phi</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+
+                <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+                <span class="k">def</span> <span class="nf">Phi_ij_derivative</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">Phi_ij_derivative</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="k">else</span> <span class="n">Phi_ij</span>
+
+            <span class="n">eqs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="p">(</span><span class="n">lamda_l</span><span class="p">,</span> <span class="n">mul_l</span><span class="p">)</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+                <span class="n">λ_l</span><span class="p">,</span> <span class="n">m_l</span> <span class="o">=</span> <span class="n">eigenvals</span><span class="p">[</span><span class="n">lamda_l</span><span class="p">]</span> <span class="p">,</span> <span class="n">multiplicities</span><span class="p">[</span><span class="n">mul_l</span><span class="p">]</span>
+
+                <span class="n">derivatives</span> <span class="o">=</span> <span class="p">{</span><span class="n">r</span><span class="p">:</span> <span class="n">Eq</span><span class="p">(</span><span class="n">partial_r</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">Phi_ij_derivative</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                               <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m_l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                               <span class="k">for</span> <span class="n">partial_r</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\partial^{{(</span><span class="si">{}</span><span class="s1">)}}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">))]}</span>
+
+                <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">der_eq</span> <span class="ow">in</span> <span class="n">derivatives</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">with</span> <span class="n">lift_to_Lambda</span><span class="p">(</span><span class="n">der_eq</span><span class="p">)</span> <span class="k">as</span> <span class="n">der_fn</span><span class="p">:</span>
+                        <span class="n">lhs</span> <span class="o">=</span> <span class="n">der_fn</span><span class="p">(</span><span class="n">λ_l</span> <span class="k">if</span> <span class="n">early_eigenvals_subs</span> <span class="k">else</span> <span class="n">lamda_l</span><span class="p">)</span>
+                        <span class="n">rhs</span> <span class="o">=</span> <span class="n">KroneckerDelta</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">KroneckerDelta</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+                        <span class="n">eqs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Eq</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">))</span>
+
+            <span class="n">respect_to</span> <span class="o">=</span> <span class="p">[</span><span class="n">phi_abstract_coefficient</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>
+                          <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">poly</span><span class="p">(</span><span class="n">Phi_ij</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span><span class="o">.</span><span class="n">degree</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+
+            <span class="n">sols</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">eqs</span><span class="p">,</span> <span class="n">respect_to</span><span class="p">)</span>
+
+            <span class="n">lhs</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\Phi_{{ </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1"> }}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+            <span class="n">rhs</span> <span class="o">=</span> <span class="n">Phi_ij</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">sols</span><span class="p">,</span> <span class="n">simultaneous</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+            <span class="n">baked_poly</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+            <span class="n">formal_poly</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">Phi_ij</span><span class="p">)</span>
+
+            <span class="n">polynomials</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">baked_poly</span><span class="p">,</span> <span class="n">formal_poly</span><span class="p">,</span> <span class="n">eqs</span><span class="p">,</span> <span class="n">sols</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose_return</span> <span class="k">else</span> <span class="n">baked_poly</span>
+
+    <span class="k">return</span> <span class="n">polynomials</span>
+
+<span class="k">def</span> <span class="nf">component_polynomials_riordan</span><span class="p">(</span><span class="n">degree</span><span class="p">):</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{(</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span> <span class="n">define</span><span class="p">(</span> <span class="n">let</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\Phi_{{ </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1"> }}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">))(</span><span class="n">z</span><span class="p">),</span> 
+                            <span class="n">be</span><span class="o">=</span><span class="n">Sum</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">**</span><span class="n">k</span><span class="o">/</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">doit</span><span class="p">())</span> 
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
+
+
+<span class="k">def</span> <span class="nf">g_poly</span><span class="p">(</span><span class="n">f_eq</span><span class="p">,</span> <span class="n">eigendata</span><span class="p">,</span> <span class="n">Phi_polys</span><span class="p">,</span> <span class="n">matrix_form</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+    <span class="n">delta</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\delta&#39;</span><span class="p">),</span> <span class="n">Function</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">IndexedBase</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span>
+    <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="n">f_eq</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">args</span>
+
+    <span class="n">g_poly</span> <span class="o">=</span> <span class="n">Integer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="k">with</span> <span class="n">lift_to_Lambda</span><span class="p">(</span><span class="n">f_eq</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_fn</span><span class="p">:</span>
+
+        <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">F_derivative</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">F_derivative</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="k">else</span> <span class="n">f_fn</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>  
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">lamda</span><span class="p">,</span> <span class="n">mul</span><span class="p">)</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">multiplicities</span><span class="p">[</span><span class="n">mul</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                 <span class="k">with</span> <span class="n">lift_to_Lambda</span><span class="p">(</span><span class="n">Eq</span><span class="p">(</span><span class="n">delta</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">F_derivative</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span> <span class="k">as</span> <span class="n">der_fn</span><span class="p">,</span>\
+                      <span class="n">lift_to_Lambda</span><span class="p">(</span><span class="n">Phi_polys</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="k">as</span> <span class="n">Phi</span><span class="p">:</span>
+                        <span class="n">derivative_term</span> <span class="o">=</span> <span class="n">der_fn</span><span class="p">(</span><span class="n">lamda</span><span class="p">)</span>
+                        <span class="n">Phi_term</span> <span class="o">=</span> <span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="k">if</span> <span class="n">matrix_form</span> <span class="k">else</span> <span class="n">Phi</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+                        <span class="n">g_poly</span> <span class="o">+=</span> <span class="n">derivative_term</span><span class="o">*</span><span class="n">Phi_term</span>
+
+    <span class="k">return</span> <span class="n">Eq</span><span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">g_poly</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">component_matrices</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">Phi_polys</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">IndexedBase</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">),</span> <span class="n">post</span><span class="o">=</span><span class="n">factor</span><span class="p">):</span>
+    
+    <span class="n">Z_matrices</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">Phi_polys</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">with</span> <span class="n">lift_to_matrix_function</span><span class="p">(</span><span class="n">cp</span><span class="p">)</span> <span class="k">as</span> <span class="n">cp_fn</span><span class="p">:</span>
+            <span class="n">Z_ij</span> <span class="o">=</span> <span class="n">cp_fn</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+            <span class="n">Z_matrices</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">Z_ij</span> <span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">Z_matrices</span>
+
+
+<span class="k">def</span> <span class="nf">M_space</span><span class="p">(</span><span class="n">cmatrices</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">IndexedBase</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\boldsymbol</span><span class="si">{x}</span><span class="s1">&#39;</span><span class="p">)):</span>
+
+    <span class="k">def</span> <span class="nf">M_S</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+
+        <span class="n">M_space</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">Z_eq</span> <span class="ow">in</span> <span class="n">cmatrices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="n">m</span> <span class="o">=</span> <span class="n">Z_eq</span><span class="o">.</span><span class="n">rhs</span><span class="o">.</span><span class="n">rows</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">M_space</span><span class="p">:</span> 
+                <span class="n">M_space</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="n">Z_i1</span> <span class="o">=</span> <span class="n">cmatrices</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rhs</span> 
+            <span class="n">Z_i2</span> <span class="o">=</span> <span class="n">cmatrices</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">rhs</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">cmatrices</span> <span class="k">else</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+
+            <span class="n">x_ij</span> <span class="o">=</span> <span class="n">Z_i2</span><span class="o">**</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Z_i1</span> <span class="o">*</span> <span class="n">v</span>
+
+            <span class="n">M_space</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span> <span class="n">x_ij</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">M_space</span>
+
+    <span class="k">return</span> <span class="n">M_S</span>
+
+<span class="k">def</span> <span class="nf">generalized_eigenvectors_matrices</span><span class="p">(</span><span class="n">M_space</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">IndexedBase</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)):</span>
+
+    <span class="n">Xs</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">M_i</span> <span class="ow">in</span> <span class="n">M_space</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">M_i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rhs</span><span class="o">.</span><span class="n">rows</span> <span class="c1"># at least, an eigenvalue should exist so take the first</span>
+        <span class="n">X_i</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">M_i</span><span class="p">),</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">M_i</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rhs</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">Xs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">X_i</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Xs</span>
+
+
+<span class="k">def</span> <span class="nf">Jordan_normalform</span><span class="p">(</span><span class="n">eigendata</span><span class="p">,</span> <span class="n">matrices</span><span class="p">,</span> <span class="n">syms</span><span class="o">=</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;X J&#39;</span><span class="p">)):</span>
+
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+    <span class="n">A</span><span class="p">,</span> <span class="n">M_space</span><span class="p">,</span> <span class="n">blocks</span> <span class="o">=</span> <span class="n">matrices</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">syms</span>
+
+    <span class="n">X_cols</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">M_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">M_i</span> <span class="ow">in</span> <span class="n">M_space</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="n">Xmatrix</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">cols</span><span class="p">,</span> <span class="n">X_cols</span><span class="p">)</span>
+
+    <span class="n">J_cols</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">J_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">J_i</span> <span class="ow">in</span> <span class="n">blocks</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="n">Jmatrix</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">X_cols</span><span class="p">,</span> <span class="n">J_cols</span><span class="p">)</span>
+
+    <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">λ</span><span class="p">,</span> <span class="n">m_λ</span><span class="p">)</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="n">M_i</span> <span class="o">=</span> <span class="n">M_space</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">J_i</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">assert</span> <span class="n">M_i</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">==</span> <span class="n">J_i</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">M_i</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">Xmatrix</span><span class="p">[:,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">M_i</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">rhs</span>
+            <span class="n">Jmatrix</span><span class="p">[</span><span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">multiplicities</span><span class="p">[</span><span class="n">m_λ</span><span class="p">],</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">J_i</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">col</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">row</span> <span class="o">+=</span> <span class="n">multiplicities</span><span class="p">[</span><span class="n">m_λ</span><span class="p">]</span>
+
+    <span class="n">Xeq</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Xmatrix</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">Jeq</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">Jmatrix</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Xeq</span><span class="p">,</span> <span class="n">Jeq</span>
+
+
+<span class="k">def</span> <span class="nf">Jordan_blocks</span><span class="p">(</span><span class="n">eigendata</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="n">IndexedBase</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)):</span>
+
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+
+    <span class="n">blocks</span> <span class="o">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span> <span class="p">{</span> <span class="n">j</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">,</span><span class="n">k</span><span class="p">:</span> <span class="n">λ</span> <span class="k">if</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span> <span class="o">==</span> <span class="n">j</span> <span class="k">else</span> 
+                                                <span class="mi">1</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="n">j</span> <span class="k">else</span> 
+                                                <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">}</span>
+               <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">λ</span><span class="p">,</span> <span class="n">m_λ</span><span class="p">)</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+               <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="p">[</span><span class="n">multiplicities</span><span class="p">[</span><span class="n">m_λ</span><span class="p">]]</span> <span class="c1"># binding</span>
+             <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">blocks</span>
+
+
+<span class="k">def</span> <span class="nf">generalized_eigenvectors_relations</span><span class="p">(</span><span class="n">eigendata</span><span class="p">):</span>
+
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+
+    <span class="k">def</span> <span class="nf">GER</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">M_space</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="n">simplify</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="n">eqs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">λ</span><span class="p">,</span> <span class="n">m_λ</span><span class="p">)</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="n">eig</span><span class="p">,</span> <span class="n">mul</span> <span class="o">=</span> <span class="n">eigenvals</span><span class="p">[</span><span class="n">λ</span><span class="p">],</span> <span class="n">multiplicities</span><span class="p">[</span><span class="n">m_λ</span><span class="p">]</span>
+            <span class="n">Jordan_chain</span> <span class="o">=</span> <span class="n">M_space</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="n">eqs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">mul</span><span class="p">):</span>
+                <span class="n">x_ij</span><span class="p">,</span> <span class="n">x_i_succj</span> <span class="o">=</span> <span class="n">Jordan_chain</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">rhs</span><span class="p">,</span> <span class="n">Jordan_chain</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rhs</span>
+                <span class="n">x_ij_eig</span> <span class="o">=</span> <span class="n">x_ij</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">λ</span><span class="p">)</span>
+                <span class="n">eq</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">A</span><span class="o">*</span><span class="n">x_ij</span><span class="p">,</span> <span class="n">x_ij_eig</span> <span class="o">+</span> <span class="n">x_i_succj</span><span class="p">)</span>
+                <span class="n">eqs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">post</span><span class="p">),</span> <span class="n">eq</span><span class="o">.</span><span class="n">rhs</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">post</span><span class="p">),</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">x_i_mul</span> <span class="o">=</span> <span class="n">Jordan_chain</span><span class="p">[</span><span class="n">mul</span><span class="p">]</span><span class="o">.</span><span class="n">rhs</span>
+            <span class="n">x_i_mul_eig</span> <span class="o">=</span> <span class="n">x_i_mul</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">λ</span><span class="p">)</span>
+            <span class="n">eq</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">A</span><span class="o">*</span><span class="n">x_i_mul</span><span class="p">,</span> <span class="n">x_i_mul_eig</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">eqs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">mul</span><span class="p">]</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">post</span><span class="p">),</span> <span class="n">eq</span><span class="o">.</span><span class="n">rhs</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">post</span><span class="p">),</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">check</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">S</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">eigenvals</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
+
+            <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">lhs</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">==</span> <span class="n">rhs</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+                       <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">M_i</span> <span class="ow">in</span> <span class="n">eqs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> 
+                       <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">eq</span> <span class="ow">in</span> <span class="n">M_i</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                       <span class="k">for</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">eq</span><span class="o">.</span><span class="n">lhs</span><span class="p">,</span> <span class="n">eq</span><span class="o">.</span><span class="n">rhs</span><span class="p">)])</span>
+
+        <span class="k">return</span> <span class="n">eqs</span>
+
+    <span class="k">return</span> <span class="n">GER</span>
+
+<span class="k">def</span> <span class="nf">split_X_matrix</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">one</span><span class="p">):</span>
+
+    <span class="n">split</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">factorized</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">rows</span><span class="p">):</span>
+        <span class="n">indicator_i</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="n">i</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">rows</span><span class="p">)}</span>
+        <span class="n">X_i</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">rows</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">cols</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">X</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">indicator_i</span><span class="p">))</span>
+        <span class="n">X_i_factorized</span> <span class="o">=</span> <span class="n">Mul</span><span class="p">(</span><span class="n">Matrix</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">rows</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">cols</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">X_i</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">normalization</span><span class="p">(</span><span class="n">k</span><span class="p">))),</span>
+                             <span class="n">Matrix</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">rows</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">cols</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">normalization</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">n</span><span class="o">==</span><span class="n">k</span> <span class="k">else</span> <span class="mi">0</span><span class="p">),</span>
+                             <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">X_i</span> <span class="o">==</span> <span class="n">X_i_factorized</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">X_i_factorized</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">split</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X_i</span><span class="p">)</span>
+        <span class="n">factorized</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X_i_factorized</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">X</span> <span class="o">==</span> <span class="nb">sum</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="n">zeros</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">rows</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">cols</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">factorized</span> <span class="k">if</span> <span class="n">factor</span> <span class="k">else</span> <span class="n">split</span> 
+
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2018, Massimo Nocentini.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
