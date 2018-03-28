@@ -8,6 +8,9 @@ SPHINXPROJ    = simple
 SOURCEDIR     = source
 BUILDDIR      = build
 
+deploy-html:
+	make doctest && make html
+
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

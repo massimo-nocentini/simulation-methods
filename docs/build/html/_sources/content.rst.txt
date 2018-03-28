@@ -2,11 +2,16 @@
 Title
 =====
 
+
+.. testcode::
+    :hide:
+
+    from commons import save_latex_repr
+
 Some text
 
 .. doctest::
 
-    >>> from contextlib import redirect_stdout
     >>> from sympy import *
 
     >>> t = symbols('t')
@@ -17,20 +22,12 @@ Some text
 .. testcode::
     :hide:
 
-    with open('./source/my-sum.rst', 'w') as f:
-        with redirect_stdout(f):
-            print('.. math::\n\n\t{}'.format(latex(term)))
+    save_latex_repr(term, './source/my-sum.rst')
 
 Produces
 
 .. include:: my-sum.rst
 
-.. sidebar:: Sidebar Title
-    :subtitle: Optional Sidebar Subtitle
-
-    Subsequent indented lines comprise
-    the body of the sidebar, and are
-    interpreted as body elements.
 
 .. doctest::
 

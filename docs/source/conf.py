@@ -17,9 +17,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('./../../src/'))
 
 
 # -- General configuration ------------------------------------------------
@@ -51,9 +51,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'simple'
-copyright = '2018, Massimo'
-author = 'Massimo'
+project = 'Simulation Methods'
+copyright = '2017-2018, Massimo Nocentini'
+author = 'Massimo Nocentini'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -105,7 +105,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'simpledoc'
+htmlhelp_basename = 'smdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -147,7 +147,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     #(master_doc, 'simple.tex', 'simple Documentation', 'Massimo', 'tufte-handout'),
-    (master_doc, 'simple.tex', 'simple Documentation', 'Massimo', 'article'),
+    (master_doc, 'sm.tex', 'Simulation Methods Documentation', 'Massimo Nocentini', 'article'),
 ]
 
 
