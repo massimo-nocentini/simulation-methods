@@ -123,7 +123,14 @@ $\mathcal{C} \sim_{Y_{\boldsymbol{\beta}}\,\left(X_{\boldsymbol{\alpha}}\right)^
 \begin{displaymath}
 {Y_{\boldsymbol{\beta}}\,\left(X_{\boldsymbol{\alpha}}\right)^{-1}} = \frac{\beta_{0}}{\alpha_{0}} \left[\begin{matrix}1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\0 & 1 & 1 & 0 & 0 & 0 & 0 & 0\\0 & \frac{3}{2} & \frac{5}{2} & 1 & 0 & 0 & 0 & 0\\0 & \frac{8}{3} & 6 & \frac{13}{3} & 1 & 0 & 0 & 0\\0 & \frac{31}{6} & \frac{175}{12} & \frac{89}{6} & \frac{77}{12} & 1 & 0 & 0\\0 & \frac{157}{15} & \frac{215}{6} & \frac{281}{6} & \frac{175}{6} & \frac{87}{10} & 1 & 0\\0 & \frac{649}{30} & \frac{1767}{20} & \frac{851}{6} & 115 & \frac{1501}{30} & \frac{223}{20} & 1\end{matrix}\right]
 \end{displaymath}
-as required.
+as required. Finally, consider the matrix-vector product $A\boldsymbol{b}$, where
+$\boldsymbol{b}\in\mathbb{C}^{m}$; provided that $A\sim_{X_{\boldsymbol{\alpha}}}J$ then
+\begin{displaymath}
+A\boldsymbol{b} = \left.X_{\boldsymbol{\alpha}}\,J\,\left(X_{\boldsymbol{\alpha}}\right)^{-1}\,\boldsymbol{b}\right|_{\boldsymbol{\alpha}=\boldsymbol{b}}
+                = X_{\boldsymbol{b}}\,J\,\boldsymbol{e}_{0}
+\end{displaymath}
+where $\left(X_{\boldsymbol{b}}\right)^{-1}\,\boldsymbol{b}=\boldsymbol{e}_{0}$ because 
+$X_{\boldsymbol{b}}\,\boldsymbol{e}_{0}=\boldsymbol{x}_{1,1} = Z_{1,2}^{0}\,Z_{1,1}\boldsymbol{b}=\boldsymbol{b}$.
 
 
 
