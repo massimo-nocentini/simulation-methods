@@ -3,8 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to simple's documentation!
-==================================
+Numerical methods for simulation and dynamic systems
+====================================================
+
+Collecting my work to support `Numerical methods for simulation <http://web.math.unifi.it/users/brugnano/Corsi/anno_accademico/a.a.%202016-2017/Prog-MNS.htm>`_ course,
+taught by prof. `Luigi Brugnano <http://web.math.unifi.it/users/brugnano/>`_ @ University of Florence.
+
 
 .. toctree::
     :maxdepth: 3
@@ -20,3 +24,5 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+ 
