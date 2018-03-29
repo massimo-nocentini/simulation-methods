@@ -8,8 +8,11 @@ SPHINXPROJ    = simple
 SOURCEDIR     = source
 BUILDDIR      = build
 
-deploy-html:
-	make doctest && make html
+doctest-html: travis
+	make html
+
+travis:
+	make clean && make doctest # it is not necessary to build the entire documentation
 
 # Put it first so that "make" without argument is like "make help".
 help:
