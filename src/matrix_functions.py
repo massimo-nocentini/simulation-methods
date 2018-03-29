@@ -91,7 +91,7 @@ def Phi_poly_ctor(deg):
 
 def component_polynomials(eigendata, early_eigenvals_subs=False, verbose_return=False):
 
-    data, eigenvals, multiplicities = eigendata
+    data, eigenvals, multiplicities = eigendata.rhs
 
     deg = sum(multiplicities.values()) - 1
 
@@ -149,7 +149,7 @@ def component_polynomials_riordan(degree):
     >>> R_cal, d = IndexedBase(r'\mathcal{R}'), IndexedBase('d') # helpers bases
     >>> R = define(R_cal[m], Matrix(m, m, riordan_matrix_by_recurrence(m, lambda n, k: {(n, k):1 if n == k else d[n, k]})))
     >>> eigendata = spectrum(R)
-    >>> assert (component_polynomials(eigendata.rhs, early_eigenvals_subs=True) == 
+    >>> assert (component_polynomials(eigendata, early_eigenvals_subs=True) == 
     ...         component_polynomials_riordan(degree=m-1))
 
     '''
@@ -235,7 +235,7 @@ def generalized_eigenvectors_matrices(M_space, X=IndexedBase('X')):
 
 def Jordan_normalform(eigendata, matrices, syms=symbols('X J')):
 
-    data, eigenvals, multiplicities = eigendata
+    data, eigenvals, multiplicities = eigendata.rhs
     A, M_space, blocks = matrices
     X, J = syms
 
@@ -268,7 +268,7 @@ def Jordan_normalform(eigendata, matrices, syms=symbols('X J')):
 
 def Jordan_blocks(eigendata, J=IndexedBase('J')):
 
-    data, eigenvals, multiplicities = eigendata
+    data, eigenvals, multiplicities = eigendata.rhs
 
     blocks = { i: { j: Matrix(m, 1, lambda n,k: λ if n+1 == j else 
                                                 1 if n == j else 
@@ -282,7 +282,7 @@ def Jordan_blocks(eigendata, J=IndexedBase('J')):
 
 def generalized_eigenvectors_relations(eigendata):
 
-    data, eigenvals, multiplicities = eigendata
+    data, eigenvals, multiplicities = eigendata.rhs
 
     def GER(A, M_space, post=simplify, check=True):
 

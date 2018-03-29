@@ -42,7 +42,7 @@ Component polynomials
 
 .. doctest::
 
-    >>> Phi_polynomials = component_polynomials(eigendata.rhs)
+    >>> Phi_polynomials = component_polynomials(eigendata)
     >>> Phi_polynomials
     {(1, 1): Eq(\Phi_{ 1, 1 }(z), z**3/(\lambda[1]**3 - \lambda[1]**2*\lambda[2] - \lambda[1]**2*\lambda[3] - \lambda[1]**2*\lambda[4] + \lambda[1]*\lambda[2]*\lambda[3] + \lambda[1]*\lambda[2]*\lambda[4] + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]*\lambda[3]*\lambda[4]) - z**2*(\lambda[2] + \lambda[3] + \lambda[4])/(\lambda[1]**3 - \lambda[1]**2*\lambda[2] - \lambda[1]**2*\lambda[3] - \lambda[1]**2*\lambda[4] + \lambda[1]*\lambda[2]*\lambda[3] + \lambda[1]*\lambda[2]*\lambda[4] + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]*\lambda[3]*\lambda[4]) + z*(\lambda[2]*\lambda[3] + \lambda[2]*\lambda[4] + \lambda[3]*\lambda[4])/(\lambda[1]**3 - \lambda[1]**2*\lambda[2] - \lambda[1]**2*\lambda[3] - \lambda[1]**2*\lambda[4] + \lambda[1]*\lambda[2]*\lambda[3] + \lambda[1]*\lambda[2]*\lambda[4] + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]*\lambda[3]*\lambda[4]) - \lambda[2]*\lambda[3]*\lambda[4]/(\lambda[1]**3 - \lambda[1]**2*\lambda[2] - \lambda[1]**2*\lambda[3] - \lambda[1]**2*\lambda[4] + \lambda[1]*\lambda[2]*\lambda[3] + \lambda[1]*\lambda[2]*\lambda[4] + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]*\lambda[3]*\lambda[4])), (2, 1): Eq(\Phi_{ 2, 1 }(z), -z**3/(\lambda[1]*\lambda[2]**2 - \lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]**3 + \lambda[2]**2*\lambda[3] + \lambda[2]**2*\lambda[4] - \lambda[2]*\lambda[3]*\lambda[4]) + z**2*(\lambda[1] + \lambda[3] + \lambda[4])/(\lambda[1]*\lambda[2]**2 - \lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]**3 + \lambda[2]**2*\lambda[3] + \lambda[2]**2*\lambda[4] - \lambda[2]*\lambda[3]*\lambda[4]) - z*(\lambda[1]*\lambda[3] + \lambda[1]*\lambda[4] + \lambda[3]*\lambda[4])/(\lambda[1]*\lambda[2]**2 - \lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]**3 + \lambda[2]**2*\lambda[3] + \lambda[2]**2*\lambda[4] - \lambda[2]*\lambda[3]*\lambda[4]) + \lambda[1]*\lambda[3]*\lambda[4]/(\lambda[1]*\lambda[2]**2 - \lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]**3 + \lambda[2]**2*\lambda[3] + \lambda[2]**2*\lambda[4] - \lambda[2]*\lambda[3]*\lambda[4])), (3, 1): Eq(\Phi_{ 3, 1 }(z), z**3/(\lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] - \lambda[1]*\lambda[3]**2 + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]*\lambda[3]**2 + \lambda[2]*\lambda[3]*\lambda[4] + \lambda[3]**3 - \lambda[3]**2*\lambda[4]) - z**2*(\lambda[1] + \lambda[2] + \lambda[4])/(\lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] - \lambda[1]*\lambda[3]**2 + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]*\lambda[3]**2 + \lambda[2]*\lambda[3]*\lambda[4] + \lambda[3]**3 - \lambda[3]**2*\lambda[4]) + z*(\lambda[1]*\lambda[2] + \lambda[1]*\lambda[4] + \lambda[2]*\lambda[4])/(\lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] - \lambda[1]*\lambda[3]**2 + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]*\lambda[3]**2 + \lambda[2]*\lambda[3]*\lambda[4] + \lambda[3]**3 - \lambda[3]**2*\lambda[4]) - \lambda[1]*\lambda[2]*\lambda[4]/(\lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] - \lambda[1]*\lambda[3]**2 + \lambda[1]*\lambda[3]*\lambda[4] - \lambda[2]*\lambda[3]**2 + \lambda[2]*\lambda[3]*\lambda[4] + \lambda[3]**3 - \lambda[3]**2*\lambda[4])), (4, 1): Eq(\Phi_{ 4, 1 }(z), -z**3/(\lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] - \lambda[1]*\lambda[3]*\lambda[4] + \lambda[1]*\lambda[4]**2 - \lambda[2]*\lambda[3]*\lambda[4] + \lambda[2]*\lambda[4]**2 + \lambda[3]*\lambda[4]**2 - \lambda[4]**3) + z**2*(\lambda[1] + \lambda[2] + \lambda[3])/(\lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] - \lambda[1]*\lambda[3]*\lambda[4] + \lambda[1]*\lambda[4]**2 - \lambda[2]*\lambda[3]*\lambda[4] + \lambda[2]*\lambda[4]**2 + \lambda[3]*\lambda[4]**2 - \lambda[4]**3) - z*(\lambda[1]*\lambda[2] + \lambda[1]*\lambda[3] + \lambda[2]*\lambda[3])/(\lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] - \lambda[1]*\lambda[3]*\lambda[4] + \lambda[1]*\lambda[4]**2 - \lambda[2]*\lambda[3]*\lambda[4] + \lambda[2]*\lambda[4]**2 + \lambda[3]*\lambda[4]**2 - \lambda[4]**3) + \lambda[1]*\lambda[2]*\lambda[3]/(\lambda[1]*\lambda[2]*\lambda[3] - \lambda[1]*\lambda[2]*\lambda[4] - \lambda[1]*\lambda[3]*\lambda[4] + \lambda[1]*\lambda[4]**2 - \lambda[2]*\lambda[3]*\lambda[4] + \lambda[2]*\lambda[4]**2 + \lambda[3]*\lambda[4]**2 - \lambda[4]**3))}
 
@@ -84,7 +84,7 @@ Component polynomials
 
 .. doctest::
 
-    >>> Phi_polynomials = component_polynomials(eigendata.rhs)
+    >>> Phi_polynomials = component_polynomials(eigendata)
     >>> Phi_polynomials
     {(1, 1): Eq(\Phi_{ 1, 1 }(z), 1), (1, 2): Eq(\Phi_{ 1, 2 }(z), z - \lambda[1]), (1, 3): Eq(\Phi_{ 1, 3 }(z), z**2/2 - z*\lambda[1] + \lambda[1]**2/2), (1, 4): Eq(\Phi_{ 1, 4 }(z), z**3/6 - z**2*\lambda[1]/2 + z*\lambda[1]**2/2 - \lambda[1]**3/6), (1, 5): Eq(\Phi_{ 1, 5 }(z), z**4/24 - z**3*\lambda[1]/6 + z**2*\lambda[1]**2/4 - z*\lambda[1]**3/6 + \lambda[1]**4/24), (1, 6): Eq(\Phi_{ 1, 6 }(z), z**5/120 - z**4*\lambda[1]/24 + z**3*\lambda[1]**2/12 - z**2*\lambda[1]**3/12 + z*\lambda[1]**4/24 - \lambda[1]**5/120), (1, 7): Eq(\Phi_{ 1, 7 }(z), z**6/720 - z**5*\lambda[1]/120 + z**4*\lambda[1]**2/48 - z**3*\lambda[1]**3/36 + z**2*\lambda[1]**4/48 - z*\lambda[1]**5/120 + \lambda[1]**6/720), (1, 8): Eq(\Phi_{ 1, 8 }(z), z**7/5040 - z**6*\lambda[1]/720 + z**5*\lambda[1]**2/240 - z**4*\lambda[1]**3/144 + z**3*\lambda[1]**4/144 - z**2*\lambda[1]**5/240 + z*\lambda[1]**6/720 - \lambda[1]**7/5040)}
 
@@ -237,6 +237,19 @@ Functions
 
     >>> f, g = Function('f'), Function('g') # abstract function and its Hermite interpolating polynomial
 
+    >>> Phi_polynomials = component_polynomials(eigendata, early_eigenvals_subs=True)
+    >>> Phi_polynomials
+    {(1, 1): Eq(\Phi_{ 1, 1 }(z), 1), (1, 2): Eq(\Phi_{ 1, 2 }(z), z - 1), (1, 3): Eq(\Phi_{ 1, 3 }(z), z**2/2 - z + 1/2), (1, 4): Eq(\Phi_{ 1, 4 }(z), z**3/6 - z**2/2 + z/2 - 1/6), (1, 5): Eq(\Phi_{ 1, 5 }(z), z**4/24 - z**3/6 + z**2/4 - z/6 + 1/24), (1, 6): Eq(\Phi_{ 1, 6 }(z), z**5/120 - z**4/24 + z**3/12 - z**2/12 + z/24 - 1/120), (1, 7): Eq(\Phi_{ 1, 7 }(z), z**6/720 - z**5/120 + z**4/48 - z**3/36 + z**2/48 - z/120 + 1/720), (1, 8): Eq(\Phi_{ 1, 8 }(z), z**7/5040 - z**6/720 + z**5/240 - z**4/144 + z**3/144 - z**2/240 + z/720 - 1/5040)}
+
+
+.. testcode::
+    :hide:
+
+    obj = [eq.factor() for k, eq in Phi_polynomials.items()] # pretty print
+    save_latex_repr(obj, './source/latex-snippets/generic-RAs-16.rst', iterable=True)
+
+.. include:: latex-snippets/generic-RAs-16.rst
+
 :math:`f(z)=z^{r}, r\in\mathbb{Q}` 
 ----------------------------------
 
@@ -246,9 +259,23 @@ Functions
     >>> f_power
     Eq(f(z), z**r)
 
-    >>> g_power = g_poly(f_power, eigendata, Phi_polynomials)
+    >>> f_power_derivatives = [f_power.rhs.diff(z, i).factor().powsimp() for i in range(m)]
+    >>> f_power_derivatives
+    [z**r, r*z**(r - 1), r*z**(r - 2)*(r - 1), r*z**(r - 3)*(r - 2)*(r - 1), r*z**(r - 4)*(r - 3)*(r - 2)*(r - 1), r*z**(r - 5)*(r - 4)*(r - 3)*(r - 2)*(r - 1), r*z**(r - 6)*(r - 5)*(r - 4)*(r - 3)*(r - 2)*(r - 1), r*z**(r - 7)*(r - 6)*(r - 5)*(r - 4)*(r - 3)*(r - 2)*(r - 1)]
+
+.. testcode::
+    :hide:
+
+    save_latex_repr(f_power_derivatives, './source/latex-snippets/generic-RAs-11.rst', iterable=True)
+
+.. include:: latex-snippets/generic-RAs-11.rst
+
+.. doctest::
+
+    >>> g_power = g_poly(f_power, eigendata, component_polynomials(eigendata, early_eigenvals_subs=True))
     >>> g_power
-    Eq(g(z), -r**7*\lambda[1]**r/5040 + r**6*\lambda[1]**r/180 - 23*r**5*\lambda[1]**r/360 + 7*r**4*\lambda[1]**r/18 - 967*r**3*\lambda[1]**r/720 + 469*r**2*\lambda[1]**r/180 - 363*r*\lambda[1]**r/140 + z**7*(r**7*\lambda[1]**r/(5040*\lambda[1]**7) - r**6*\lambda[1]**r/(240*\lambda[1]**7) + 5*r**5*\lambda[1]**r/(144*\lambda[1]**7) - 7*r**4*\lambda[1]**r/(48*\lambda[1]**7) + 29*r**3*\lambda[1]**r/(90*\lambda[1]**7) - 7*r**2*\lambda[1]**r/(20*\lambda[1]**7) + r*\lambda[1]**r/(7*\lambda[1]**7)) + z**6*(-r**7*\lambda[1]**r/(720*\lambda[1]**6) + 11*r**6*\lambda[1]**r/(360*\lambda[1]**6) - 19*r**5*\lambda[1]**r/(72*\lambda[1]**6) + 41*r**4*\lambda[1]**r/(36*\lambda[1]**6) - 1849*r**3*\lambda[1]**r/(720*\lambda[1]**6) + 1019*r**2*\lambda[1]**r/(360*\lambda[1]**6) - 7*r*\lambda[1]**r/(6*\lambda[1]**6)) + z**5*(r**7*\lambda[1]**r/(240*\lambda[1]**5) - 23*r**6*\lambda[1]**r/(240*\lambda[1]**5) + 69*r**5*\lambda[1]**r/(80*\lambda[1]**5) - 185*r**4*\lambda[1]**r/(48*\lambda[1]**5) + 134*r**3*\lambda[1]**r/(15*\lambda[1]**5) - 201*r**2*\lambda[1]**r/(20*\lambda[1]**5) + 21*r*\lambda[1]**r/(5*\lambda[1]**5)) + z**4*(-r**7*\lambda[1]**r/(144*\lambda[1]**4) + r**6*\lambda[1]**r/(6*\lambda[1]**4) - 113*r**5*\lambda[1]**r/(72*\lambda[1]**4) + 22*r**4*\lambda[1]**r/(3*\lambda[1]**4) - 2545*r**3*\lambda[1]**r/(144*\lambda[1]**4) + 41*r**2*\lambda[1]**r/(2*\lambda[1]**4) - 35*r*\lambda[1]**r/(4*\lambda[1]**4)) + z**3*(r**7*\lambda[1]**r/(144*\lambda[1]**3) - 25*r**6*\lambda[1]**r/(144*\lambda[1]**3) + 247*r**5*\lambda[1]**r/(144*\lambda[1]**3) - 1219*r**4*\lambda[1]**r/(144*\lambda[1]**3) + 389*r**3*\lambda[1]**r/(18*\lambda[1]**3) - 949*r**2*\lambda[1]**r/(36*\lambda[1]**3) + 35*r*\lambda[1]**r/(3*\lambda[1]**3)) + z**2*(-r**7*\lambda[1]**r/(240*\lambda[1]**2) + 13*r**6*\lambda[1]**r/(120*\lambda[1]**2) - 9*r**5*\lambda[1]**r/(8*\lambda[1]**2) + 71*r**4*\lambda[1]**r/(12*\lambda[1]**2) - 3929*r**3*\lambda[1]**r/(240*\lambda[1]**2) + 879*r**2*\lambda[1]**r/(40*\lambda[1]**2) - 21*r*\lambda[1]**r/(2*\lambda[1]**2)) + z*(r**7*\lambda[1]**r/(720*\lambda[1]) - 3*r**6*\lambda[1]**r/(80*\lambda[1]) + 59*r**5*\lambda[1]**r/(144*\lambda[1]) - 37*r**4*\lambda[1]**r/(16*\lambda[1]) + 319*r**3*\lambda[1]**r/(45*\lambda[1]) - 223*r**2*\lambda[1]**r/(20*\lambda[1]) + 7*r*\lambda[1]**r/\lambda[1]) + \lambda[1]**r)
+    Eq(g(z), -r**7*\lambda[1]**r/(5040*\lambda[1]**7) + r**6*\lambda[1]**r/(720*\lambda[1]**6) + r**6*\lambda[1]**r/(240*\lambda[1]**7) - r**5*\lambda[1]**r/(120*\lambda[1]**5) - r**5*\lambda[1]**r/(48*\lambda[1]**6) - 5*r**5*\lambda[1]**r/(144*\lambda[1]**7) + r**4*\lambda[1]**r/(24*\lambda[1]**4) + r**4*\lambda[1]**r/(12*\lambda[1]**5) + 17*r**4*\lambda[1]**r/(144*\lambda[1]**6) + 7*r**4*\lambda[1]**r/(48*\lambda[1]**7) - r**3*\lambda[1]**r/(6*\lambda[1]**3) - r**3*\lambda[1]**r/(4*\lambda[1]**4) - 7*r**3*\lambda[1]**r/(24*\lambda[1]**5) - 5*r**3*\lambda[1]**r/(16*\lambda[1]**6) - 29*r**3*\lambda[1]**r/(90*\lambda[1]**7) + r**2*\lambda[1]**r/(2*\lambda[1]**2) + r**2*\lambda[1]**r/(2*\lambda[1]**3) + 11*r**2*\lambda[1]**r/(24*\lambda[1]**4) + 5*r**2*\lambda[1]**r/(12*\lambda[1]**5) + 137*r**2*\lambda[1]**r/(360*\lambda[1]**6) + 7*r**2*\lambda[1]**r/(20*\lambda[1]**7) - r*\lambda[1]**r/\lambda[1] - r*\lambda[1]**r/(2*\lambda[1]**2) - r*\lambda[1]**r/(3*\lambda[1]**3) - r*\lambda[1]**r/(4*\lambda[1]**4) - r*\lambda[1]**r/(5*\lambda[1]**5) - r*\lambda[1]**r/(6*\lambda[1]**6) - r*\lambda[1]**r/(7*\lambda[1]**7) + z**7*(r**7*\lambda[1]**r/(5040*\lambda[1]**7) - r**6*\lambda[1]**r/(240*\lambda[1]**7) + 5*r**5*\lambda[1]**r/(144*\lambda[1]**7) - 7*r**4*\lambda[1]**r/(48*\lambda[1]**7) + 29*r**3*\lambda[1]**r/(90*\lambda[1]**7) - 7*r**2*\lambda[1]**r/(20*\lambda[1]**7) + r*\lambda[1]**r/(7*\lambda[1]**7)) + z**6*(-r**7*\lambda[1]**r/(720*\lambda[1]**7) + r**6*\lambda[1]**r/(720*\lambda[1]**6) + 7*r**6*\lambda[1]**r/(240*\lambda[1]**7) - r**5*\lambda[1]**r/(48*\lambda[1]**6) - 35*r**5*\lambda[1]**r/(144*\lambda[1]**7) + 17*r**4*\lambda[1]**r/(144*\lambda[1]**6) + 49*r**4*\lambda[1]**r/(48*\lambda[1]**7) - 5*r**3*\lambda[1]**r/(16*\lambda[1]**6) - 203*r**3*\lambda[1]**r/(90*\lambda[1]**7) + 137*r**2*\lambda[1]**r/(360*\lambda[1]**6) + 49*r**2*\lambda[1]**r/(20*\lambda[1]**7) - r*\lambda[1]**r/(6*\lambda[1]**6) - r*\lambda[1]**r/\lambda[1]**7) + z**5*(r**7*\lambda[1]**r/(240*\lambda[1]**7) - r**6*\lambda[1]**r/(120*\lambda[1]**6) - 7*r**6*\lambda[1]**r/(80*\lambda[1]**7) + r**5*\lambda[1]**r/(120*\lambda[1]**5) + r**5*\lambda[1]**r/(8*\lambda[1]**6) + 35*r**5*\lambda[1]**r/(48*\lambda[1]**7) - r**4*\lambda[1]**r/(12*\lambda[1]**5) - 17*r**4*\lambda[1]**r/(24*\lambda[1]**6) - 49*r**4*\lambda[1]**r/(16*\lambda[1]**7) + 7*r**3*\lambda[1]**r/(24*\lambda[1]**5) + 15*r**3*\lambda[1]**r/(8*\lambda[1]**6) + 203*r**3*\lambda[1]**r/(30*\lambda[1]**7) - 5*r**2*\lambda[1]**r/(12*\lambda[1]**5) - 137*r**2*\lambda[1]**r/(60*\lambda[1]**6) - 147*r**2*\lambda[1]**r/(20*\lambda[1]**7) + r*\lambda[1]**r/(5*\lambda[1]**5) + r*\lambda[1]**r/\lambda[1]**6 + 3*r*\lambda[1]**r/\lambda[1]**7) + z**4*(-r**7*\lambda[1]**r/(144*\lambda[1]**7) + r**6*\lambda[1]**r/(48*\lambda[1]**6) + 7*r**6*\lambda[1]**r/(48*\lambda[1]**7) - r**5*\lambda[1]**r/(24*\lambda[1]**5) - 5*r**5*\lambda[1]**r/(16*\lambda[1]**6) - 175*r**5*\lambda[1]**r/(144*\lambda[1]**7) + r**4*\lambda[1]**r/(24*\lambda[1]**4) + 5*r**4*\lambda[1]**r/(12*\lambda[1]**5) + 85*r**4*\lambda[1]**r/(48*\lambda[1]**6) + 245*r**4*\lambda[1]**r/(48*\lambda[1]**7) - r**3*\lambda[1]**r/(4*\lambda[1]**4) - 35*r**3*\lambda[1]**r/(24*\lambda[1]**5) - 75*r**3*\lambda[1]**r/(16*\lambda[1]**6) - 203*r**3*\lambda[1]**r/(18*\lambda[1]**7) + 11*r**2*\lambda[1]**r/(24*\lambda[1]**4) + 25*r**2*\lambda[1]**r/(12*\lambda[1]**5) + 137*r**2*\lambda[1]**r/(24*\lambda[1]**6) + 49*r**2*\lambda[1]**r/(4*\lambda[1]**7) - r*\lambda[1]**r/(4*\lambda[1]**4) - r*\lambda[1]**r/\lambda[1]**5 - 5*r*\lambda[1]**r/(2*\lambda[1]**6) - 5*r*\lambda[1]**r/\lambda[1]**7) + z**3*(r**7*\lambda[1]**r/(144*\lambda[1]**7) - r**6*\lambda[1]**r/(36*\lambda[1]**6) - 7*r**6*\lambda[1]**r/(48*\lambda[1]**7) + r**5*\lambda[1]**r/(12*\lambda[1]**5) + 5*r**5*\lambda[1]**r/(12*\lambda[1]**6) + 175*r**5*\lambda[1]**r/(144*\lambda[1]**7) - r**4*\lambda[1]**r/(6*\lambda[1]**4) - 5*r**4*\lambda[1]**r/(6*\lambda[1]**5) - 85*r**4*\lambda[1]**r/(36*\lambda[1]**6) - 245*r**4*\lambda[1]**r/(48*\lambda[1]**7) + r**3*\lambda[1]**r/(6*\lambda[1]**3) + r**3*\lambda[1]**r/\lambda[1]**4 + 35*r**3*\lambda[1]**r/(12*\lambda[1]**5) + 25*r**3*\lambda[1]**r/(4*\lambda[1]**6) + 203*r**3*\lambda[1]**r/(18*\lambda[1]**7) - r**2*\lambda[1]**r/(2*\lambda[1]**3) - 11*r**2*\lambda[1]**r/(6*\lambda[1]**4) - 25*r**2*\lambda[1]**r/(6*\lambda[1]**5) - 137*r**2*\lambda[1]**r/(18*\lambda[1]**6) - 49*r**2*\lambda[1]**r/(4*\lambda[1]**7) + r*\lambda[1]**r/(3*\lambda[1]**3) + r*\lambda[1]**r/\lambda[1]**4 + 2*r*\lambda[1]**r/\lambda[1]**5 + 10*r*\lambda[1]**r/(3*\lambda[1]**6) + 5*r*\lambda[1]**r/\lambda[1]**7) + z**2*(-r**7*\lambda[1]**r/(240*\lambda[1]**7) + r**6*\lambda[1]**r/(48*\lambda[1]**6) + 7*r**6*\lambda[1]**r/(80*\lambda[1]**7) - r**5*\lambda[1]**r/(12*\lambda[1]**5) - 5*r**5*\lambda[1]**r/(16*\lambda[1]**6) - 35*r**5*\lambda[1]**r/(48*\lambda[1]**7) + r**4*\lambda[1]**r/(4*\lambda[1]**4) + 5*r**4*\lambda[1]**r/(6*\lambda[1]**5) + 85*r**4*\lambda[1]**r/(48*\lambda[1]**6) + 49*r**4*\lambda[1]**r/(16*\lambda[1]**7) - r**3*\lambda[1]**r/(2*\lambda[1]**3) - 3*r**3*\lambda[1]**r/(2*\lambda[1]**4) - 35*r**3*\lambda[1]**r/(12*\lambda[1]**5) - 75*r**3*\lambda[1]**r/(16*\lambda[1]**6) - 203*r**3*\lambda[1]**r/(30*\lambda[1]**7) + r**2*\lambda[1]**r/(2*\lambda[1]**2) + 3*r**2*\lambda[1]**r/(2*\lambda[1]**3) + 11*r**2*\lambda[1]**r/(4*\lambda[1]**4) + 25*r**2*\lambda[1]**r/(6*\lambda[1]**5) + 137*r**2*\lambda[1]**r/(24*\lambda[1]**6) + 147*r**2*\lambda[1]**r/(20*\lambda[1]**7) - r*\lambda[1]**r/(2*\lambda[1]**2) - r*\lambda[1]**r/\lambda[1]**3 - 3*r*\lambda[1]**r/(2*\lambda[1]**4) - 2*r*\lambda[1]**r/\lambda[1]**5 - 5*r*\lambda[1]**r/(2*\lambda[1]**6) - 3*r*\lambda[1]**r/\lambda[1]**7) + z*(r**7*\lambda[1]**r/(720*\lambda[1]**7) - r**6*\lambda[1]**r/(120*\lambda[1]**6) - 7*r**6*\lambda[1]**r/(240*\lambda[1]**7) + r**5*\lambda[1]**r/(24*\lambda[1]**5) + r**5*\lambda[1]**r/(8*\lambda[1]**6) + 35*r**5*\lambda[1]**r/(144*\lambda[1]**7) - r**4*\lambda[1]**r/(6*\lambda[1]**4) - 5*r**4*\lambda[1]**r/(12*\lambda[1]**5) - 17*r**4*\lambda[1]**r/(24*\lambda[1]**6) - 49*r**4*\lambda[1]**r/(48*\lambda[1]**7) + r**3*\lambda[1]**r/(2*\lambda[1]**3) + r**3*\lambda[1]**r/\lambda[1]**4 + 35*r**3*\lambda[1]**r/(24*\lambda[1]**5) + 15*r**3*\lambda[1]**r/(8*\lambda[1]**6) + 203*r**3*\lambda[1]**r/(90*\lambda[1]**7) - r**2*\lambda[1]**r/\lambda[1]**2 - 3*r**2*\lambda[1]**r/(2*\lambda[1]**3) - 11*r**2*\lambda[1]**r/(6*\lambda[1]**4) - 25*r**2*\lambda[1]**r/(12*\lambda[1]**5) - 137*r**2*\lambda[1]**r/(60*\lambda[1]**6) - 49*r**2*\lambda[1]**r/(20*\lambda[1]**7) + r*\lambda[1]**r/\lambda[1] + r*\lambda[1]**r/\lambda[1]**2 + r*\lambda[1]**r/\lambda[1]**3 + r*\lambda[1]**r/\lambda[1]**4 + r*\lambda[1]**r/\lambda[1]**5 + r*\lambda[1]**r/\lambda[1]**6 + r*\lambda[1]**r/\lambda[1]**7) + \lambda[1]**r)
+
 
 .. testcode::
     :hide:
@@ -278,9 +305,8 @@ Functions
     >>> g_power_theo_kj = define(g(z), sum((-1)**(j)*binomial(r, j)*binomial(j, k)*(-z)**k 
     ...                                    for k in range(m) 
     ...                                    for j in range(k, m)).collect(z))
-    >>> assert (g_power.rhs.collect(z) == 
-    ...         g_power_theo_jk.rhs.combsimp().collect(z) == 
-    ...         g_power_theo_kj.rhs.combsimp().collect(z))
+    >>> g_power_theo_kj
+    Eq(g(z), z**7*binomial(r, 7) + z**6*(binomial(r, 6) - 7*binomial(r, 7)) + z**5*(binomial(r, 5) - 6*binomial(r, 6) + 21*binomial(r, 7)) + z**4*(binomial(r, 4) - 5*binomial(r, 5) + 15*binomial(r, 6) - 35*binomial(r, 7)) + z**3*(binomial(r, 3) - 4*binomial(r, 4) + 10*binomial(r, 5) - 20*binomial(r, 6) + 35*binomial(r, 7)) + z**2*(binomial(r, 2) - 3*binomial(r, 3) + 6*binomial(r, 4) - 10*binomial(r, 5) + 15*binomial(r, 6) - 21*binomial(r, 7)) + z*(binomial(r, 1) - 2*binomial(r, 2) + 3*binomial(r, 3) - 4*binomial(r, 4) + 5*binomial(r, 5) - 6*binomial(r, 6) + 7*binomial(r, 7)) - binomial(r, 1) + binomial(r, 2) - binomial(r, 3) + binomial(r, 4) - binomial(r, 5) + binomial(r, 6) - binomial(r, 7) + 1)
 
 .. testcode::
     :hide:
@@ -288,6 +314,68 @@ Functions
     save_latex_repr(g_power_theo_kj, './source/latex-snippets/generic-RAs-10.rst')
 
 .. include:: latex-snippets/generic-RAs-10.rst
+
+.. doctest::
+
+    >>> assert (g_power.rhs.collect(z) == 
+    ...         g_power_theo_jk.rhs.combsimp().collect(z) == 
+    ...         g_power_theo_kj.rhs.combsimp().collect(z))
+
+:math:`f(z)=\frac{1}{z}` 
+------------------------
+
+.. doctest::
+
+    >>> f_inverse = define(f(z), 1/z)
+    >>> f_inverse
+    Eq(f(z), 1/z)
+
+    >>> f_inverse_derivatives = [f_inverse.rhs.diff(z, i) for i in range(m)]
+    >>> f_inverse_derivatives
+    [1/z, -1/z**2, 2/z**3, -6/z**4, 24/z**5, -120/z**6, 720/z**7, -5040/z**8]
+
+.. testcode::
+    :hide:
+
+    save_latex_repr(f_inverse_derivatives, './source/latex-snippets/generic-RAs-12.rst')
+
+.. include:: latex-snippets/generic-RAs-12.rst
+
+.. doctest::
+
+    >>> g_inverse = g_poly(f_inverse, eigendata, Phi_polynomials)
+    >>> g_inverse
+    Eq(g(z), -z**7/\lambda[1]**8 + z**6*(\lambda[1]**(-7) + 7/\lambda[1]**8) + z**5*(-1/\lambda[1]**6 - 6/\lambda[1]**7 - 21/\lambda[1]**8) + z**4*(\lambda[1]**(-5) + 5/\lambda[1]**6 + 15/\lambda[1]**7 + 35/\lambda[1]**8) + z**3*(-1/\lambda[1]**4 - 4/\lambda[1]**5 - 10/\lambda[1]**6 - 20/\lambda[1]**7 - 35/\lambda[1]**8) + z**2*(\lambda[1]**(-3) + 3/\lambda[1]**4 + 6/\lambda[1]**5 + 10/\lambda[1]**6 + 15/\lambda[1]**7 + 21/\lambda[1]**8) + z*(-1/\lambda[1]**2 - 2/\lambda[1]**3 - 3/\lambda[1]**4 - 4/\lambda[1]**5 - 5/\lambda[1]**6 - 6/\lambda[1]**7 - 7/\lambda[1]**8) + 1/\lambda[1] + \lambda[1]**(-2) + \lambda[1]**(-3) + \lambda[1]**(-4) + \lambda[1]**(-5) + \lambda[1]**(-6) + \lambda[1]**(-7) + \lambda[1]**(-8))
+
+
+.. testcode::
+    :hide:
+
+    save_latex_repr(g_inverse, './source/latex-snippets/generic-RAs-13.rst')
+
+.. include:: latex-snippets/generic-RAs-13.rst
+
+.. doctest::
+
+    >>> g_inverse = g_inverse.subs(eigenvals)
+    >>> g_inverse
+    Eq(g(z), -z**7 + 8*z**6 - 28*z**5 + 56*z**4 - 70*z**3 + 56*z**2 - 28*z + 8)
+
+.. testcode::
+    :hide:
+
+    save_latex_repr(g_inverse, './source/latex-snippets/generic-RAs-14.rst')
+
+.. include:: latex-snippets/generic-RAs-14.rst
+
+.. doctest::
+
+    >>> g_inverse_theo_jk = define(g(z), sum(binomial(j-1, k)*(-z)**k
+    ...                                      for j in range(1, m+1)
+    ...                                      for k in range(j)))
+    >>> g_inverse_theo_kj = define(g(z), sum(binomial(m, k+1)*(-z)**(k) 
+    ...                                      for k in range(m)))
+    >>> assert (g_inverse.rhs == g_inverse_theo_jk.rhs == g_inverse_theo_kj.rhs)
 
 
 

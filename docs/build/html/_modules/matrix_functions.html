@@ -249,7 +249,7 @@
 
 <span class="k">def</span> <span class="nf">component_polynomials</span><span class="p">(</span><span class="n">eigendata</span><span class="p">,</span> <span class="n">early_eigenvals_subs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose_return</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
-    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span><span class="o">.</span><span class="n">rhs</span>
 
     <span class="n">deg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">multiplicities</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">-</span> <span class="mi">1</span>
 
@@ -307,7 +307,7 @@
 <span class="sd">    &gt;&gt;&gt; R_cal, d = IndexedBase(r&#39;\mathcal{R}&#39;), IndexedBase(&#39;d&#39;) # helpers bases</span>
 <span class="sd">    &gt;&gt;&gt; R = define(R_cal[m], Matrix(m, m, riordan_matrix_by_recurrence(m, lambda n, k: {(n, k):1 if n == k else d[n, k]})))</span>
 <span class="sd">    &gt;&gt;&gt; eigendata = spectrum(R)</span>
-<span class="sd">    &gt;&gt;&gt; assert (component_polynomials(eigendata.rhs, early_eigenvals_subs=True) == </span>
+<span class="sd">    &gt;&gt;&gt; assert (component_polynomials(eigendata, early_eigenvals_subs=True) == </span>
 <span class="sd">    ...         component_polynomials_riordan(degree=m-1))</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -393,7 +393,7 @@
 
 <span class="k">def</span> <span class="nf">Jordan_normalform</span><span class="p">(</span><span class="n">eigendata</span><span class="p">,</span> <span class="n">matrices</span><span class="p">,</span> <span class="n">syms</span><span class="o">=</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;X J&#39;</span><span class="p">)):</span>
 
-    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span><span class="o">.</span><span class="n">rhs</span>
     <span class="n">A</span><span class="p">,</span> <span class="n">M_space</span><span class="p">,</span> <span class="n">blocks</span> <span class="o">=</span> <span class="n">matrices</span>
     <span class="n">X</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">syms</span>
 
@@ -426,7 +426,7 @@
 
 <span class="k">def</span> <span class="nf">Jordan_blocks</span><span class="p">(</span><span class="n">eigendata</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="n">IndexedBase</span><span class="p">(</span><span class="s1">&#39;J&#39;</span><span class="p">)):</span>
 
-    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span><span class="o">.</span><span class="n">rhs</span>
 
     <span class="n">blocks</span> <span class="o">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span> <span class="p">{</span> <span class="n">j</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">,</span><span class="n">k</span><span class="p">:</span> <span class="n">λ</span> <span class="k">if</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span> <span class="o">==</span> <span class="n">j</span> <span class="k">else</span> 
                                                 <span class="mi">1</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="n">j</span> <span class="k">else</span> 
@@ -440,7 +440,7 @@
 
 <span class="k">def</span> <span class="nf">generalized_eigenvectors_relations</span><span class="p">(</span><span class="n">eigendata</span><span class="p">):</span>
 
-    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span><span class="o">.</span><span class="n">rhs</span>
 
     <span class="k">def</span> <span class="nf">GER</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">M_space</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="n">simplify</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
