@@ -1,3 +1,5 @@
+see https://massimo-nocentini.github.io/simulation-methods/
+
 # Numerical methods for simulation and dynamic systems
 
 Collecting my work to support [Numerical methods for simulation][site] course,
