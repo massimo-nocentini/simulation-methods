@@ -3,6 +3,10 @@ from contextlib import contextmanager, redirect_stdout
 from sympy import Eq, Lambda, Function, Indexed, latex
 
 def define(let, be, **kwds):
+
+    if 'evaluate' not in kwds:
+        kwds['evaluate'] = False
+
     return Eq(let, be, **kwds)
 
 @contextmanager
@@ -13,8 +17,15 @@ def lift_to_Lambda(eq, return_eq=False, lhs_handler=lambda args: []):
             lhs_handler(lhs))
     yield Lambda(args, eq if return_eq else eq.rhs)
 
-def save_latex_repr(term, filename):
+def save_latex_repr(term, filename, iterable=False):
+
     with open(filename, 'w') as f:
         with redirect_stdout(f):
-            print('.. math::\n\n\t{}'.format(latex(term)))
+            print('.. math::\n\n', end='')
+            if iterable:
+                for subterm in term:
+                    print('\t& ' + r'{}\\'.format(latex(subterm)))
+            else:
+                print('\t' + latex(term))
+
 

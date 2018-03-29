@@ -89,9 +89,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../content.html">Title</a></li>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../generic-RAs.html">Generic Riordan Arrays</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../matrix_functions-module.html">matrix_functions module</a></li>
 </ul>
@@ -159,6 +157,17 @@
             
   <h1>Source code for matrix_functions</h1><div class="highlight"><pre>
 <span></span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Start of :code:`matrix_functions` module documentation</span>
+
+<span class="sd">    &gt;&gt;&gt; from sympy import *</span>
+
+<span class="sd">    &gt;&gt;&gt; from commons import *</span>
+<span class="sd">    &gt;&gt;&gt; from sequences import *</span>
+<span class="sd">    &gt;&gt;&gt; from matrix_functions import *</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">lru_cache</span>
 
@@ -194,7 +203,10 @@
 
     <span class="k">yield</span> <span class="n">lift</span>
 
-<span class="k">def</span> <span class="nf">eigen_data</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">spectrum</span><span class="p">(</span><span class="n">matrix_def</span><span class="p">):</span>
+
+    <span class="n">matrix_name</span><span class="p">,</span> <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrix_def</span><span class="o">.</span><span class="n">lhs</span><span class="p">,</span> <span class="n">matrix_def</span><span class="o">.</span><span class="n">rhs</span>
+
     <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">eigenvals</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">multiplicities</span> <span class="o">=</span> <span class="p">{}</span>
@@ -205,20 +217,15 @@
         <span class="n">eigenvals</span><span class="p">[</span><span class="n">lamda</span><span class="p">]</span> <span class="o">=</span> <span class="n">eigen_value</span>
         <span class="n">multiplicities</span><span class="p">[</span><span class="n">mul</span><span class="p">]</span> <span class="o">=</span> <span class="n">multiplicity</span>
 
-    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span>
+    <span class="n">eigendata</span> <span class="o">=</span> <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span>
+
+    <span class="k">return</span> <span class="n">Eq</span><span class="p">(</span><span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\sigma&#39;</span><span class="p">)</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">matrix_name</span><span class="p">),</span> <span class="n">eigendata</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Phi_poly_ctor"><a class="viewcode-back" href="../matrix_functions-module.html#matrix_functions.Phi_poly_ctor">[docs]</a><span class="k">def</span> <span class="nf">Phi_poly_ctor</span><span class="p">(</span><span class="n">deg</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Ctor.</span>
 
-<span class="sd">    .. testcode::</span>
-<span class="sd">        :hide:</span>
-
-<span class="sd">        from commons import save_latex_repr</span>
-
-
-<span class="sd">    &gt;&gt;&gt; from matrix_functions import Phi_poly_ctor</span>
 <span class="sd">    &gt;&gt;&gt; p = Phi_poly_ctor(deg=3)</span>
 <span class="sd">    &gt;&gt;&gt; p</span>
 <span class="sd">    Eq(\Phi(z, i, j), z**3*\phi[i, j, 0] + z**2*\phi[i, j, 1] + z*\phi[i, j, 2] + \phi[i, j, 3])</span>
@@ -291,16 +298,28 @@
 
     <span class="k">return</span> <span class="n">polynomials</span>
 
-<span class="k">def</span> <span class="nf">component_polynomials_riordan</span><span class="p">(</span><span class="n">degree</span><span class="p">):</span>
+<div class="viewcode-block" id="component_polynomials_riordan"><a class="viewcode-back" href="../matrix_functions-module.html#matrix_functions.component_polynomials_riordan">[docs]</a><span class="k">def</span> <span class="nf">component_polynomials_riordan</span><span class="p">(</span><span class="n">degree</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Quick generation of component polynomials to be used as bases in functions applications to Riordan arrays.</span>
+<span class="sd">    </span>
+
+<span class="sd">    &gt;&gt;&gt; m = 8</span>
+<span class="sd">    &gt;&gt;&gt; R_cal, d = IndexedBase(r&#39;\mathcal{R}&#39;), IndexedBase(&#39;d&#39;) # helpers bases</span>
+<span class="sd">    &gt;&gt;&gt; R = define(R_cal[m], Matrix(m, m, riordan_matrix_by_recurrence(m, lambda n, k: {(n, k):1 if n == k else d[n, k]})))</span>
+<span class="sd">    &gt;&gt;&gt; eigendata = spectrum(R)</span>
+<span class="sd">    &gt;&gt;&gt; assert (component_polynomials(eigendata.rhs, early_eigenvals_subs=True) == </span>
+<span class="sd">    ...         component_polynomials_riordan(degree=m-1))</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{(</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span> <span class="n">define</span><span class="p">(</span> <span class="n">let</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\Phi_{{ </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1"> }}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">))(</span><span class="n">z</span><span class="p">),</span> 
                             <span class="n">be</span><span class="o">=</span><span class="n">Sum</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">z</span><span class="o">**</span><span class="n">k</span><span class="o">/</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">factorial</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">k</span><span class="p">)),</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">doit</span><span class="p">())</span> 
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">+</span><span class="mi">1</span><span class="p">)}</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">+</span><span class="mi">2</span><span class="p">)}</span></div>
 
 
 <span class="k">def</span> <span class="nf">g_poly</span><span class="p">(</span><span class="n">f_eq</span><span class="p">,</span> <span class="n">eigendata</span><span class="p">,</span> <span class="n">Phi_polys</span><span class="p">,</span> <span class="n">matrix_form</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
-    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span><span class="o">.</span><span class="n">rhs</span>
     <span class="n">delta</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\delta&#39;</span><span class="p">),</span> <span class="n">Function</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
     <span class="n">Z</span> <span class="o">=</span> <span class="n">IndexedBase</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span>
     <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="n">f_eq</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">args</span>

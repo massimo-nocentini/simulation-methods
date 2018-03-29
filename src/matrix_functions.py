@@ -1,4 +1,15 @@
 
+'''
+    Start of :code:`matrix_functions` module documentation
+
+    >>> from sympy import *
+
+    >>> from commons import *
+    >>> from sequences import *
+    >>> from matrix_functions import *
+
+'''
+
 from contextlib import contextmanager
 from functools import lru_cache
 
@@ -34,7 +45,10 @@ def lift_to_matrix_function(f_def):
 
     yield lift
 
-def eigen_data(matrix):
+def spectrum(matrix_def):
+
+    matrix_name, matrix = matrix_def.lhs, matrix_def.rhs
+
     data = {}
     eigenvals = {}
     multiplicities = {}
@@ -45,20 +59,15 @@ def eigen_data(matrix):
         eigenvals[lamda] = eigen_value
         multiplicities[mul] = multiplicity
 
-    return data, eigenvals, multiplicities
+    eigendata = data, eigenvals, multiplicities
+
+    return Eq(Function(r'\sigma').__call__(matrix_name), eigendata, evaluate=False)
 
 
 def Phi_poly_ctor(deg):
     '''
     Ctor.
 
-    .. testcode::
-        :hide:
-
-        from commons import save_latex_repr
-
-
-    >>> from matrix_functions import Phi_poly_ctor
     >>> p = Phi_poly_ctor(deg=3)
     >>> p
     Eq(\Phi(z, i, j), z**3*\phi[i, j, 0] + z**2*\phi[i, j, 1] + z*\phi[i, j, 2] + \phi[i, j, 3])
@@ -132,15 +141,27 @@ def component_polynomials(eigendata, early_eigenvals_subs=False, verbose_return=
     return polynomials
 
 def component_polynomials_riordan(degree):
+    '''
+    Quick generation of component polynomials to be used as bases in functions applications to Riordan arrays.
+    
+
+    >>> m = 8
+    >>> R_cal, d = IndexedBase(r'\mathcal{R}'), IndexedBase('d') # helpers bases
+    >>> R = define(R_cal[m], Matrix(m, m, riordan_matrix_by_recurrence(m, lambda n, k: {(n, k):1 if n == k else d[n, k]})))
+    >>> eigendata = spectrum(R)
+    >>> assert (component_polynomials(eigendata.rhs, early_eigenvals_subs=True) == 
+    ...         component_polynomials_riordan(degree=m-1))
+
+    '''
     z = symbols('z')
     return {(1, j): define( let=Function(r'\Phi_{{ {}, {} }}'.format(1, j))(z), 
                             be=Sum((-1)**(j-1-k)*z**k/(factorial(k)*factorial(j-1-k)), (k, 0, j-1)).doit()) 
-                for j in range(1, degree+1)}
+                for j in range(1, degree+2)}
 
 
 def g_poly(f_eq, eigendata, Phi_polys, matrix_form=False):
 
-    data, eigenvals, multiplicities = eigendata
+    data, eigenvals, multiplicities = eigendata.rhs
     delta, g = Function(r'\delta'), Function('g')
     Z = IndexedBase('Z')
     z, *rest = f_eq.lhs.args
