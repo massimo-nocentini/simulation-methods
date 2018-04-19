@@ -27,12 +27,13 @@ mul_indexed = IndexedBase(r'm')
 
 
 @contextmanager
-def lift_to_matrix_function(f_def):
+def lift_to_matrix_function(g_def):
     
-    def lift(matrix, post=lambda c: c.simplify()):
+    def lift(matrix_def, post=lambda c: c.simplify()):
        
-        z, *rest = f_def.lhs.args
-        gpp, *_ = poly_from_expr(f_def.rhs, z)
+        matrix = matrix_def.rhs
+        z, *_ = g_def.lhs.args
+        gpp, *_ = poly_from_expr(g_def.rhs, z)
         coeffs = dict(gpp.terms())
 
         I = eye(matrix.rows)
@@ -41,7 +42,9 @@ def lift_to_matrix_function(f_def):
         for d in range(gpp.degree()-1, -1, -1): 
             Z = Z*matrix + coeffs.get((d,), 0)*I
 
-        return Z.applyfunc(post) if callable(post) else Z
+        lhs = g_def.lhs.func(matrix_def.lhs)
+        rhs = Z.applyfunc(post) if callable(post) else Z
+        return Eq(lhs, rhs, evaluate=False)
 
     yield lift
 
@@ -159,12 +162,13 @@ def component_polynomials_riordan(degree):
                 for j in range(1, degree+2)}
 
 
-def g_poly(f_eq, eigendata, Phi_polys, matrix_form=False):
+def Hermite_interpolation_polynomial(f_eq, eigendata, Phi_polys, matrix_form=False):
 
     data, eigenvals, multiplicities = eigendata.rhs
-    delta, g = Function(r'\delta'), Function('g')
+    delta = Function(r'\delta')
+    g = Function('{}_{{ {} }}'.format(f_eq.lhs.func, sum(multiplicities.values())))
     Z = IndexedBase('Z')
-    z, *rest = f_eq.lhs.args
+    z, *_ = f_eq.lhs.args
 
     g_poly = Integer(0)
     
