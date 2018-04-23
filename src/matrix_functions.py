@@ -194,13 +194,12 @@ def component_matrices( matrix_eq,
                         Zctor=lambda lhs: IndexedBase(r'Z^{{\left[ {} \right]}}'.format(lhs)), 
                         post=factor):
     
-    matrix = matrix_eq.rhs
     Z = Zctor(matrix_eq.lhs)
     Z_matrices = {}
     
     for (i, j), cp in Phi_polys.items():
         with lift_to_matrix_function(cp) as cp_fn:
-            Z_ij = cp_fn(matrix).applyfunc(post)
+            Z_ij = cp_fn(matrix_eq, post=post).rhs
             Z_matrices[i, j] = Eq(Z[i, j], Z_ij , evaluate=False)
     
     return Z_matrices

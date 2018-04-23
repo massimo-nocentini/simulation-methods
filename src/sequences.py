@@ -32,6 +32,8 @@ def convolution(sequences, t):
     
     return Eq(conv_def, conv)
 
+def riordan_matrix_exponential(RA):
+    return lambda i,j: factorial(i)*RA(i,j)/factorial(j)
 
 def riordan_matrix_by_convolution(dim, d, h):
 
