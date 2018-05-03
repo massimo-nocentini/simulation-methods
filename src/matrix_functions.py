@@ -10,6 +10,8 @@
 
 '''
 
+import collections
+
 from contextlib import contextmanager
 from functools import lru_cache
 
@@ -25,6 +27,7 @@ lamda_indexed = IndexedBase(r'\lambda')
 mul_indexed = IndexedBase(r'm')
 #}}}
 
+Eigendata = collections.namedtuple('Eigendata', ['data', 'eigenvals', 'multiplicities'])
 
 @contextmanager
 def lift_to_matrix_function(g_def):
@@ -62,9 +65,10 @@ def spectrum(matrix_def):
         eigenvals[lamda] = eigen_value
         multiplicities[mul] = multiplicity
 
-    eigendata = data, eigenvals, multiplicities
+    eigendata = Eigendata(data, eigenvals, multiplicities)
 
-    return Eq(Function(r'\sigma').__call__(matrix_name), eigendata, evaluate=False)
+    σ = Function(r'\sigma')
+    return define(σ(matrix_name), eigendata)
 
 
 def Phi_poly_ctor(deg):

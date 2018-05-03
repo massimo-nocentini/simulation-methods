@@ -185,12 +185,13 @@
 
 
 <span class="nd">@contextmanager</span>
-<span class="k">def</span> <span class="nf">lift_to_matrix_function</span><span class="p">(</span><span class="n">f_def</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">lift_to_matrix_function</span><span class="p">(</span><span class="n">g_def</span><span class="p">):</span>
     
-    <span class="k">def</span> <span class="nf">lift</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">simplify</span><span class="p">()):</span>
+    <span class="k">def</span> <span class="nf">lift</span><span class="p">(</span><span class="n">matrix_def</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">simplify</span><span class="p">()):</span>
        
-        <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="n">f_def</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">args</span>
-        <span class="n">gpp</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">poly_from_expr</span><span class="p">(</span><span class="n">f_def</span><span class="o">.</span><span class="n">rhs</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrix_def</span><span class="o">.</span><span class="n">rhs</span>
+        <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">g_def</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">args</span>
+        <span class="n">gpp</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">poly_from_expr</span><span class="p">(</span><span class="n">g_def</span><span class="o">.</span><span class="n">rhs</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
         <span class="n">coeffs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">gpp</span><span class="o">.</span><span class="n">terms</span><span class="p">())</span>
 
         <span class="n">I</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
@@ -199,7 +200,9 @@
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gpp</span><span class="o">.</span><span class="n">degree</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span> 
             <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">*</span><span class="n">matrix</span> <span class="o">+</span> <span class="n">coeffs</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">d</span><span class="p">,),</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">I</span>
 
-        <span class="k">return</span> <span class="n">Z</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">post</span><span class="p">)</span> <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">post</span><span class="p">)</span> <span class="k">else</span> <span class="n">Z</span>
+        <span class="n">lhs</span> <span class="o">=</span> <span class="n">g_def</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">matrix_def</span><span class="o">.</span><span class="n">lhs</span><span class="p">)</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">post</span><span class="p">)</span> <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">post</span><span class="p">)</span> <span class="k">else</span> <span class="n">Z</span>
+        <span class="k">return</span> <span class="n">Eq</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">yield</span> <span class="n">lift</span>
 
@@ -317,12 +320,13 @@
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="o">+</span><span class="mi">2</span><span class="p">)}</span></div>
 
 
-<span class="k">def</span> <span class="nf">g_poly</span><span class="p">(</span><span class="n">f_eq</span><span class="p">,</span> <span class="n">eigendata</span><span class="p">,</span> <span class="n">Phi_polys</span><span class="p">,</span> <span class="n">matrix_form</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">Hermite_interpolation_polynomial</span><span class="p">(</span><span class="n">f_eq</span><span class="p">,</span> <span class="n">eigendata</span><span class="p">,</span> <span class="n">Phi_polys</span><span class="p">,</span> <span class="n">matrix_form</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
     <span class="n">data</span><span class="p">,</span> <span class="n">eigenvals</span><span class="p">,</span> <span class="n">multiplicities</span> <span class="o">=</span> <span class="n">eigendata</span><span class="o">.</span><span class="n">rhs</span>
-    <span class="n">delta</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\delta&#39;</span><span class="p">),</span> <span class="n">Function</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\delta&#39;</span><span class="p">)</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_{{ </span><span class="si">{}</span><span class="s1"> }}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f_eq</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">multiplicities</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
     <span class="n">Z</span> <span class="o">=</span> <span class="n">IndexedBase</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span>
-    <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="n">f_eq</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">args</span>
+    <span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">f_eq</span><span class="o">.</span><span class="n">lhs</span><span class="o">.</span><span class="n">args</span>
 
     <span class="n">g_poly</span> <span class="o">=</span> <span class="n">Integer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     
@@ -343,13 +347,17 @@
     <span class="k">return</span> <span class="n">Eq</span><span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">g_poly</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">component_matrices</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">Phi_polys</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="n">IndexedBase</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">),</span> <span class="n">post</span><span class="o">=</span><span class="n">factor</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">component_matrices</span><span class="p">(</span> <span class="n">matrix_eq</span><span class="p">,</span> 
+                        <span class="n">Phi_polys</span><span class="p">,</span> 
+                        <span class="n">Zctor</span><span class="o">=</span><span class="k">lambda</span> <span class="n">lhs</span><span class="p">:</span> <span class="n">IndexedBase</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Z^{{\left[ </span><span class="si">{}</span><span class="s1"> \right]}}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lhs</span><span class="p">)),</span> 
+                        <span class="n">post</span><span class="o">=</span><span class="n">factor</span><span class="p">):</span>
     
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Zctor</span><span class="p">(</span><span class="n">matrix_eq</span><span class="o">.</span><span class="n">lhs</span><span class="p">)</span>
     <span class="n">Z_matrices</span> <span class="o">=</span> <span class="p">{}</span>
     
     <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">cp</span> <span class="ow">in</span> <span class="n">Phi_polys</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">with</span> <span class="n">lift_to_matrix_function</span><span class="p">(</span><span class="n">cp</span><span class="p">)</span> <span class="k">as</span> <span class="n">cp_fn</span><span class="p">:</span>
-            <span class="n">Z_ij</span> <span class="o">=</span> <span class="n">cp_fn</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+            <span class="n">Z_ij</span> <span class="o">=</span> <span class="n">cp_fn</span><span class="p">(</span><span class="n">matrix_eq</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="n">post</span><span class="p">)</span><span class="o">.</span><span class="n">rhs</span>
             <span class="n">Z_matrices</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Eq</span><span class="p">(</span><span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">Z_ij</span> <span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     
     <span class="k">return</span> <span class="n">Z_matrices</span>
