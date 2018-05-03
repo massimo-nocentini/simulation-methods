@@ -9,6 +9,16 @@ from commons import *
 
 nature = namedtuple('nature', ['is_ordinary', 'is_exponential'])
 
+# the following are indexed bases relative to commonly known RAs
+mathcal_R, mathcal_P, mathcal_C, mathcal_S = ( 
+    IndexedBase(r'\mathcal{R}'), # stands for the abstract RA
+    IndexedBase(r'\mathcal{P}'), # stands for the Pascal triangle
+    IndexedBase(r'\mathcal{C}'), # stands for the Catalan triangle
+    IndexedBase(r'\mathcal{S}'), # stands for the Stirling triangle
+)
+
+gencoeff_d = IndexedBase('d') # stands for a generic coeff in a matrix
+
 def convolution(sequences, t):
     
     if not sequences: return Integer(0)
