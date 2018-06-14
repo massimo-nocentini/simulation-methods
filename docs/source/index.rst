@@ -3,12 +3,27 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Numerical methods for simulation and dynamic systems
-====================================================
+Functions and Jordan canonical forms of Riordan matrices
+========================================================
 
-Collecting my work to support `Numerical methods for simulation <http://web.math.unifi.it/users/brugnano/Corsi/anno_accademico/a.a.%202016-2017/Prog-MNS.htm>`_ course,
-taught by prof. `Luigi Brugnano <http://web.math.unifi.it/users/brugnano/>`_ @ University of Florence.
+Symbolic stuff on top of the Python language to support a recently submitted paper
+(formerly, collecting my work to support 
+`Numerical methods for simulation <http://web.math.unifi.it/users/brugnano/Corsi/anno_accademico/a.a.%202016-2017/Prog-MNS.htm>`_ course,
+taught by prof. `Luigi Brugnano <http://web.math.unifi.it/users/brugnano/>`_ @ University of Florence).
 
+Notebooks
+---------
+
+- theory of matrices functions applied to a pure symbolic Riordan array (`view <http://nbviewer.jupyter.org/github/massimo-nocentini/simulation-methods/blob/master/notes/matrices-functions/generic-riordan-array.ipynb>`_);
+- Fibonacci numbers generation matrix and function :math:`f(z)=z^{r}` (`view <http://nbviewer.jupyter.org/github/massimo-nocentini/simulation-methods/blob/master/notes/matrices-functions/fibonacci-generation-matrix.ipynb>`_);
+- Jordan canonical forms of triangles of binomials, Catalan and Stirling (II kind) numbers (`view <http://nbviewer.jupyter.org/github/massimo-nocentini/simulation-methods/blob/master/notes/matrices-functions/jordan-normal-forms.ipynb>`_);
+- matricial decomposition of Hermite interpolating polynomials (`view <http://nbviewer.jupyter.org/github/massimo-nocentini/simulation-methods/blob/master/notes/matrices-functions/matricial-characterization-of-Hermite-interpolating-polynomials.ipynb>`_);
+- functions applied to the triangle of binomial numbers (`view <http://nbviewer.jupyter.org/github/massimo-nocentini/simulation-methods/blob/master/notes/matrices-functions/pascal-riordan-array.ipynb>`_);
+- functions applied to the triangle of Catalan numbers (`view <http://nbviewer.jupyter.org/github/massimo-nocentini/simulation-methods/blob/master/notes/matrices-functions/catalan-riordan-array.ipynb>`_);
+- functions applied to the triangle of Stirling (II kind) numbers (`view <http://nbviewer.jupyter.org/github/massimo-nocentini/simulation-methods/blob/master/notes/matrices-functions/stirling-II-kind-riordan-array.ipynb>`_);
+- Riordan arrays constructors (`view <http://nbviewer.jupyter.org/github/massimo-nocentini/simulation-methods/blob/master/notes/matrices-functions/riordan-arrays-ctors.ipynb>`_);
+
+More stuff about the general theory to be inlined into the first notebook above:
 
 .. toctree::
     :maxdepth: 3
