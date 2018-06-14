@@ -164,6 +164,15 @@ def Asequence(M):
 def one(i):
     return 1
 
+def rows_shift_matrix(by):
+    return lambda i, j: 1 if i + by == j else 0
+
+def diagonal_func_matrix(f):
+    return lambda i, j: f(i) if i == j else 0
+
+def columns_symmetry(M):
+    return lambda i, j: M[i, i-j]
+
 def production_matrix(M, exp=False):
     """
     Returns the production matrix of the given RA `M`.
@@ -183,11 +192,6 @@ def production_matrix(M, exp=False):
     PM = PM[:-1, :-1]
     return PM.applyfunc(simplify)
 
-def rows_shift_matrix(by):
-    return lambda i, j: 1 if i + by == j else 0
-
-def diagonal_func_matrix(f):
-    return lambda i, j: f(i) if i == j else 0
 
 def inspect(M):
 
