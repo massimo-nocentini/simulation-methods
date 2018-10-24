@@ -20,16 +20,17 @@ def make(eigendata, Phi_polynomials, subs_eigenvals=True, *, f):
     data, eigenvals, multiplicities = eigendata.rhs # unpacking to use `eigenvals` in `subs`
 
     g = Hermite_interpolation_polynomial(f, eigendata, Phi_polynomials)
-    g = g.subs(eigenvals, simultaneous=True) if subs_eigenvals else g
-    with lift_to_matrix_function(g) as G:
-        return f, g, G
+    if subs_eigenvals: 
+        g = define(g.lhs, g.rhs.subs(eigenvals, simultaneous=True), ctor=MFEq)
 
-power = partial(make, f=define(function('P', z), z**r))
-inverse = partial(make, f=define(function('I', z), 1/z))
-square_root = partial(make, f=define(function('R', z), sympy.sqrt(z)))
-exp = partial(make, f=define(function('E', z), sympy.exp(alpha*z)))
-log = partial(make, f=define(function('L', z), sympy.log(z)))
-sin = partial(make, f=define(function('S', z), sympy.sin(z)))
-cos = partial(make, f=define(function('C', z), sympy.cos(z)))
-mobius = partial(make, f=define(function('M', z), (a*z+b)/(c*z+d)))
-normal = partial(make, f=define(function('N', z), sympy.exp(- z**2/2)/sympy.sqrt(2*pi)))
+    return f, g
+
+power = partial(make, f=define(function('P', z), z**r, ctor=FEq))
+inverse = partial(make, f=define(function('I', z), 1/z, ctor=FEq))
+square_root = partial(make, f=define(function('R', z), sympy.sqrt(z), ctor=FEq))
+exp = partial(make, f=define(function('E', z), sympy.exp(alpha*z), ctor=FEq))
+log = partial(make, f=define(function('L', z), sympy.log(z), ctor=FEq))
+sin = partial(make, f=define(function('S', z), sympy.sin(z), ctor=FEq))
+cos = partial(make, f=define(function('C', z), sympy.cos(z), ctor=FEq))
+mobius = partial(make, f=define(function('M', z), (a*z+b)/(c*z+d), ctor=FEq))
+normal = partial(make, f=define(function('N', z), sympy.exp(- z**2/2)/sympy.sqrt(2*pi), ctor=FEq))

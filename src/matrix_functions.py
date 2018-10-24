@@ -51,6 +51,16 @@ def lift_to_matrix_function(g_def):
 
     yield lift
 
+class MFEq(FEq):
+
+    def __call__(self, arg, **kwds):
+        if isinstance(arg, Eq) and isinstance(arg.rhs, MatrixBase):
+            with lift_to_matrix_function(self) as F:
+                return F(arg, **kwds) # how to lift to more than one dimension?
+        else:
+            return super().__call__(arg, **kwds) 
+        
+
 def spectrum(matrix_def):
 
     matrix_name, matrix = matrix_def.lhs, matrix_def.rhs
@@ -91,9 +101,10 @@ def Phi_poly_ctor(deg):
     Phi = Function(r'\Phi')
     z, i, j, k = symbols('z, i, j, k')
 
-    terms = Sum(phi_abstract_coefficient[i, j, deg-k] * z**k, (k, 0, deg)).doit()
+    terms = sum(phi_abstract_coefficient[i, j, deg-k] * z**k
+                for k in range(deg+1))
 
-    return Eq(Phi(z, i, j), terms)
+    return define(Phi(z, i, j), terms, ctor=FEq)
 
 
 def component_polynomials(eigendata, early_eigenvals_subs=False, verbose_return=False):
@@ -102,8 +113,8 @@ def component_polynomials(eigendata, early_eigenvals_subs=False, verbose_return=
 
     deg = sum(multiplicities.values()) - 1
 
-    Phi_poly = Phi_poly_ctor(deg)
-    z, *_ = Phi_poly.lhs.args
+    Phi = Phi_poly_ctor(deg)
+    z, *_ = Phi.lhs.args
 
     polynomials = {}
 
@@ -111,27 +122,25 @@ def component_polynomials(eigendata, early_eigenvals_subs=False, verbose_return=
 
         for j in range(1, multiplicities[mul] + 1):
 
-            with lift_to_Lambda(Phi_poly) as Phi: 
-                Phi_ij = Phi(z, i, j)
+            Phi_ij = Phi(z, i, j)
 
-                @lru_cache(maxsize=None)
-                def Phi_ij_derivative(j):
-                    return Phi_ij_derivative(j-1).diff(z) if j else Phi_ij
+            @lru_cache(maxsize=None)
+            def Phi_ij_derivative(j):
+                return Phi_ij_derivative(j-1).diff(z) if j else Phi_ij
 
             eqs = set()
             for l, (lamda_l, mul_l) in data.items():
 
                 λ_l, m_l = eigenvals[lamda_l] , multiplicities[mul_l]
 
-                derivatives = {r: Eq(partial_r(z), Phi_ij_derivative(r-1))
+                derivatives = {r: define(partial_r(z), Phi_ij_derivative(r-1), ctor=FEq)
                                for r in range(1, m_l + 1)
                                for partial_r in [Function(r'\partial^{{({})}}'.format(r))]}
 
-                for r, der_eq in derivatives.items():
-                    with lift_to_Lambda(der_eq) as der_fn:
-                        lhs = der_fn(λ_l if early_eigenvals_subs else lamda_l)
-                        rhs = KroneckerDelta(l, i) * KroneckerDelta(r, j)
-                        eqs.add(Eq(lhs, rhs))
+                for r, der in derivatives.items():
+                    lhs = der(λ_l if early_eigenvals_subs else lamda_l)
+                    rhs = KroneckerDelta(l, i) * KroneckerDelta(r, j)
+                    eqs.add(define(lhs, rhs))
 
             respect_to = [phi_abstract_coefficient[i,j,k]
                           for k in range(poly(Phi_ij, z).degree()+1)]
@@ -140,8 +149,8 @@ def component_polynomials(eigendata, early_eigenvals_subs=False, verbose_return=
 
             lhs = Function(r'\Phi_{{ {}, {} }}'.format(i, j)).__call__(z)
             rhs = Phi_ij.subs(sols, simultaneous=True).collect(z)
-            baked_poly = Eq(lhs, rhs)
-            formal_poly = Eq(lhs, Phi_ij)
+            baked_poly = define(lhs, rhs, ctor=MFEq)
+            formal_poly = define(lhs, Phi_ij, ctor=MFEq)
 
             polynomials[i,j] = (baked_poly, formal_poly, eqs, sols) if verbose_return else baked_poly
 
@@ -170,27 +179,29 @@ def Hermite_interpolation_polynomial(f_eq, eigendata, Phi_polys, matrix_form=Fal
 
     data, eigenvals, multiplicities = eigendata.rhs
     delta = Function(r'\delta')
-    g = Function('{}_{{ {} }}'.format(f_eq.lhs.func, sum(multiplicities.values())))
+    m = sum(multiplicities.values())
+    g = Function('{}_{{ {} }}'.format(f_eq.lhs.func, m))
     Z = IndexedBase('Z')
     z, *_ = f_eq.lhs.args
 
     g_poly = Integer(0)
-    
-    with lift_to_Lambda(f_eq) as f_fn:
 
-        @lru_cache(maxsize=None)
-        def F_derivative(j):
-            return F_derivative(j-1).diff(z) if j else f_fn(z)  
+    @lru_cache(maxsize=None)
+    def F_derivative(j):
+        return F_derivative(j-1).diff(z) if j else f_eq(z)  
 
-        for i, (lamda, mul) in data.items():
-            for j in range(1, multiplicities[mul]+1):
-                 with lift_to_Lambda(Eq(delta(z), F_derivative(j-1))) as der_fn,\
-                      lift_to_Lambda(Phi_polys[i, j]) as Phi:
-                        derivative_term = der_fn(lamda)
-                        Phi_term = Z[i,j] if matrix_form else Phi(z)
-                        g_poly += derivative_term*Phi_term
+    for i, (lamda, mul) in data.items():
+        for j in range(1, multiplicities[mul]+1):
 
-    return Eq(g(z), g_poly.expand().collect(z))
+            der_eq = define(delta(z), F_derivative(j-1), ctor=FEq)
+            derivative_term = der_eq(lamda)
+
+            Phi = Phi_polys[i, j]
+            Phi_term = Z[i,j] if matrix_form else Phi(z)
+
+            g_poly += derivative_term*Phi_term
+
+    return MFEq(g(z), g_poly.expand().collect(z))
 
 
 def component_matrices( matrix_eq, 
@@ -202,9 +213,8 @@ def component_matrices( matrix_eq,
     Z_matrices = {}
     
     for (i, j), cp in Phi_polys.items():
-        with lift_to_matrix_function(cp) as cp_fn:
-            Z_ij = cp_fn(matrix_eq, post=post).rhs
-            Z_matrices[i, j] = Eq(Z[i, j], Z_ij , evaluate=False)
+        Z_ij = cp(matrix_eq, post=post).rhs
+        Z_matrices[i, j] = define(Z[i, j], Z_ij , evaluate=False)
     
     return Z_matrices
 

@@ -1,12 +1,13 @@
 from contextlib import contextmanager, redirect_stdout
-from sympy import Eq, Lambda, Function, Indexed, latex
+from sympy import Eq, Lambda, Function, Indexed, latex, Subs
+from functools import partial
 
-def define(let, be, **kwds):
+def define(let, be, ctor=Eq, **kwds,):
 
-    if 'evaluate' not in kwds:                                      # If `evaluate` is already given, use it as it is,
-        kwds['evaluate'] = False                                    # otherwise set to `False` to preevent evaluation 
+    if 'evaluate' not in kwds: kwds['evaluate'] = False # If `evaluate` is already given, use it as it is,
+    # otherwise set to `False` to preevent evaluation 
                                                                     # by `Eq`, which implicitly do simplifications;
-    return Eq(let, be, **kwds)                                      # finally, return an equation object.
+    return ctor(let, be, **kwds)                                      # finally, return an equation object.
 
 @contextmanager
 def lift_to_Lambda(eq, return_eq=False, lhs_handler=lambda args: []):
@@ -40,3 +41,17 @@ def foldl1(f, lst, key=identity):
         accumulated = f(accumulated, key(current))                  # with the accumulated value via the function `f`.
 
     return accumulated                                              # Finally, return the accumulated value.
+
+
+class FEq(Eq):
+
+    def __call__(self, *args, **kwds):
+        with lift_to_Lambda(self, **kwds) as feq:
+            applied = feq(*args)
+            if isinstance(applied, Eq):
+                subs = Subs(applied, self.lhs, self.rhs)  
+                setattr(subs, 'substitution', partial(lambda inner_self, *args, **kwds: self, subs))
+                return subs
+            else:
+                return applied
+
