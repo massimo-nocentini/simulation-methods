@@ -55,3 +55,25 @@ class FEq(Eq):
             else:
                 return applied
 
+    def swap(self):
+        return self.__class__(self.rhs, self.lhs)
+
+    def __iter__(self):
+        yield self.lhs, self.rhs
+
+    def as_substitution(self):
+        return dict(self)
+
+    def __mod__(self, arg):
+
+        def S(term):
+            return term.subs(self, simultaneous=True)
+        
+        if isinstance(arg, Eq):
+            lhs = self.lhs if self.lhs == arg.lhs else S(arg.lhs)
+            rhs = S(arg.rhs)
+            return arg.__class__(lhs, rhs, evaluate=False)
+        else:
+            return S(arg)
+
+
