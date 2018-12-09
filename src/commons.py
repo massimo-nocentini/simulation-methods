@@ -1,5 +1,5 @@
 from contextlib import contextmanager, redirect_stdout
-from sympy import Eq, Lambda, Function, Indexed, latex, Subs
+from sympy import Eq, Lambda, Function, Indexed, latex, Subs, factorial
 from functools import partial
 
 def define(let, be, ctor=Eq, **kwds,):
@@ -77,4 +77,22 @@ class FEq(Eq):
         else:
             return S(arg)
 
+    def series(self, *args, **kwds):
+        expr = self.rhs
+        n = kwds.get('n', 6)
+        kwds['n'] = n # simple update to make sure that SymPy's `series` uses the same `n`.
+        is_exp = kwds.pop('is_exp', False)
+        t, *_ = args
+        handler = factorial if is_exp else lambda i: 1
+
+        s = expr.series(*args, **kwds)
+        if is_exp:
+            bigO = s.getO()
+            s = sum([s.coeff(t,i) * handler(i) * t**i 
+                     for i in range(n)]) + (bigO if bigO else 0)
+
+        return define(self.lhs, define(self.rhs, s, ctor=FEq), ctor=FEq)
+
+        
+        
 
