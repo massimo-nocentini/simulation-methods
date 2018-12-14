@@ -39,7 +39,7 @@ The type system subject of our study is defined by the grammar
 \begin{displaymath}
 \begin{split}
 \Gamma\quad::=\quad&()\indent\textit{(empty type, also called \emph{unit}.)} \\
-             |\quad&\textbf{tyvar}\,\mathcal{V}\indent\textit{(type variable)} \\
+             |\quad&\textbf{tyvar}\,\mathcal{V}_{z}\indent\textit{(type variable)} \\
              |\quad&\Gamma\,\cup\,\Gamma\indent\textit{(disjoint union)} \\
              |\quad&\Gamma\,\times_{c}\,\Gamma\indent\textit{(cartesian product)} \\
              |\quad&\Gamma\,\times_{b}\,\Gamma\indent\textit{(binomial product)} \\
@@ -49,21 +49,22 @@ The type system subject of our study is defined by the grammar
              |\quad&\sim\Gamma\indent\textit{(cycles)} \\
 \end{split}
 \end{displaymath}
-where $\mathcal{V}=  \lbrace v_{i} \rbrace_{i\in\mathbb{N}}$ is a
+where $\mathcal{V}_{z} = \lbrace v\,z^{i}:v\in\mathcal{V}^{+} \rbrace_{i\in\mathbb{N}}$ built on
+$\mathcal{V}=  \lbrace v_{i} \rbrace_{i\in\mathbb{N}}$ which is a
 \textit{countable} set of pure symbols; in what follow, we stick to the habit
 that uses greek symbols to denote type variables. To that syntax we attach the
-semantic function $\semantic{}: \Gamma \rightarrow \mathbb{Z}[z]$ is defined by
-structural induction on terms in $\Gamma$,
+semantic function $\semantic{}: \Gamma \rightarrow \mathbb{Z}[z]$ which is
+defined by structural induction for terms in $\Gamma$,
 \begin{displaymath}
 \begin{split}
     \semantic{()} &= 1 \\
-    \semantic{\textbf{tyvar}\,\gamma} &= \gamma\,z \\
+    \semantic{\textbf{tyvar}\,\gamma} &= \gamma\indent\textit{(observe that $\gamma$ may contain powers of $z$)} \\
     \semantic{a\,\cup\,b} &= \semantic{a} + \semantic{b} \\
     \semantic{a\,\times_{c}\,b} &= \semantic{a}\cdot\semantic{b} \\
     \semantic{a\,\times_{b}\,c} &= \semantic{a}\star\semantic{c} \\
-    \semantic{\textbf{rec}\,\gamma.\,a} &= \beta  \quad\text{where}\quad
+    \semantic{\textbf{rec}\,\gamma.\,a} &= \beta(z)  \quad\text{where}\quad
         %\semantic{\textbf{tyvar}\,\gamma}\,=_{\beta}\,\semantic{a\,[\textbf{tyvar}\,\gamma/\gamma]}\\
-        \semantic{\textbf{tyvar}\,\gamma}\,=_{\beta}\,\semantic{a}\\
+        \semantic{\textbf{tyvar}\,\gamma}\,=_{\beta(z)}\,\semantic{a}\\
     \semantic{b\cdot2^{a}} &= e^{b\,\semantic{a}}\\
     %\semantic{(-2)^{a}} &= \frac{e^{-\beta}}{1-\beta}\quad\text{where}\quad\beta=\semantic{a}(z)\\
     \semantic{\sim a} &= log\,\semantic{a}\\
@@ -89,31 +90,33 @@ to manipulate both ordinary and exponential generating functions.
 \begin{example}
 Let $L,\alpha\in\mathcal{V}$ be pure symbols then consider the type
 \begin{displaymath}
-    \rec{L}{()\,|\,\tyvar{\alpha}\times_{c}\tyvar{L}}
+    \rec{L}{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}
 \end{displaymath}
 whose generating function can be found by the semantic
 \begin{displaymath}
-    \semantic{\rec{L}{()\,|\,\tyvar{\alpha}\times_{c}\tyvar{L}}} = \beta(z)
+    \semantic{\rec{L}{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}} = \beta(z)
 \end{displaymath}
 where $\beta(z)$ is the solution of the equation 
 \begin{displaymath}
-    \semantic{\tyvar{L}} = \semantic{()\,|\,\tyvar{\alpha}\times_{c}\tyvar{L}}
+    \semantic{\tyvar{L}} = \semantic{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}
 \end{displaymath}
 which reduces to solve
 \begin{displaymath}
-    L\,z = 1 + \alpha\,z\,L\,z\quad\text{with respect to $L\,z$}, 
+    L = 1 + \alpha\,z\,L\quad\text{with respect to $L$}, 
 \end{displaymath}
-therefore $\displaystyle L\,z = \frac{1}{1 - \alpha\,z}$
+therefore $\displaystyle L = \frac{1}{1 - \alpha\,z}$
 so take $\displaystyle \beta(z) = \frac{1}{1 - \alpha\,z}$, as required.
 
 A series expansion of $\beta(z)$ up to $10$ terms yields
 \begin{displaymath}
 \beta(z) = 1 + \alpha z + \alpha^{2} z^{2} + \alpha^{3} z^{3} + \alpha^{4} z^{4} + \alpha^{5} z^{5} + \alpha^{6} z^{6} + \alpha^{7} z^{7} + \alpha^{8} z^{8} + \alpha^{9} z^{9} + O\left(z^{10}\right)
 \end{displaymath}
-hence $[z^{n}]\,\semantic{\rec{L}{()\,|\,\tyvar{\alpha}\times_{c}\tyvar{L}}} =
-\alpha^{n}$ which says that there is $1$ composition of $n$ values with type
-$\tyvar{\alpha}$.  The generalization of this type is so fundamental that we
-stick to it a name
+hence $[z^{n}]\,\semantic{\rec{L}{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}} =
+\alpha^{n}$ which says that there is $1$ composition of $n$ values having type
+$\tyvar{\alpha\,z}$ each one of them.  
+\end{example}
+
+The generalization of the previous type is so fundamental that we stick to it a name
 \begin{displaymath}
 \begin{split}
     \Gamma\quad::=\quad&... \\
@@ -122,12 +125,21 @@ stick to it a name
 \end{displaymath}
 with semantic
 \begin{displaymath}
-    \semantic{\lst{a}} = \frac{1}{1-\semantic{a}\,z},
+    \semantic{\lst{a}} = \frac{1}{1-\semantic{a}},
 \end{displaymath}
-namely $lst\,\gamma$ is the set of all (possibly infinite) lists of
-objects with type $\gamma\in\Gamma$.
-\end{example}
-
+namely $\lst{\gamma}$ is the set of all (possibly infinite) lists of
+objects with type $\gamma\in\Gamma$. Using it immediately we can add new types, such 
+as 
+\begin{displaymath}
+\begin{split}
+    \Gamma\quad::=\quad&... \\
+           |\quad&\derangements{\Gamma}\,\triangleq\,(-1\cdot2)^{\Gamma}\times_{b}\lst{\Gamma}\indent\text{(derangements)}
+\end{split}
+\end{displaymath}
+with semantic
+\begin{displaymath}
+    \semantic{\derangements{a}} = e^{-\semantic{a}}\star\frac{1}{1-\semantic{a}\,z}
+\end{displaymath}
 
 \section{Unlabelled structures}
 
