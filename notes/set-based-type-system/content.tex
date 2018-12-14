@@ -1,0 +1,234 @@
+
+\section{Introduction}
+
+In the spirit of \citet{burge1975recursive}, this document collects our effort
+to make into practice what Burge describes in the first half of Chapter $3$ in
+his book -- for your humble author, it is a collection of seminal idea now
+available in present functional programming languages, by the way. For this
+reason, much of the content has been borrowed from that chapter and extended
+using recent outstanding references, such as \citet{sedgewick2014introduction}
+and the more ambitious work of \citet{flajolet2009analytic}.
+
+Our contribution is a practical implementation using the Python language of the
+abstract ideas introduced by the referenced authors, which aims \emph{to
+automate the computation of generating functions (both ordinary and
+exponential) for arbitrary compositions of types}; moreover, the interleave of
+symbolic manipulation with the usual functional style allows us to obtain
+counting formulae in closed form.
+
+How to read this document: words in \texttt{monospace font} represent Python
+code that can be typed and evaluated in a Python 3 interpreter while the
+results of the execution are reported in the lines immediately below formatted
+according to their nature, usually using standard \TeX\, math symbols. In the
+prose we introduce and describe classes of Python objects that implement the
+desired theory, postponing their precise definitions in Section
+\ref{sec:appendix}. Moreover, we assume that the bindings
+\begin{minted}[baselinestretch=0.8]{python}
+x,y,m,n,t,z = symbols('x y m n t z')
+alpha, beta, gamma, eta = symbols(r'\alpha \beta \gamma \eta')
+f,g = Function('f'), Function('g')
+w = IndexedBase('w')
+\end{minted}
+last till the end of this work and they are in scope for all definitions, finally
+the variable $z$ will be reserved for counting with respect to the number of
+atomic objects within a combinatorial structure.
+
+\section{Syntax and semantic}
+
+The type system subject of our study is defined by the grammar
+\begin{displaymath}
+\begin{split}
+\Gamma\quad::=\quad&()\indent\textit{(empty type, also called \emph{unit}.)} \\
+             |\quad&\textbf{tyvar}\,\mathcal{V}\indent\textit{(type variable)} \\
+             |\quad&\Gamma\,\cup\,\Gamma\indent\textit{(disjoint union)} \\
+             |\quad&\Gamma\,\times_{c}\,\Gamma\indent\textit{(cartesian product)} \\
+             |\quad&\Gamma\,\times_{b}\,\Gamma\indent\textit{(binomial product)} \\
+             |\quad&\textbf{rec}\,\mathcal{V}.\,\Gamma\indent\textit{(recursion)} \\
+             |\quad&\mathbb{Z}\cdot2^{\Gamma}\indent\textit{(set of all finite subsets)} \\
+             %|\quad&(-2)^{\Gamma}\indent\textit{(derangements)} \\
+             |\quad&\sim\Gamma\indent\textit{(cycles)} \\
+\end{split}
+\end{displaymath}
+where $\mathcal{V}=  \lbrace v_{i} \rbrace_{i\in\mathbb{N}}$ is a
+\textit{countable} set of pure symbols; in what follow, we stick to the habit
+that uses greek symbols to denote type variables. To that syntax we attach the
+semantic function $\semantic{}: \Gamma \rightarrow \mathbb{Z}[z]$ is defined by
+structural induction on terms in $\Gamma$,
+\begin{displaymath}
+\begin{split}
+    \semantic{()} &= 1 \\
+    \semantic{\textbf{tyvar}\,\gamma} &= \gamma\,z \\
+    \semantic{a\,\cup\,b} &= \semantic{a} + \semantic{b} \\
+    \semantic{a\,\times_{c}\,b} &= \semantic{a}\cdot\semantic{b} \\
+    \semantic{a\,\times_{b}\,c} &= \semantic{a}\star\semantic{c} \\
+    \semantic{\textbf{rec}\,\gamma.\,a} &= \beta  \quad\text{where}\quad
+        %\semantic{\textbf{tyvar}\,\gamma}\,=_{\beta}\,\semantic{a\,[\textbf{tyvar}\,\gamma/\gamma]}\\
+        \semantic{\textbf{tyvar}\,\gamma}\,=_{\beta}\,\semantic{a}\\
+    \semantic{b\cdot2^{a}} &= e^{b\,\semantic{a}}\\
+    %\semantic{(-2)^{a}} &= \frac{e^{-\beta}}{1-\beta}\quad\text{where}\quad\beta=\semantic{a}(z)\\
+    \semantic{\sim a} &= log\,\semantic{a}\\
+\end{split}
+\end{displaymath}
+denoting with $a\,=_{\beta}\,b(a)$ that $\beta$ is the solution of the equation
+$a\,=\,b(a)$ with respect to $a$. In plain words, $\semantic{a}$ yields  the
+\textit{generating function} that counts the number of atomic objects in values
+of type $a$; in particular, the coefficient $a_{n}$ of $z^{n}$ in the series
+expansion of $\semantic{a}$, in symbols $[z^{n}]\,\semantic{a} = a_{n}$, counts
+the number of atomic objects within a value of dimension $n$ with type
+$a\in\Gamma$ -- the operator $[z^{n}]$ is studied in depth by \citet{MSV07}.
+
+For the sake of clarity, we define the two product operators
+\begin{displaymath}
+\begin{split}
+    a(z)\,\cdot\,b(z) &= \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{a_{k}b_{n-k}}\right)\,z^{n}}\quad\text{and}\\
+    a(z)\,\star\,b(z) &= \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{{ {n}\choose{k} }a_{k}b_{n-k}}\right)\,\frac{z^{n}}{n!}} \\
+\end{split}
+\end{displaymath}
+to manipulate both ordinary and exponential generating functions.
+
+\begin{example}
+Let $L,\alpha\in\mathcal{V}$ be pure symbols then consider the type
+\begin{displaymath}
+    \rec{L}{()\,|\,\tyvar{\alpha}\times_{c}\tyvar{L}}
+\end{displaymath}
+whose generating function can be found by the semantic
+\begin{displaymath}
+    \semantic{\rec{L}{()\,|\,\tyvar{\alpha}\times_{c}\tyvar{L}}} = \beta(z)
+\end{displaymath}
+where $\beta(z)$ is the solution of the equation 
+\begin{displaymath}
+    \semantic{\tyvar{L}} = \semantic{()\,|\,\tyvar{\alpha}\times_{c}\tyvar{L}}
+\end{displaymath}
+which reduces to solve
+\begin{displaymath}
+    L\,z = 1 + \alpha\,z\,L\,z\quad\text{with respect to $L\,z$}, 
+\end{displaymath}
+therefore $\displaystyle L\,z = \frac{1}{1 - \alpha\,z}$
+so take $\displaystyle \beta(z) = \frac{1}{1 - \alpha\,z}$, as required.
+
+A series expansion of $\beta(z)$ up to $10$ terms yields
+\begin{displaymath}
+\beta(z) = 1 + \alpha z + \alpha^{2} z^{2} + \alpha^{3} z^{3} + \alpha^{4} z^{4} + \alpha^{5} z^{5} + \alpha^{6} z^{6} + \alpha^{7} z^{7} + \alpha^{8} z^{8} + \alpha^{9} z^{9} + O\left(z^{10}\right)
+\end{displaymath}
+hence $[z^{n}]\,\semantic{\rec{L}{()\,|\,\tyvar{\alpha}\times_{c}\tyvar{L}}} =
+\alpha^{n}$ which says that there is $1$ composition of $n$ values with type
+$\tyvar{\alpha}$.  The generalization of this type is so fundamental that we
+stick to it a name
+\begin{displaymath}
+\begin{split}
+    \Gamma\quad::=\quad&... \\
+           |\quad&\lst{\Gamma}\,\triangleq\,\rec{\mathcal{V}}{()\,|\,\Gamma\times_{c}\tyvar{\mathcal{V}}}\indent\text{(list)}
+\end{split}
+\end{displaymath}
+with semantic
+\begin{displaymath}
+    \semantic{\lst{a}} = \frac{1}{1-\semantic{a}\,z},
+\end{displaymath}
+namely $lst\,\gamma$ is the set of all (possibly infinite) lists of
+objects with type $\gamma\in\Gamma$.
+\end{example}
+
+
+\section{Unlabelled structures}
+
+\begin{minted}[baselinestretch=0.8]{python}
+tyvar(x).gf()
+\end{minted}
+\begin{displaymath}
+\left [ \mathcal{V}{\left (x \right )} = x\right ]
+\end{displaymath}
+
+\section{Labelled structures}
+
+Before proceeding on our main track we recap some \emph{exponential} generating
+functions and their series expansions, for the sake of clarity
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), z**3,ctor=FEq).series(z, n=10, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = z^{3} = 6 z^{3};
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), exp(z),ctor=FEq).series(z, n=10, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = e^{z} = 1 + z + z^{2} + z^{3} + z^{4} + z^{5} + z^{6} + z^{7} + z^{8} + z^{9} + O\left(z^{10}\right);
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), z*exp(z), ctor=FEq).series(z, n=10, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = z e^{z} = z + 2 z^{2} + 3 z^{3} + 4 z^{4} + 5 z^{5} + 6 z^{6} + 7 z^{7} + 8 z^{8} + 9 z^{9} + O\left(z^{10}\right)
+\end{displaymath}
+which is the exponential dual of the ordinary expansion
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), z*(1/(1-z))*(1/(1-z)),
+       ctor=FEq).series(z,n=10,is_exp=False)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = \frac{z}{\left(- z + 1\right)^{2}} = z + 2 z^{2} + 3 z^{3} + 4 z^{4} + 5 z^{5} + 6 z^{6} + 7 z^{7} + 8 z^{8} + 9 z^{9} + O\left(z^{10}\right);
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), z**2*exp(z)/factorial(2,evaluate=False),
+       ctor=FEq).series(z, n=10, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = \frac{z^{2} e^{z}}{2!} = z^{2} + 3 z^{3} + 6 z^{4} + 10 z^{5} + 15 z^{6} + 21 z^{7} + 28 z^{8} + 36 z^{9} + O\left(z^{10}\right);
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), z**3*exp(z)/factorial(3, evaluate=False),
+       ctor=FEq).series(z, n=10, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = \frac{z^{3} e^{z}}{3!} = z^{3} + 4 z^{4} + 10 z^{5} + 20 z^{6} + 35 z^{7} + 56 z^{8} + 84 z^{9} + O\left(z^{10}\right);
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), (exp(z)+exp(-z))/2,
+       ctor=FEq).series(z, n=20, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = \frac{e^{z}}{2} + \frac{e^{- z}}{2} = 1 + z^{2} + z^{4} + z^{6} + z^{8} + z^{10} + z^{12} + z^{14} + z^{16} + z^{18} + O\left(z^{20}\right);
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), exp(m*z), ctor=FEq).series(z, n=10, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = e^{m z} = 1 + m z + m^{2} z^{2} + m^{3} z^{3} + m^{4} z^{4} + m^{5} z^{5} + m^{6} z^{6} + m^{7} z^{7} + m^{8} z^{8} + m^{9} z^{9} + O\left(z^{10}\right);
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), (exp(z)-1)/z, ctor=FEq).series(z, n=10, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = \frac{e^{z} - 1}{z} = 1 + \frac{z}{2} + \frac{z^{2}}{3} + \frac{z^{3}}{4} + \frac{z^{4}}{5} + \frac{z^{5}}{6} + \frac{z^{6}}{7} + \frac{z^{7}}{8} + \frac{z^{8}}{9} + \frac{z^{9}}{10} + O\left(z^{10}\right);
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), 1/(1-z), ctor=FEq).series(z, n=10, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = \frac{1}{- z + 1} = 1 + z + 2 z^{2} + 6 z^{3} + 24 z^{4} + 120 z^{5} + 720 z^{6} + 5040 z^{7} + 40320 z^{8} + 362880 z^{9} + O\left(z^{10}\right);
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), (1/(1-z))*(1/(1-z)), ctor=FEq).series(z, n=10,is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = \frac{1}{\left(- z + 1\right)^{2}} = 1 + 2 z + 6 z^{2} + 24 z^{3} + 120 z^{4} + 720 z^{5} + 5040 z^{6} + 40320 z^{7} + 362880 z^{8} + 3628800 z^{9} + O\left(z^{10}\right);
+\end{displaymath}
+
+\begin{minted}[baselinestretch=0.8]{python}
+define(f(z), exp(z)**2, ctor=FEq).series(z, n=10, is_exp=True)
+\end{minted}
+\begin{displaymath}
+f{\left (z \right )} = e^{2 z} = 1 + 2 z + 4 z^{2} + 8 z^{3} + 16 z^{4} + 32 z^{5} + 64 z^{6} + 128 z^{7} + 256 z^{8} + 512 z^{9} + O\left(z^{10}\right).
+\end{displaymath}
+
+\input{appendix.tex}
