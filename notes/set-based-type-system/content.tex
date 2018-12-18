@@ -16,6 +16,14 @@ exponential) for arbitrary compositions of types}; moreover, the interleave of
 symbolic manipulation with the usual functional style allows us to obtain
 counting formulae in closed form.
 
+This work is an extended exercise on understanding basic concepts of
+combinatorial analysis, drawing and inspired by
+\citet{riordan2002introduction}, to further combine to form a coherent
+language; eventually, we wish to \textit{use generating functions as a true
+enumeration device by a tight integration with symbolic programming}, not just
+for its counting capabilities which say nothing about the structure of actual
+objects being counted. 
+
 How to read this document: words in \texttt{monospace font} represent Python
 code that can be typed and evaluated in a Python 3 interpreter while the
 results of the execution are reported in the lines immediately below formatted
@@ -36,6 +44,7 @@ atomic objects within a combinatorial structure.
 \section{Syntax and semantic}
 
 The type system subject of our study is defined by the grammar
+\begin{definition}[Syntax]
 \begin{displaymath}
 \begin{split}
 \Gamma\quad::=\quad&()\indent\textit{(empty type, also called \emph{unit}.)} \\
@@ -44,17 +53,36 @@ The type system subject of our study is defined by the grammar
              |\quad&\Gamma\,\times_{c}\,\Gamma\indent\textit{(cartesian product)} \\
              |\quad&\Gamma\,\times_{b}\,\Gamma\indent\textit{(binomial product)} \\
              |\quad&\textbf{rec}\,\mathcal{V}.\,\Gamma\indent\textit{(recursion)} \\
-             |\quad&\mathbb{Z}\cdot2^{\Gamma}\indent\textit{(set of all finite subsets)} \\
+             |\quad&\mathcal{F}(\,\Gamma\,)\indent\textit{(transformation)} \\
+             %|\quad&-\,\Gamma\indent\textit{(negation)} \\
+             %|\quad&2^{\Gamma}\indent\textit{(set of all finite subsets)} \\
              %|\quad&(-2)^{\Gamma}\indent\textit{(derangements)} \\
-             |\quad&\sim\Gamma\indent\textit{(cycles)} \\
+             %|\quad&\sim\Gamma\indent\textit{(cycles)} \\
+             |\quad&\partial\,{\Gamma}\indent\textit{(derivation)} \\
+             |\quad&\int{\Gamma}\indent\textit{(integration)} \\
+             |\quad&\Gamma\,\Gamma\indent\textit{(application)} \\
 \end{split}
 \end{displaymath}
-where $\mathcal{V}_{z} = \lbrace v\,z^{i}:v\in\mathcal{V}^{+} \rbrace_{i\in\mathbb{N}}$ built on
-$\mathcal{V}=  \lbrace v_{i} \rbrace_{i\in\mathbb{N}}$ which is a
-\textit{countable} set of pure symbols; in what follow, we stick to the habit
-that uses greek symbols to denote type variables. To that syntax we attach the
-semantic function $\semantic{}: \Gamma \rightarrow \mathbb{Z}[z]$ which is
-defined by structural induction for terms in $\Gamma$,
+where $\mathcal{V}_{z} = \lbrace v\,z^{i}:v\in\mathcal{V}^{+}
+\rbrace_{i\in\mathbb{N}}$ is built on $\mathcal{V}=  \lbrace v_{i}
+\rbrace_{i\in\mathbb{N}}$, which is a \textit{countable} set of pure symbols;
+moreover, $\mathcal{F}$ is a set of continuous and differentiable (infinitely
+many times) functions over $\mathbb{Z}[z]$, namely  $\mathcal{F} = \lbrace
+f\,\in\,C^{\infty}(\mathbb{Z}[z], \mathbb{Z}[z])\rbrace$.
+\end{definition}
+
+In what follow, we stick to the habit that uses greek symbols to denote type
+variables. The following conventions are in order: (i)~operators $\cup$ and
+$\times_{c}$ associate to the right, $(a \cup b \cup c)$ and $(a \times_{c} b
+\times_{c} d)$ denote $\left(a \cup (b \cup c)\right)$ and $(a \times_{c} (b
+\times_{c} d))$ respectively; on the other hand, the application $a\,b\,c$
+associates to the left, namely $(a\,b)\,c$ as in currified function
+applications.
+
+We give meaning to the introduced syntax by 
+\begin{definition}[Semantic]
+The semantic function $\semantic{}: \Gamma \rightarrow
+\mathbb{Z}[z]$ is defined by structural induction for terms in $\Gamma$,
 \begin{displaymath}
 \begin{split}
     \semantic{()} &= 1 \\
@@ -65,27 +93,74 @@ defined by structural induction for terms in $\Gamma$,
     \semantic{\textbf{rec}\,\gamma.\,a} &= \beta(z)  \quad\text{where}\quad
         %\semantic{\textbf{tyvar}\,\gamma}\,=_{\beta}\,\semantic{a\,[\textbf{tyvar}\,\gamma/\gamma]}\\
         \semantic{\textbf{tyvar}\,\gamma}\,=_{\beta(z)}\,\semantic{a}\\
-    \semantic{b\cdot2^{a}} &= e^{b\,\semantic{a}}\\
+    %\semantic{-\,a} &= -\,\semantic{a}\\
+    %\semantic{2^{a}} &= e^{\semantic{a}}\\
     %\semantic{(-2)^{a}} &= \frac{e^{-\beta}}{1-\beta}\quad\text{where}\quad\beta=\semantic{a}(z)\\
-    \semantic{\sim a} &= log\,\semantic{a}\\
+    %\semantic{\sim a} &= log\,\semantic{a}\\
+    \semantic{f(\,a\,)} &= f(\,\semantic{a}\,)\indent\textit{(recall that $f\,:\,\mathbb{Z}[z]\rightarrow\mathbb{Z}[z]$)}\\
+    \semantic{\partial\,a} &= \frac{\partial}{\partial\,z}\,\semantic{a}\\
+    \semantic{\int{a}} &= \int{\semantic{a}\,dz}\\
+    \semantic{a\,b} &= \semantic{a}\big|_{z=\semantic{b}}\\
 \end{split}
 \end{displaymath}
 denoting with $a\,=_{\beta}\,b(a)$ that $\beta$ is the solution of the equation
-$a\,=\,b(a)$ with respect to $a$. In plain words, $\semantic{a}$ yields  the
-\textit{generating function} that counts the number of atomic objects in values
-of type $a$; in particular, the coefficient $a_{n}$ of $z^{n}$ in the series
-expansion of $\semantic{a}$, in symbols $[z^{n}]\,\semantic{a} = a_{n}$, counts
-the number of atomic objects within a value of dimension $n$ with type
-$a\in\Gamma$ -- the operator $[z^{n}]$ is studied in depth by \citet{MSV07}.
+$a\,=\,b(a)$ with respect to $a$; moreover, the operator $c\,\big|_{a=b}$
+substitutes every occurrence of $a$ expressions with the $b$ expression in the
+context expression $c$.
+\end{definition}
 
-For the sake of clarity, we define the two product operators
+In plain words, $\semantic{a}$ yields  the \textit{generating function} that
+counts the number of atomic objects in values of type $a$; in particular, the
+coefficient $a_{n}$ of $z^{n}$ in the series expansion of $\semantic{a}$, in
+symbols $[z^{n}]\,\semantic{a} = a_{n}$, counts the number of atomic objects
+within a value of dimension $n$ with type $a\in\Gamma$ -- the operator
+$[z^{n}]$ is studied in depth by \citet{MSV07}.
+
+Precisely, the semantic of the cartesian product type
+$\Gamma\,\times_{c}\,\Gamma$ is defined as the Cauchy convolution
+\begin{displaymath}
+    \semantic{a}\cdot\semantic{b} = \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{a_{k}b_{n-k}}\right)\,z^{n}},
+\end{displaymath}
+to which the binomial product type $\Gamma\,\times_{b}\,\Gamma$ can be reduced by
 \begin{displaymath}
 \begin{split}
-    a(z)\,\cdot\,b(z) &= \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{a_{k}b_{n-k}}\right)\,z^{n}}\quad\text{and}\\
-    a(z)\,\star\,b(z) &= \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{{ {n}\choose{k} }a_{k}b_{n-k}}\right)\,\frac{z^{n}}{n!}} \\
+    \semantic{a}\star\semantic{b}   
+        &= \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{{ {n}\choose{k} }a_{k}b_{n-k}}\right)\,\frac{z^{n}}{n!}} 
+         = \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{\frac{a_{k}}{k!}\,\frac{b_{n-k}}{(n-k)!}}\right)\,z^{n}} \\
+        &= \semantic{\hat{a}}\cdot\semantic{\hat{b}} \quad\text{where}\quad[t^{n}]\semantic{\hat{c}} = \frac{1}{n!}\,[t^{n}]\semantic{c},
 \end{split}
 \end{displaymath}
-to manipulate both ordinary and exponential generating functions.
+allows us to manipulate both ordinary and exponential generating functions,
+enumerating \textit{unlabelled} and \textit{labelled} objects respectively.
+
+\begin{example}
+Let $\alpha\in\mathcal{V}$ and consider the type
+\begin{displaymath}
+    \tyunit\,\cup\,\tyvar{\alpha\,z} 
+\end{displaymath}
+whose generating function can be found by the semantic
+\begin{displaymath}
+    \semantic{\tyunit\,\cup\,\tyvar{\alpha\,z}} = 1 + \alpha\,z
+\end{displaymath}
+which represents the possibility to choose an element of type \tyvar{\alpha} or
+to choose nothing.
+\end{example}
+
+\begin{definition}[\maybe{\gamma}]
+The generalization of the previous type is so fundamental that we stick to it a name
+\begin{displaymath}
+\begin{split}
+    \Gamma\quad::=\quad&... \\
+           |\quad&\maybe{\Gamma}\,\triangleq\,\tydu{\tyunit}{\Gamma}\indent\textit{(choice)}
+\end{split}
+\end{displaymath}
+with semantic
+\begin{displaymath}
+    \semantic{\maybe{a}} = 1\,+\,\semantic{a},
+\end{displaymath}
+namely $\lst{\gamma}$ is the set of all (possibly infinite) lists of
+objects with type $\gamma\in\Gamma$.
+\end{definition}
 
 \begin{example}
 Let $L,\alpha\in\mathcal{V}$ be pure symbols then consider the type
@@ -120,7 +195,7 @@ The generalization of the previous type is so fundamental that we stick to it a 
 \begin{displaymath}
 \begin{split}
     \Gamma\quad::=\quad&... \\
-           |\quad&\lst{\Gamma}\,\triangleq\,\rec{\mathcal{V}}{()\,|\,\Gamma\times_{c}\tyvar{\mathcal{V}}}\indent\text{(list)}
+           |\quad&\lst{\Gamma}\,\triangleq\,\rec{\mathcal{V}}{()\,|\,\Gamma\times_{c}\tyvar{\mathcal{V}}}\indent\textit{(list)}
 \end{split}
 \end{displaymath}
 with semantic
