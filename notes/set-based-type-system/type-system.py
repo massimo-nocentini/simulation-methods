@@ -57,7 +57,8 @@ class ty:
 class cp(ty):
         
     def gf_rhs(self, *types):
-        return [reduce(lambda acc, gf: gf.rhs * acc, gfs, Integer(1)) 
+        return [foldr(lambda gf, acc: gf.rhs * acc, 
+                      lambda: Integer(1), gfs)
                 for gfs in self.gfs_space()]
         
     def label(self):

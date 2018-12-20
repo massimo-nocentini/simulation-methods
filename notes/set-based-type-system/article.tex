@@ -40,7 +40,11 @@
 \newtheorem{example}[theorem]{Example}
 
 \newcommand{\semantic}[1]{\left\llbracket\,#1\,\right\rrbracket}
+\newcommand{\tydef}[3]{#1\indent\triangleq\indent#2\indent\textit{(#3)}}
 \newcommand{\tyunit}[0]{()}
+\newcommand{\tytruth}[0]{\textbf{truth}}
+\newcommand{\tyfalsehood}[0]{\textbf{falsehood}}
+\newcommand{\tyboolean}[0]{\textbf{boolean}}
 \newcommand{\tydu}[2]{#1\,\cup\,#2}
 \newcommand{\maybe}[1]{\textbf{maybe}\,#1}
 \newcommand{\rec}[2]{\textbf{rec}\,#1.\,#2}

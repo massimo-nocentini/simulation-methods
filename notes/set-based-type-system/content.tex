@@ -49,7 +49,7 @@ The type system subject of our study is defined by the grammar
 \begin{split}
 \Gamma\quad::=\quad&()\indent\textit{(empty type, also called \emph{unit}.)} \\
              |\quad&\textbf{tyvar}\,\mathcal{V}_{z}\indent\textit{(type variable)} \\
-             |\quad&\Gamma\,\cup\,\Gamma\indent\textit{(disjoint union)} \\
+             |\quad&\tydu{\Gamma}{\Gamma}\indent\textit{(disjoint union)} \\
              |\quad&\Gamma\,\times_{c}\,\Gamma\indent\textit{(cartesian product)} \\
              |\quad&\Gamma\,\times_{b}\,\Gamma\indent\textit{(binomial product)} \\
              |\quad&\textbf{rec}\,\mathcal{V}.\,\Gamma\indent\textit{(recursion)} \\
@@ -87,7 +87,7 @@ The semantic function $\semantic{}: \Gamma \rightarrow
 \begin{split}
     \semantic{()} &= 1 \\
     \semantic{\textbf{tyvar}\,\gamma} &= \gamma\indent\textit{(observe that $\gamma$ may contain powers of $z$)} \\
-    \semantic{a\,\cup\,b} &= \semantic{a} + \semantic{b} \\
+    \semantic{\tydu{a}{b}} &= \semantic{a} + \semantic{b} \\
     \semantic{a\,\times_{c}\,b} &= \semantic{a}\cdot\semantic{b} \\
     \semantic{a\,\times_{b}\,c} &= \semantic{a}\star\semantic{c} \\
     \semantic{\textbf{rec}\,\gamma.\,a} &= \beta(z)  \quad\text{where}\quad
@@ -133,14 +133,58 @@ to which the binomial product type $\Gamma\,\times_{b}\,\Gamma$ can be reduced b
 allows us to manipulate both ordinary and exponential generating functions,
 enumerating \textit{unlabelled} and \textit{labelled} objects respectively.
 
+\section{Enumerations and boxes}
+
+The enumeration of a type $a\in\Gamma$ can (i)~be unified and generalized using
+their semantic $\semantic{a}$ and can (ii)~be interpreted in terms of boxes and
+placements of objects in them; for the sake of clarity, for us \textit{a box is
+a configuration of a (possibly infinite) collection of cells} and it can be represented graphically as
+\begin{displaymath}
+\underbrace{\underbrace{\quad}_{\textit{a cell}}\quad\underbrace{\quad}_{\textit{another cell}}\quad\cdots}_{\textit{a box}}
+\end{displaymath}
+finally, a \textit{cell holds either an atomic object or another box}. The
+connection among a type $a\in\Gamma$ and a box $B$ is that $a$ defines the
+configuration of the cells within $B$, namely $\displaystyle
+\underbrace{a\in\Gamma}_{\textit{box }\,B}$.  Starting small, the two primitive types
+$\tyunit$ and $\tyvar{(\alpha\,z)}$ denotes the boxes $E$ and $O$, graphically depicted as
+\begin{displaymath}
+\underbrace{\underbrace{1}_{\textit{a cell}}}_{\textit{box E}}\quad\text{and}\quad
+\underbrace{\underbrace{\alpha}_{\textit{a cell}}}_{\textit{box O}},
+\end{displaymath} 
+which both indicate a box having one cell that is empty and holds \textit{one}
+object of type $\alpha$, respectively.  Therefore, when we write down a type,
+we give the configuration of a box, namely types represent selections of
+objects to fullfil cells in that box.
+
+\begin{definition}[\tytruth, \tyfalsehood, \tyboolean]
+Types that represent truth, falsehood and boolean are in order,
+\begin{displaymath}
+\begin{split}
+    \Gamma\quad::=\quad&... \\
+           |\quad&\tydef{\tytruth}{\tyvar{w_{1}\,z}}{logical success}\\
+           |\quad&\tydef{\tyfalsehood}{\tyvar{w_{0}\,z}}{logical failure}\\
+           |\quad&\tydef{\tyboolean}{\tydu{\tytruth}{\tyfalsehood}}{logical choice}\\
+\end{split}
+\end{displaymath}
+with semantic
+\begin{displaymath}
+\begin{split}
+    \semantic{\tytruth} &= w_{1}\,z\\
+    \semantic{\tyfalsehood} &= w_{0}\,z\\
+    \semantic{\tyboolean} &= (w_{1} + w_{0})\,z,
+\end{split}
+\end{displaymath}
+respectively.
+\end{definition}
+
 \begin{example}
 Let $\alpha\in\mathcal{V}$ and consider the type
 \begin{displaymath}
-    \tyunit\,\cup\,\tyvar{\alpha\,z} 
+    \tydu{\tyunit}{\tyvar{\alpha\,z}}
 \end{displaymath}
 whose generating function can be found by the semantic
 \begin{displaymath}
-    \semantic{\tyunit\,\cup\,\tyvar{\alpha\,z}} = 1 + \alpha\,z
+    \semantic{\tydu{\tyunit}{\tyvar{\alpha\,z}}} = 1 + \alpha\,z
 \end{displaymath}
 which represents the possibility to choose an element of type \tyvar{\alpha} or
 to choose nothing.
@@ -151,15 +195,15 @@ The generalization of the previous type is so fundamental that we stick to it a 
 \begin{displaymath}
 \begin{split}
     \Gamma\quad::=\quad&... \\
-           |\quad&\maybe{\Gamma}\,\triangleq\,\tydu{\tyunit}{\Gamma}\indent\textit{(choice)}
+           |\quad&\tydef{\maybe{\Gamma}}{\tydu{\tyunit}{\Gamma}}{possible occurrence}
 \end{split}
 \end{displaymath}
 with semantic
 \begin{displaymath}
     \semantic{\maybe{a}} = 1\,+\,\semantic{a},
 \end{displaymath}
-namely $\lst{\gamma}$ is the set of all (possibly infinite) lists of
-objects with type $\gamma\in\Gamma$.
+namely $\maybe{a}$ says that \textit{an object of type $a$
+may not or may appear in a box configuration}.
 \end{definition}
 
 \begin{example}

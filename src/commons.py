@@ -1,5 +1,6 @@
+
 from contextlib import contextmanager, redirect_stdout
-from sympy import Eq, Lambda, Function, Indexed, latex, Subs, factorial
+from sympy import Eq, Lambda, Function, Indexed, latex, Subs, factorial, Symbol
 from functools import partial
 
 def define(let, be, ctor=Eq, **kwds,):
@@ -31,6 +32,15 @@ def save_latex_repr(term, filename, iterable=False):
 
 def identity(*args):
     return args if len(args) > 1 else args[0]                       # Return the given arguments, simply.
+
+def foldr(f, init, iterable):
+    def F(l):
+        try:
+            car, *cdr = l
+            return f(car, F(cdr))
+        except ValueError:
+            return init()
+    return F(iterable)
 
 def foldl1(f, lst, key=identity):
 
@@ -88,11 +98,17 @@ class FEq(Eq):
         s = expr.series(*args, **kwds)
         if is_exp:
             bigO = s.getO()
-            s = sum([s.coeff(t,i) * handler(i) * t**i 
+            s = sum([s.coeff(t,i) * handler(i) * t**i
                      for i in range(n)]) + (bigO if bigO else 0)
 
         return define(self.lhs, define(self.rhs, s, ctor=FEq), ctor=FEq)
 
-        
-        
+def commute_symbols(expr, symbols, commutative=True):
+
+    commuted_symbols = {fs: Symbol(fs.name, commutative=commutative)
+                        for fs in symbols}
+
+    return expr.subs(commuted_symbols, simultaneous=True)
+
+
 
