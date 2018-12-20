@@ -22,7 +22,7 @@ combinatorial analysis, drawing and inspired by
 language; eventually, we wish to \textit{use generating functions as a true
 enumeration device by a tight integration with symbolic programming}, not just
 for its counting capabilities which say nothing about the structure of actual
-objects being counted. 
+objects being counted.
 
 How to read this document: words in \texttt{monospace font} represent Python
 code that can be typed and evaluated in a Python 3 interpreter while the
@@ -47,11 +47,12 @@ The type system subject of our study is defined by the grammar
 \begin{definition}[Syntax]
 \begin{displaymath}
 \begin{split}
-\Gamma\quad::=\quad&()\indent\textit{(empty type, also called \emph{unit}.)} \\
+\Gamma\quad::=\quad&\tyunit\indent\textit{(empty type)} \\
              |\quad&\textbf{tyvar}\,\mathcal{V}_{z}\indent\textit{(type variable)} \\
+             |\quad&\typarens{\Gamma}\indent\textit{(precedence)} \\
              |\quad&\tydu{\Gamma}{\Gamma}\indent\textit{(disjoint union)} \\
-             |\quad&\Gamma\,\times_{c}\,\Gamma\indent\textit{(cartesian product)} \\
-             |\quad&\Gamma\,\times_{b}\,\Gamma\indent\textit{(binomial product)} \\
+             |\quad&\tycp{\Gamma}{\Gamma}\indent\textit{(cartesian product)} \\
+             %|\quad&\Gamma\,\times_{b}\,\Gamma\indent\textit{(binomial product)} \\
              |\quad&\textbf{rec}\,\mathcal{V}.\,\Gamma\indent\textit{(recursion)} \\
              |\quad&\mathcal{F}(\,\Gamma\,)\indent\textit{(transformation)} \\
              %|\quad&-\,\Gamma\indent\textit{(negation)} \\
@@ -73,23 +74,24 @@ f\,\in\,C^{\infty}(\mathbb{Z}[z], \mathbb{Z}[z])\rbrace$.
 
 In what follow, we stick to the habit that uses greek symbols to denote type
 variables. The following conventions are in order: (i)~operators $\cup$ and
-$\times_{c}$ associate to the right, $(a \cup b \cup c)$ and $(a \times_{c} b
-\times_{c} d)$ denote $\left(a \cup (b \cup c)\right)$ and $(a \times_{c} (b
-\times_{c} d))$ respectively; on the other hand, the application $a\,b\,c$
+$\times$ associate to the right, $(a \cup b \cup c)$ and $(a \times b
+\times d)$ denote $\left(a \cup (b \cup c)\right)$ and $(a \times (b
+\times d))$ respectively; on the other hand, the application $a\,b\,c$
 associates to the left, namely $(a\,b)\,c$ as in currified function
 applications.
 
-We give meaning to the introduced syntax by 
+We give meaning to the introduced syntax by
 \begin{definition}[Semantic]
 The semantic function $\semantic{}: \Gamma \rightarrow
 \mathbb{Z}[z]$ is defined by structural induction for terms in $\Gamma$,
 \begin{displaymath}
 \begin{split}
-    \semantic{()} &= 1 \\
-    \semantic{\textbf{tyvar}\,\gamma} &= \gamma\indent\textit{(observe that $\gamma$ may contain powers of $z$)} \\
+    \semantic{\tyunit} &= 1 \\
+    \semantic{\tyvar{\gamma}} &= \gamma\indent\textit{(observe that $\gamma$ may contain powers of $z$)} \\
+    \semantic{\typarens{\gamma}} &= \semantic{\gamma}\\
     \semantic{\tydu{a}{b}} &= \semantic{a} + \semantic{b} \\
-    \semantic{a\,\times_{c}\,b} &= \semantic{a}\cdot\semantic{b} \\
-    \semantic{a\,\times_{b}\,c} &= \semantic{a}\star\semantic{c} \\
+    \semantic{\tycp{a}{b}} &= \semantic{a}\cdot\semantic{b} \\
+    %\semantic{a\,\times_{b}\,c} &= \semantic{a}\star\semantic{c} \\
     \semantic{\textbf{rec}\,\gamma.\,a} &= \beta(z)  \quad\text{where}\quad
         %\semantic{\textbf{tyvar}\,\gamma}\,=_{\beta}\,\semantic{a\,[\textbf{tyvar}\,\gamma/\gamma]}\\
         \semantic{\textbf{tyvar}\,\gamma}\,=_{\beta(z)}\,\semantic{a}\\
@@ -117,15 +119,15 @@ within a value of dimension $n$ with type $a\in\Gamma$ -- the operator
 $[z^{n}]$ is studied in depth by \citet{MSV07}.
 
 Precisely, the semantic of the cartesian product type
-$\Gamma\,\times_{c}\,\Gamma$ is defined as the Cauchy convolution
+$\tycp{\Gamma}{\Gamma}$ is defined as the Cauchy convolution
 \begin{displaymath}
     \semantic{a}\cdot\semantic{b} = \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{a_{k}b_{n-k}}\right)\,z^{n}},
 \end{displaymath}
 to which the binomial product type $\Gamma\,\times_{b}\,\Gamma$ can be reduced by
 \begin{displaymath}
 \begin{split}
-    \semantic{a}\star\semantic{b}   
-        &= \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{{ {n}\choose{k} }a_{k}b_{n-k}}\right)\,\frac{z^{n}}{n!}} 
+    \semantic{a}\star\semantic{b}
+        &= \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{{ {n}\choose{k} }a_{k}b_{n-k}}\right)\,\frac{z^{n}}{n!}}
          = \sum_{n\in\mathbb{N}}{\left(\sum_{k=0}^{n}{\frac{a_{k}}{k!}\,\frac{b_{n-k}}{(n-k)!}}\right)\,z^{n}} \\
         &= \semantic{\hat{a}}\cdot\semantic{\hat{b}} \quad\text{where}\quad[t^{n}]\semantic{\hat{c}} = \frac{1}{n!}\,[t^{n}]\semantic{c},
 \end{split}
@@ -150,7 +152,7 @@ $\tyunit$ and $\tyvar{(\alpha\,z)}$ denotes the boxes $E$ and $O$, graphically d
 \begin{displaymath}
 \underbrace{\underbrace{1}_{\textit{a cell}}}_{\textit{box E}}\quad\text{and}\quad
 \underbrace{\underbrace{\alpha}_{\textit{a cell}}}_{\textit{box O}},
-\end{displaymath} 
+\end{displaymath}
 which both indicate a box having one cell that is empty and holds \textit{one}
 object of type $\alpha$, respectively.  Therefore, when we write down a type,
 we give the configuration of a box, namely types represent selections of
@@ -190,21 +192,195 @@ which represents the possibility to choose an element of type \tyvar{\alpha} or
 to choose nothing.
 \end{example}
 
-\begin{definition}[\maybe{\gamma}]
+Previous examples is only the beginning and the following one connects
+the boxes analogy with a problem about powers of natural numbers.
+
+\begin{example}
+Enumerate all numbers that can be written as sum of powers of $2$, $3$ and $5$
+respectively, using at most $4$ powers of each, in that case a single time.
+The answer lies in the semantic
+\begin{displaymath}
+\semantic{\tycp{a}{\tycp{b}{\tycp{c}{d}}}} = \left(z^{b^{0}} {\space}_{b^{0}} + 1\right) \left(z^{b^{1}} {\space}_{b^{1}} + 1\right) \left(z^{b^{2}} {\space}_{b^{2}} + 1\right) \left(z^{b^{3}} {\space}_{b^{3}} + 1\right),
+\end{displaymath}
+where
+\begin{displaymath}
+\begin{split}
+    a &= \typarens{\tydu{\tyunit}{\tyvar{{\space}_{b^{0}} z^{b^{0}}}}},
+        b = \typarens{\tydu{\tyunit}{\tyvar{{\space}_{b^{1}} z^{b^{1}}}}},\\
+    c &= \typarens{\tydu{\tyunit}{\tyvar{{\space}_{b^{2}} z^{b^{2}}}}}\quad\text{and}\quad
+        d = \typarens{\tydu{\tyunit}{\tyvar{{\space}_{b^{3}} z^{b^{3}}}}},
+\end{split}
+\end{displaymath}
+and its series expansion with respect to $z$ enumerates (i)~for $b=2$,
+\begin{displaymath}
+\begin{split}
+&z^{15} {\space}_{2^{0}} {\space}_{2^{1}} {\space}_{2^{2}} {\space}_{2^{3}} + z^{14} {\space}_{2^{1}} {\space}_{2^{2}} {\space}_{2^{3}} + z^{13} {\space}_{2^{0}} {\space}_{2^{2}} {\space}_{2^{3}} + z^{12} {\space}_{2^{2}} {\space}_{2^{3}} + z^{11} {\space}_{2^{0}} {\space}_{2^{1}} {\space}_{2^{3}} + z^{10} {\space}_{2^{1}} {\space}_{2^{3}} + z^{9} {\space}_{2^{0}} {\space}_{2^{3}} + \\
+&z^{8} {\space}_{2^{3}} + z^{7} {\space}_{2^{0}} {\space}_{2^{1}} {\space}_{2^{2}} + z^{6} {\space}_{2^{1}} {\space}_{2^{2}} + z^{5} {\space}_{2^{0}} {\space}_{2^{2}} + z^{4} {\space}_{2^{2}} + z^{3} {\space}_{2^{0}} {\space}_{2^{1}} + z^{2} {\space}_{2^{1}} + z {\space}_{2^{0}} + 1;
+\end{split}
+\end{displaymath}
+(ii)~for $b=3$,
+\begin{displaymath}
+\begin{split}
+&z^{40} {\space}_{3^{0}} {\space}_{3^{1}} {\space}_{3^{2}} {\space}_{3^{3}} + z^{39} {\space}_{3^{1}} {\space}_{3^{2}} {\space}_{3^{3}} + z^{37} {\space}_{3^{0}} {\space}_{3^{2}} {\space}_{3^{3}} + z^{36} {\space}_{3^{2}} {\space}_{3^{3}} + z^{31} {\space}_{3^{0}} {\space}_{3^{1}} {\space}_{3^{3}} + z^{30} {\space}_{3^{1}} {\space}_{3^{3}} + z^{28} {\space}_{3^{0}} {\space}_{3^{3}} + \\
+&z^{27} {\space}_{3^{3}} + z^{13} {\space}_{3^{0}} {\space}_{3^{1}} {\space}_{3^{2}} + z^{12} {\space}_{3^{1}} {\space}_{3^{2}} + z^{10} {\space}_{3^{0}} {\space}_{3^{2}} + z^{9} {\space}_{3^{2}} + z^{4} {\space}_{3^{0}} {\space}_{3^{1}} + z^{3} {\space}_{3^{1}} + z {\space}_{3^{0}} + 1;
+\end{split}
+\end{displaymath}
+(iii)~for $b=5$,
+\begin{displaymath}
+\begin{split}
+&z^{156} {\space}_{5^{0}} {\space}_{5^{1}} {\space}_{5^{2}} {\space}_{5^{3}} + z^{155} {\space}_{5^{1}} {\space}_{5^{2}} {\space}_{5^{3}} + z^{151} {\space}_{5^{0}} {\space}_{5^{2}} {\space}_{5^{3}} + z^{150} {\space}_{5^{2}} {\space}_{5^{3}} + z^{131} {\space}_{5^{0}} {\space}_{5^{1}} {\space}_{5^{3}} + z^{130} {\space}_{5^{1}} {\space}_{5^{3}} + z^{126} {\space}_{5^{0}} {\space}_{5^{3}} + \\
+&z^{125} {\space}_{5^{3}} + z^{31} {\space}_{5^{0}} {\space}_{5^{1}} {\space}_{5^{2}} + z^{30} {\space}_{5^{1}} {\space}_{5^{2}} + z^{26} {\space}_{5^{0}} {\space}_{5^{2}} + z^{25} {\space}_{5^{2}} + z^{6} {\space}_{5^{0}} {\space}_{5^{1}} + z^{5} {\space}_{5^{1}} + z {\space}_{5^{0}} + 1
+\end{split}
+\end{displaymath}
+and (iv)~for $b=7$,
+\begin{displaymath}
+\begin{split}
+&z^{400} {\space}_{7^{0}} {\space}_{7^{1}} {\space}_{7^{2}} {\space}_{7^{3}} + z^{399} {\space}_{7^{1}} {\space}_{7^{2}} {\space}_{7^{3}} + z^{393} {\space}_{7^{0}} {\space}_{7^{2}} {\space}_{7^{3}} + z^{392} {\space}_{7^{2}} {\space}_{7^{3}} + z^{351} {\space}_{7^{0}} {\space}_{7^{1}} {\space}_{7^{3}} + z^{350} {\space}_{7^{1}} {\space}_{7^{3}} + z^{344} {\space}_{7^{0}} {\space}_{7^{3}} + \\
+&z^{343} {\space}_{7^{3}} + z^{57} {\space}_{7^{0}} {\space}_{7^{1}} {\space}_{7^{2}} + z^{56} {\space}_{7^{1}} {\space}_{7^{2}} + z^{50} {\space}_{7^{0}} {\space}_{7^{2}} + z^{49} {\space}_{7^{2}} + z^{8} {\space}_{7^{0}} {\space}_{7^{1}} + z^{7} {\space}_{7^{1}} + z {\space}_{7^{0}} + 1,
+\end{split}
+\end{displaymath}
+respectively; for the sake of clarity, $z^{393} {\space}_{7^{0}} {\space}_{7^{2}}
+{\space}_{7^{3}}$ proves that $393 = 7^{0} + 7^{2} + 7^{3}$.
+\end{example}
+
+\begin{definition}[\tymaybe{\gamma}]
 The generalization of the previous type is so fundamental that we stick to it a name
 \begin{displaymath}
 \begin{split}
     \Gamma\quad::=\quad&... \\
-           |\quad&\tydef{\maybe{\Gamma}}{\tydu{\tyunit}{\Gamma}}{possible occurrence}
+           |\quad&\tydef{\tymaybe{\Gamma}}{\tydu{\tyvar{␣}}{\Gamma}}{possible occurrence}
 \end{split}
 \end{displaymath}
 with semantic
 \begin{displaymath}
-    \semantic{\maybe{a}} = 1\,+\,\semantic{a},
+    \semantic{\tymaybe{a}} = ␣\,+\,\semantic{a},
 \end{displaymath}
-namely $\maybe{a}$ says that \textit{an object of type $a$
+namely $\tymaybe{a}$ says that \textit{an object of type $a$
 may not or may appear in a box configuration}.
 \end{definition}
+
+Using the types seen so far it is possible to tackle some occupancy problems,
+as follows in the next examples.
+
+\begin{example}
+What's the occupancy configurations of $4$ boxes using $4$ objects
+$o_{0}$,$o_{1}$,$o_{2}$ and $o_{3}$, where each object may not or may be
+selected for placement?
+
+The answer lies in the semantic
+\begin{displaymath}
+    \semantic{\tycp{a}{\tycp{b}{\tycp{c}{d}}}} = \left(z o_{0} + ␣\right) \left(z o_{1} + ␣\right) \left(z o_{2} + ␣\right) \left(z o_{3} + ␣\right)
+    \quad\text{where}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+a&={\tymaybe{\typarens{\tyvar{o_{0}\,z}}}}, b={\tymaybe{\typarens{\tyvar{o_{1}\,z}}}},\\
+c&={\tymaybe{\typarens{\tyvar{o_{2}\,z}}}}\quad\text{and}\quad d={\tymaybe{\typarens{\tyvar{o_{3}\,z}}}},
+\end{split}
+\end{displaymath}
+and its series expansion with respect to $z$ enumerates as follows,
+according to the cases (i)~\textit{unlike objects in unlike boxes}
+\begin{displaymath}
+\begin{split}
+&z^{4} o_{0} o_{1} o_{2} o_{3} + \\
+&z^{3} \left(o_{0} o_{1} o_{2} ␣ + o_{0} o_{1} ␣ o_{3} + o_{0} ␣ o_{2} o_{3} + ␣ o_{1} o_{2} o_{3}\right) +\\
+&z^{2} \left(o_{0} o_{1} ␣^{2} + o_{0} ␣ o_{2} ␣ + o_{0} ␣^{2} o_{3} + ␣ o_{1} o_{2} ␣ + ␣ o_{1} ␣ o_{3} + ␣^{2} o_{2} o_{3}\right) + \\
+&z \left(o_{0} ␣^{3} + ␣ o_{1} ␣^{2} + ␣^{2} o_{2} ␣ + ␣^{3} o_{3}\right) +\\
+&␣^{4};
+\end{split}
+\end{displaymath}
+(ii)~\textit{unlike objects in like boxes}
+\begin{displaymath}
+\begin{split}
+&u_{0} u_{1} u_{2} u_{3} z^{4} + \\
+&z^{3} \left(u_{0} u_{1} u_{2} ␣ + u_{0} u_{1} u_{3} ␣ + u_{0} u_{2} u_{3} ␣ + u_{1} u_{2} u_{3} ␣\right) + \\
+&z^{2} \left(u_{0} u_{1} ␣^{2} + u_{0} u_{2} ␣^{2} + u_{0} u_{3} ␣^{2} + u_{1} u_{2} ␣^{2} + u_{1} u_{3} ␣^{2} + u_{2} u_{3} ␣^{2}\right) + \\
+&z \left(u_{0} ␣^{3} + u_{1} ␣^{3} + u_{2} ␣^{3} + u_{3} ␣^{3}\right) +\\
+&␣^{4};
+\end{split}
+\end{displaymath}
+(iii)~\textit{like objects in unlike boxes}
+\begin{displaymath}
+\begin{split}
+&z^{4} \bullet^{4} + \\
+&z^{3} \left(\bullet ␣ \bullet^{2} + \bullet^{2} ␣ \bullet + \bullet^{3} ␣ + ␣ \bullet^{3}\right) + \\
+&z^{2} \left(\bullet ␣ \bullet ␣ + \bullet ␣^{2} \bullet + \bullet^{2} ␣^{2} + ␣ \bullet ␣ \bullet + ␣ \bullet^{2} ␣ + ␣^{2} \bullet^{2}\right) + \\
+&z \left(\bullet ␣^{3} + ␣ \bullet ␣^{2} + ␣^{2} \bullet ␣ + ␣^{3} \bullet\right) +\\
+&␣^{4}
+\end{split}
+\end{displaymath}
+and (iv)~\textit{like objects in like boxes}
+\begin{displaymath}
+\circ^{4} z^{4} + 4 \circ^{3} z^{3} + 6 \circ^{2} z^{2} + 4 \circ z + 1
+\end{displaymath}
+respectively.
+\end{example}
+
+Previous example shows that each coefficient of $z^{i}$ in series expansions
+denotes configurations using a summation, in particular each summand indicates
+which object goes in which box; it was pretty symmetric, therefore the next
+uses a different objects setting, though similar in the spirit.
+
+\begin{example}
+What's the occupancy configurations of $3$ boxes using $3$ objects
+$o_{0}$,$o_{1}$ and $o_{2}$, where the first object may not or may be selected
+for placement, the second may not or may be selected either one or two times
+    and the third may not or may be selected either one or two or three times?
+
+The answer lies in the semantic
+\begin{displaymath}
+    \semantic{\tycp{a}{\tycp{b}{c}}} = \left(z o_{0} + ␣\right) \left(z \left(z o_{1}^{2} + o_{1}\right) + ␣\right) \left(z \left(z^{2} o_{2}^{3} + z o_{2}^{2} + o_{2}\right) + ␣\right)
+    \quad\text{where}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+a&={\tymaybe{\typarens{\tyvar{o_{0}\,z}}}}, b={\tymaybe{\typarens{\tydu{\tyvar{o_{1}\,z}}{\tyvar{o_{1}^{2}\,z^{2}}}}}}\\
+\quad&\text{and}\quad d={\tymaybe{\typarens{\tydu{\tyvar{o_{3}\,z}}{\tydu{\tyvar{o_{3}^{2}\,z^{2}}}{\tyvar{o_{3}^{3}\,z^{3}}}}}}},
+\end{split}
+\end{displaymath}
+and its series expansion with respect to $z$ enumerates as follows,
+according to the cases (i)~\textit{unlike objects in unlike boxes}
+\begin{displaymath}
+\begin{split}
+&z^{6} o_{0} o_{1}^{2} o_{2}^{3} + \\
+&z^{5} \left(o_{0} o_{1} o_{2}^{3} + o_{0} o_{1}^{2} o_{2}^{2} + ␣ o_{1}^{2} o_{2}^{3}\right) + \\
+&z^{4} \left(o_{0} o_{1} o_{2}^{2} + o_{0} o_{1}^{2} o_{2} + o_{0} ␣ o_{2}^{3} + ␣ o_{1} o_{2}^{3} + ␣ o_{1}^{2} o_{2}^{2}\right) + \\
+&z^{3} \left(o_{0} o_{1} o_{2} + o_{0} o_{1}^{2} ␣ + o_{0} ␣ o_{2}^{2} + ␣ o_{1} o_{2}^{2} + ␣ o_{1}^{2} o_{2} + ␣^{2} o_{2}^{3}\right) + \\
+&z^{2} \left(o_{0} o_{1} ␣ + o_{0} ␣ o_{2} + ␣ o_{1} o_{2} + ␣ o_{1}^{2} ␣ + ␣^{2} o_{2}^{2}\right) + \\
+&z \left(o_{0} ␣^{2} + ␣ o_{1} ␣ + ␣^{2} o_{2}\right) + \\
+&␣^{3}
+\end{split}
+\end{displaymath}
+(ii)~\textit{unlike objects in like boxes}
+\begin{displaymath}
+\begin{split}
+&u_{0} u_{1}^{2} u_{2}^{3} z^{6} + \\
+&z^{5} \left(u_{0} u_{1}^{2} u_{2}^{2} + u_{0} u_{1} u_{2}^{3} + u_{1}^{2} u_{2}^{3} ␣\right) + \\
+&z^{4} \left(u_{0} u_{1}^{2} u_{2} + u_{0} u_{1} u_{2}^{2} + u_{0} u_{2}^{3} ␣ + u_{1}^{2} u_{2}^{2} ␣ + u_{1} u_{2}^{3} ␣\right) + \\
+&z^{3} \left(u_{0} u_{1}^{2} ␣ + u_{0} u_{1} u_{2} + u_{0} u_{2}^{2} ␣ + u_{1}^{2} u_{2} ␣ + u_{1} u_{2}^{2} ␣ + u_{2}^{3} ␣^{2}\right) + \\
+&z^{2} \left(u_{0} u_{1} ␣ + u_{0} u_{2} ␣ + u_{1}^{2} ␣^{2} + u_{1} u_{2} ␣ + u_{2}^{2} ␣^{2}\right) + \\
+&z \left(u_{0} ␣^{2} + u_{1} ␣^{2} + u_{2} ␣^{2}\right) + \\
+&␣^{3}
+\end{split}
+\end{displaymath}
+(iii)~\textit{like objects in unlike boxes}
+\begin{displaymath}
+\begin{split}
+&z^{6} \bullet^{6} + \\
+&z^{5} \left(2 \bullet^{5} + ␣ \bullet^{5}\right) + \\
+&z^{4} \left(\bullet ␣ \bullet^{3} + 2 \bullet^{4} + 2 ␣ \bullet^{4}\right) + \\
+&z^{3} \left(\bullet ␣ \bullet^{2} + \bullet^{3} + \bullet^{3} ␣ + 2 ␣ \bullet^{3} + ␣^{2} \bullet^{3}\right) + \\
+&z^{2} \left(\bullet ␣ \bullet + \bullet^{2} ␣ + ␣ \bullet^{2} + ␣ \bullet^{2} ␣ + ␣^{2} \bullet^{2}\right) + \\
+&z \left(\bullet ␣^{2} + ␣ \bullet ␣ + ␣^{2} \bullet\right) + \\
+&␣^{3}
+\end{split}
+\end{displaymath}
+and (iv)~\textit{like objects in like boxes}
+\begin{displaymath}
+\circ^{6} z^{6} + 3 \circ^{5} z^{5} + 5 \circ^{4} z^{4} + 6 \circ^{3} z^{3} + 5 \circ^{2} z^{2} + 3 \circ z + 1
+\end{displaymath}
+respectively.
+\end{example}
 
 \begin{example}
 Let $L,\alpha\in\mathcal{V}$ be pure symbols then consider the type
@@ -215,13 +391,13 @@ whose generating function can be found by the semantic
 \begin{displaymath}
     \semantic{\rec{L}{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}} = \beta(z)
 \end{displaymath}
-where $\beta(z)$ is the solution of the equation 
+where $\beta(z)$ is the solution of the equation
 \begin{displaymath}
     \semantic{\tyvar{L}} = \semantic{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}
 \end{displaymath}
 which reduces to solve
 \begin{displaymath}
-    L = 1 + \alpha\,z\,L\quad\text{with respect to $L$}, 
+    L = 1 + \alpha\,z\,L\quad\text{with respect to $L$},
 \end{displaymath}
 therefore $\displaystyle L = \frac{1}{1 - \alpha\,z}$
 so take $\displaystyle \beta(z) = \frac{1}{1 - \alpha\,z}$, as required.
@@ -232,7 +408,7 @@ A series expansion of $\beta(z)$ up to $10$ terms yields
 \end{displaymath}
 hence $[z^{n}]\,\semantic{\rec{L}{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}} =
 \alpha^{n}$ which says that there is $1$ composition of $n$ values having type
-$\tyvar{\alpha\,z}$ each one of them.  
+$\tyvar{\alpha\,z}$ each one of them.
 \end{example}
 
 The generalization of the previous type is so fundamental that we stick to it a name
@@ -247,8 +423,8 @@ with semantic
     \semantic{\lst{a}} = \frac{1}{1-\semantic{a}},
 \end{displaymath}
 namely $\lst{\gamma}$ is the set of all (possibly infinite) lists of
-objects with type $\gamma\in\Gamma$. Using it immediately we can add new types, such 
-as 
+objects with type $\gamma\in\Gamma$. Using it immediately we can add new types, such
+as
 \begin{displaymath}
 \begin{split}
     \Gamma\quad::=\quad&... \\
