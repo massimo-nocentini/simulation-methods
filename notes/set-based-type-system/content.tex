@@ -53,7 +53,7 @@ The type system subject of our study is defined by the grammar
              |\quad&\tydu{\Gamma}{\Gamma}\indent\textit{(disjoint union)} \\
              |\quad&\tycp{\Gamma}{\Gamma}\indent\textit{(cartesian product)} \\
              %|\quad&\Gamma\,\times_{b}\,\Gamma\indent\textit{(binomial product)} \\
-             |\quad&\textbf{rec}\,\mathcal{V}.\,\Gamma\indent\textit{(recursion)} \\
+             |\quad&\tyrec{\mathcal{V}}{\Gamma}\indent\textit{(recursion)} \\
              |\quad&\mathcal{F}(\,\Gamma\,)\indent\textit{(transformation)} \\
              %|\quad&-\,\Gamma\indent\textit{(negation)} \\
              %|\quad&2^{\Gamma}\indent\textit{(set of all finite subsets)} \\
@@ -74,11 +74,12 @@ f\,\in\,C^{\infty}(\mathbb{Z}[z], \mathbb{Z}[z])\rbrace$.
 
 In what follow, we stick to the habit that uses greek symbols to denote type
 variables. The following conventions are in order: (i)~operators $\cup$ and
-$\times$ associate to the right, $(a \cup b \cup c)$ and $(a \times b
-\times d)$ denote $\left(a \cup (b \cup c)\right)$ and $(a \times (b
-\times d))$ respectively; on the other hand, the application $a\,b\,c$
-associates to the left, namely $(a\,b)\,c$ as in currified function
-applications.
+$\times$ associate to the right, $(a \cup b \cup c)$ and $(a \times b \times
+d)$ denote $\left(a \cup (b \cup c)\right)$ and $(a \times (b \times d))$
+respectively, (ii)~the application $a\,b\,c$ associates to the left, namely
+$(a\,b)\,c$ as in currified function applications and (iii)~function
+application has higher precedence over $\times$ which has higher precedence
+over $\cup$, as usual.
 
 We give meaning to the introduced syntax by
 \begin{definition}[Semantic]
@@ -92,9 +93,9 @@ The semantic function $\semantic{}: \Gamma \rightarrow
     \semantic{\tydu{a}{b}} &= \semantic{a} + \semantic{b} \\
     \semantic{\tycp{a}{b}} &= \semantic{a}\cdot\semantic{b} \\
     %\semantic{a\,\times_{b}\,c} &= \semantic{a}\star\semantic{c} \\
-    \semantic{\textbf{rec}\,\gamma.\,a} &= \beta(z)  \quad\text{where}\quad
+    \semantic{\tyrec{\gamma}{a}} &= \beta(z)  \quad\text{where}\quad
         %\semantic{\textbf{tyvar}\,\gamma}\,=_{\beta}\,\semantic{a\,[\textbf{tyvar}\,\gamma/\gamma]}\\
-        \semantic{\textbf{tyvar}\,\gamma}\,=_{\beta(z)}\,\semantic{a}\\
+        \semantic{\tyvar{\gamma}}\,=_{\gamma,\beta(z)}\,\semantic{a}\\
     %\semantic{-\,a} &= -\,\semantic{a}\\
     %\semantic{2^{a}} &= e^{\semantic{a}}\\
     %\semantic{(-2)^{a}} &= \frac{e^{-\beta}}{1-\beta}\quad\text{where}\quad\beta=\semantic{a}(z)\\
@@ -105,10 +106,10 @@ The semantic function $\semantic{}: \Gamma \rightarrow
     \semantic{a\,b} &= \semantic{a}\big|_{z=\semantic{b}}\\
 \end{split}
 \end{displaymath}
-denoting with $a\,=_{\beta}\,b(a)$ that $\beta$ is the solution of the equation
-$a\,=\,b(a)$ with respect to $a$; moreover, the operator $c\,\big|_{a=b}$
-substitutes every occurrence of $a$ expressions with the $b$ expression in the
-context expression $c$.
+denoting with $\alpha\,=_{\gamma,\beta}\,\eta$ that $\beta$ is the solution of
+the equation $\alpha\,=\,\eta$ with respect to $\gamma$; moreover, the operator
+$c\,\big|_{a=b}$ substitutes every occurrence of $a$ expressions with the $b$
+expression in the context expression $c$.
 \end{definition}
 
 In plain words, $\semantic{a}$ yields  the \textit{generating function} that
@@ -135,8 +136,6 @@ to which the binomial product type $\Gamma\,\times_{b}\,\Gamma$ can be reduced b
 allows us to manipulate both ordinary and exponential generating functions,
 enumerating \textit{unlabelled} and \textit{labelled} objects respectively.
 
-\section{Enumerations and boxes}
-
 The enumeration of a type $a\in\Gamma$ can (i)~be unified and generalized using
 their semantic $\semantic{a}$ and can (ii)~be interpreted in terms of boxes and
 placements of objects in them; for the sake of clarity, for us \textit{a box is
@@ -157,6 +156,13 @@ which both indicate a box having one cell that is empty and holds \textit{one}
 object of type $\alpha$, respectively.  Therefore, when we write down a type,
 we give the configuration of a box, namely types represent selections of
 objects to fullfil cells in that box.
+
+\section{Linear types}
+
+This section explores how combinations of the primitive types $\tyunit$ and
+$\tyvar{\alpha}$ yield new types that allows us to solve some combinatorial and
+enumeration problems; as a consequence, they start to put to boxes analogy into
+practice. First of all the types for logic reasoning are introduced next.
 
 \begin{definition}[\tytruth, \tyfalsehood, \tyboolean]
 Types that represent truth, falsehood and boolean are in order,
@@ -196,16 +202,16 @@ Previous examples is only the beginning and the following one connects
 the boxes analogy with a problem about powers of natural numbers.
 
 \begin{example}
-Enumerate all numbers that can be written as sum of powers of $2$, $3$ and $5$
-respectively, using at most $4$ powers of each, in that case a single time.
+Enumerate all numbers that can be written as sum of powers of $2$, $3$, $5$ and
+$7$ respectively, using at most $4$ powers of each, in that case a single time.
 The answer lies in the semantic
 \begin{displaymath}
 \semantic{\tycp{a}{\tycp{b}{\tycp{c}{d}}}} = \left(z^{b^{0}} {\space}_{b^{0}} + 1\right) \left(z^{b^{1}} {\space}_{b^{1}} + 1\right) \left(z^{b^{2}} {\space}_{b^{2}} + 1\right) \left(z^{b^{3}} {\space}_{b^{3}} + 1\right),
 \end{displaymath}
-where
 \begin{displaymath}
 \begin{split}
-    a &= \typarens{\tydu{\tyunit}{\tyvar{{\space}_{b^{0}} z^{b^{0}}}}},
+\text{where}\quad
+    a &= \typarens{\tydu{\tyunit}{\tyvar{{\space}_{b^{0}} z^{b^{0}}}}},\quad
         b = \typarens{\tydu{\tyunit}{\tyvar{{\space}_{b^{1}} z^{b^{1}}}}},\\
     c &= \typarens{\tydu{\tyunit}{\tyvar{{\space}_{b^{2}} z^{b^{2}}}}}\quad\text{and}\quad
         d = \typarens{\tydu{\tyunit}{\tyvar{{\space}_{b^{3}} z^{b^{3}}}}},
@@ -264,28 +270,28 @@ as follows in the next examples.
 
 \begin{example}
 What's the occupancy configurations of $4$ boxes using $4$ objects
-$o_{0}$,$o_{1}$,$o_{2}$ and $o_{3}$, where each object may not or may be
+$u_{0}$,$u_{1}$,$u_{2}$ and $u_{3}$, where each object may not or may be
 selected for placement?
 
 The answer lies in the semantic
 \begin{displaymath}
-    \semantic{\tycp{a}{\tycp{b}{\tycp{c}{d}}}} = \left(z o_{0} + ␣\right) \left(z o_{1} + ␣\right) \left(z o_{2} + ␣\right) \left(z o_{3} + ␣\right)
-    \quad\text{where}
+    \semantic{\tycp{a}{\tycp{b}{\tycp{c}{d}}}} = \left(z u_{0} + ␣\right) \left(z u_{1} + ␣\right) \left(z u_{2} + ␣\right) \left(z u_{3} + ␣\right)
 \end{displaymath}
 \begin{displaymath}
 \begin{split}
-a&={\tymaybe{\typarens{\tyvar{o_{0}\,z}}}}, b={\tymaybe{\typarens{\tyvar{o_{1}\,z}}}},\\
-c&={\tymaybe{\typarens{\tyvar{o_{2}\,z}}}}\quad\text{and}\quad d={\tymaybe{\typarens{\tyvar{o_{3}\,z}}}},
+\text{where}\quad
+a&={\tymaybe{\typarens{\tyvar{u_{0}\,z}}}},\quad b={\tymaybe{\typarens{\tyvar{u_{1}\,z}}}},\\
+c&={\tymaybe{\typarens{\tyvar{u_{2}\,z}}}}\quad\text{and}\quad d={\tymaybe{\typarens{\tyvar{u_{3}\,z}}}},
 \end{split}
 \end{displaymath}
 and its series expansion with respect to $z$ enumerates as follows,
 according to the cases (i)~\textit{unlike objects in unlike boxes}
 \begin{displaymath}
 \begin{split}
-&z^{4} o_{0} o_{1} o_{2} o_{3} + \\
-&z^{3} \left(o_{0} o_{1} o_{2} ␣ + o_{0} o_{1} ␣ o_{3} + o_{0} ␣ o_{2} o_{3} + ␣ o_{1} o_{2} o_{3}\right) +\\
-&z^{2} \left(o_{0} o_{1} ␣^{2} + o_{0} ␣ o_{2} ␣ + o_{0} ␣^{2} o_{3} + ␣ o_{1} o_{2} ␣ + ␣ o_{1} ␣ o_{3} + ␣^{2} o_{2} o_{3}\right) + \\
-&z \left(o_{0} ␣^{3} + ␣ o_{1} ␣^{2} + ␣^{2} o_{2} ␣ + ␣^{3} o_{3}\right) +\\
+&z^{4} u_{0} u_{1} u_{2} u_{3} +\\
+&z^{3} \left(u_{0} u_{1} u_{2} ␣ + u_{0} u_{1} ␣ u_{3} + u_{0} ␣ u_{2} u_{3} + ␣ u_{1} u_{2} u_{3}\right) + \\
+&z^{2} \left(u_{0} u_{1} ␣^{2} + u_{0} ␣ u_{2} ␣ + u_{0} ␣^{2} u_{3} + ␣ u_{1} u_{2} ␣ + ␣ u_{1} ␣ u_{3} + ␣^{2} u_{2} u_{3}\right) + \\
+&z \left(u_{0} ␣^{3} + ␣ u_{1} ␣^{2} + ␣^{2} u_{2} ␣ + ␣^{3} u_{3}\right) + \\
 &␣^{4};
 \end{split}
 \end{displaymath}
@@ -329,25 +335,25 @@ for placement, the second may not or may be selected either one or two times
 
 The answer lies in the semantic
 \begin{displaymath}
-    \semantic{\tycp{a}{\tycp{b}{c}}} = \left(z o_{0} + ␣\right) \left(z \left(z o_{1}^{2} + o_{1}\right) + ␣\right) \left(z \left(z^{2} o_{2}^{3} + z o_{2}^{2} + o_{2}\right) + ␣\right)
-    \quad\text{where}
+    \semantic{\tycp{a}{\tycp{b}{c}}} = \left(z u_{0} + ␣\right) \left(z^{2} u_{1}^{2} + z u_{1} + ␣\right) \left(z^{3} u_{2}^{3} + z^{2} u_{2}^{2} + z u_{2} + ␣\right)
 \end{displaymath}
 \begin{displaymath}
 \begin{split}
-a&={\tymaybe{\typarens{\tyvar{o_{0}\,z}}}}, b={\tymaybe{\typarens{\tydu{\tyvar{o_{1}\,z}}{\tyvar{o_{1}^{2}\,z^{2}}}}}}\\
-\quad&\text{and}\quad d={\tymaybe{\typarens{\tydu{\tyvar{o_{3}\,z}}{\tydu{\tyvar{o_{3}^{2}\,z^{2}}}{\tyvar{o_{3}^{3}\,z^{3}}}}}}},
+\text{where}&\quad
+a={\tymaybe{\typarens{\tyvar{u_{0}\,z}}}}, b={\tymaybe{\typarens{\tydu{\tyvar{u_{1}\,z}}{\tyvar{u_{1}^{2}\,z^{2}}}}}}\\
+\quad&\text{and}\quad d={\tymaybe{\typarens{\tydu{\tyvar{u_{3}\,z}}{\tydu{\tyvar{u_{3}^{2}\,z^{2}}}{\tyvar{u_{3}^{3}\,z^{3}}}}}}},
 \end{split}
 \end{displaymath}
 and its series expansion with respect to $z$ enumerates as follows,
 according to the cases (i)~\textit{unlike objects in unlike boxes}
 \begin{displaymath}
 \begin{split}
-&z^{6} o_{0} o_{1}^{2} o_{2}^{3} + \\
-&z^{5} \left(o_{0} o_{1} o_{2}^{3} + o_{0} o_{1}^{2} o_{2}^{2} + ␣ o_{1}^{2} o_{2}^{3}\right) + \\
-&z^{4} \left(o_{0} o_{1} o_{2}^{2} + o_{0} o_{1}^{2} o_{2} + o_{0} ␣ o_{2}^{3} + ␣ o_{1} o_{2}^{3} + ␣ o_{1}^{2} o_{2}^{2}\right) + \\
-&z^{3} \left(o_{0} o_{1} o_{2} + o_{0} o_{1}^{2} ␣ + o_{0} ␣ o_{2}^{2} + ␣ o_{1} o_{2}^{2} + ␣ o_{1}^{2} o_{2} + ␣^{2} o_{2}^{3}\right) + \\
-&z^{2} \left(o_{0} o_{1} ␣ + o_{0} ␣ o_{2} + ␣ o_{1} o_{2} + ␣ o_{1}^{2} ␣ + ␣^{2} o_{2}^{2}\right) + \\
-&z \left(o_{0} ␣^{2} + ␣ o_{1} ␣ + ␣^{2} o_{2}\right) + \\
+&z^{6} u_{0} u_{1}^{2} u_{2}^{3} + \\
+&z^{5} \left(u_{0} u_{1} u_{2}^{3} + u_{0} u_{1}^{2} u_{2}^{2} + ␣ u_{1}^{2} u_{2}^{3}\right) + \\
+&z^{4} \left(u_{0} u_{1} u_{2}^{2} + u_{0} u_{1}^{2} u_{2} + u_{0} ␣ u_{2}^{3} + ␣ u_{1} u_{2}^{3} + ␣ u_{1}^{2} u_{2}^{2}\right) + \\
+&z^{3} \left(u_{0} u_{1} u_{2} + u_{0} u_{1}^{2} ␣ + u_{0} ␣ u_{2}^{2} + ␣ u_{1} u_{2}^{2} + ␣ u_{1}^{2} u_{2} + ␣^{2} u_{2}^{3}\right) + \\
+&z^{2} \left(u_{0} u_{1} ␣ + u_{0} ␣ u_{2} + ␣ u_{1} u_{2} + ␣ u_{1}^{2} ␣ + ␣^{2} u_{2}^{2}\right) + \\
+&z \left(u_{0} ␣^{2} + ␣ u_{1} ␣ + ␣^{2} u_{2}\right) + \\
 &␣^{3}
 \end{split}
 \end{displaymath}
@@ -382,59 +388,258 @@ and (iv)~\textit{like objects in like boxes}
 respectively.
 \end{example}
 
+\section{Recursive types}
+
+Last section introduces and deepen linear types and their connection with a
+setting of a finite number of boxes; on the other hand, this section studies
+how such setting can be extended to consider \textit{countably many} boxes and
+their configurations. 
+
 \begin{example}
 Let $L,\alpha\in\mathcal{V}$ be pure symbols then consider the type
 \begin{displaymath}
-    \rec{L}{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}
+    \tyrec{L}{\tydu{\tyunit}{\tycp{\tyvar{\alpha\,z}}{\tyvar{L}}}}
 \end{displaymath}
 whose generating function can be found by the semantic
 \begin{displaymath}
-    \semantic{\rec{L}{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}} = \beta(z)
+    \semantic{\tyrec{L}{\tydu{\tyunit}{\tycp{\tyvar{\alpha\,z}}{\tyvar{L}}}}} = \beta(z)
 \end{displaymath}
 where $\beta(z)$ is the solution of the equation
 \begin{displaymath}
-    \semantic{\tyvar{L}} = \semantic{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}
+    \semantic{\tyvar{L}} = \semantic{\tydu{\tyunit}{\tycp{\tyvar{\alpha\,z}}{\tyvar{L}}}}
 \end{displaymath}
-which reduces to solve
-\begin{displaymath}
-    L = 1 + \alpha\,z\,L\quad\text{with respect to $L$},
-\end{displaymath}
-therefore $\displaystyle L = \frac{1}{1 - \alpha\,z}$
-so take $\displaystyle \beta(z) = \frac{1}{1 - \alpha\,z}$, as required.
-
-A series expansion of $\beta(z)$ up to $10$ terms yields
+which reduces to solve $L = 1 + \alpha\,z\,L$ with respect to $L$, therefore
+$\displaystyle L = \frac{1}{1 - \alpha\,z}$ so take $\displaystyle \beta(z) =
+\frac{1}{1 - \alpha\,z}$, as required.  A series expansion of $\beta(z)$ yields
 \begin{displaymath}
 \beta(z) = 1 + \alpha z + \alpha^{2} z^{2} + \alpha^{3} z^{3} + \alpha^{4} z^{4} + \alpha^{5} z^{5} + \alpha^{6} z^{6} + \alpha^{7} z^{7} + \alpha^{8} z^{8} + \alpha^{9} z^{9} + O\left(z^{10}\right)
 \end{displaymath}
-hence $[z^{n}]\,\semantic{\rec{L}{()\,|\,\tyvar{\alpha\,z}\times_{c}\tyvar{L}}} =
-\alpha^{n}$ which says that there is $1$ composition of $n$ values having type
+hence $[z^{n}]\,\semantic{\tyrec{L}{\tydu{\tyunit}{\tycp{\tyvar{\alpha\,z}}{\tyvar{L}}}}} = \alpha^{n}$ 
+which says that there is $1$ composition of $n$ values having type
 $\tyvar{\alpha\,z}$ each one of them.
 \end{example}
 
+\begin{definition}
 The generalization of the previous type is so fundamental that we stick to it a name
 \begin{displaymath}
 \begin{split}
     \Gamma\quad::=\quad&... \\
-           |\quad&\lst{\Gamma}\,\triangleq\,\rec{\mathcal{V}}{()\,|\,\Gamma\times_{c}\tyvar{\mathcal{V}}}\indent\textit{(list)}
+           |\quad&\tydef{\tylst{\Gamma}}{\tyrec{ \lbrace L \rbrace}{\tydu{\tyunit}{\tycp{\Gamma}{\tyvar{ \lbrace L \rbrace}}}}}{list}
 \end{split}
 \end{displaymath}
-with semantic
+where $L\in\mathcal{V}$ is a fresh symbol not used in $\Gamma$ yet, with semantic
 \begin{displaymath}
-    \semantic{\lst{a}} = \frac{1}{1-\semantic{a}},
+    \semantic{\tylst{a}} = \frac{1}{1\,-\,\semantic{a}},
 \end{displaymath}
-namely $\lst{\gamma}$ is the set of all (possibly infinite) lists of
-objects with type $\gamma\in\Gamma$. Using it immediately we can add new types, such
-as
+namely $\tylst{\gamma}$ is the set of all (possibly infinite) lists of
+objects with type $\gamma\in\Gamma$. 
+\end{definition}
+
+The following three examples shows how simple combinations of types
+$\tylst{}$, $\tymaybe{}$ and $\tyboolean$ yield well known combinatorial results.
+
+\begin{example}
+Consider the semantic
+\begin{displaymath}
+    \semantic{\tylst{\typarens{\tycp{\tymaybe{\typarens{\tyvar{y}}}}{\tyvar{z}}}}} = - \frac{1}{y z + z ␣ - 1}
+\end{displaymath}
+and its series expansion with respect to $z$ enumerates as follows,
+according to the cases (i)~\textit{unlike objects in unlike boxes}
+\begin{displaymath}
+\begin{split}
+&1 + \\
+&z \left(y + ␣\right) + \\
+&z^{2} \left(y ␣ + y^{2} + ␣ y + ␣^{2}\right) + \\
+&z^{3} \left(y ␣ y + y ␣^{2} + y^{2} ␣ + y^{3} + ␣ y ␣ + ␣ y^{2} + ␣^{2} y + ␣^{3}\right) + \\
+&z^{4} \left(y ␣ y ␣ + y ␣ y^{2} + y ␣^{2} y + y ␣^{3} + y^{2} ␣ y + y^{2} ␣^{2} + y^{3} ␣ + y^{4} \right.+\\
+&\indent\left. ␣ y ␣ y + ␣ y ␣^{2} + ␣ y^{2} ␣ + ␣ y^{3} + ␣^{2} y ␣ + ␣^{2} y^{2} + ␣^{3} y + ␣^{4}\right) + O\left(z^{5}\right);
+\end{split}
+\end{displaymath}
+(ii)~\textit{unlike objects in like boxes}
+\begin{displaymath}
+\begin{split}
+&1 + \\
+&z \left(y + ␣\right) + \\
+&z^{2} \left(y^{2} + 2 y ␣ + ␣^{2}\right) + \\
+&z^{3} \left(y^{3} + 3 y^{2} ␣ + 3 y ␣^{2} + ␣^{3}\right) + \\
+&z^{4} \left(y^{4} + 4 y^{3} ␣ + 6 y^{2} ␣^{2} + 4 y ␣^{3} + ␣^{4}\right) + O\left(z^{5}\right);
+\end{split}
+\end{displaymath}
+in parallel, the enumerations for \textit{like objects in unlike boxes}
+equals the previous one with the substitutions $y\mapsto\bullet$;
+finally, (iii)~\textit{like objects in like boxes}
+\begin{displaymath}
+\begin{split}
+&1 +\\
+&z \left(\circ + 1\right) + \\
+&z^{2} \left(\circ^{2} + 2 \circ + 1\right) + \\
+&z^{3} \left(\circ^{3} + 3 \circ^{2} + 3 \circ + 1\right) + \\
+&z^{4} \left(\circ^{4} + 4 \circ^{3} + 6 \circ^{2} + 4 \circ + 1\right) + O\left(z^{5}\right),
+\end{split}
+\end{displaymath}
+respectively.
+\end{example}
+
+\begin{example}
+Consider the following semantic
+\begin{displaymath}
+    \semantic{\tycp{\typarens{\tylst{\tytruth}}}{\typarens{\tylst{\tyfalsehood}}}} = \frac{1}{\left(w_{0} z - 1\right) \left(w_{1} z - 1\right)}
+\end{displaymath}
+and its series expansion with respect to $z$ enumerates as follows,
+according to the cases (i)~\textit{unlike objects in both unlike and like boxes}
+\begin{displaymath}
+\begin{split}
+&1 + \\
+&z \left(w_{0} + w_{1}\right) + \\
+&z^{2} \left(w_{0}^{2} + w_{1} w_{0} + w_{1}^{2}\right) + \\
+&z^{3} \left(w_{0}^{3} + w_{1} w_{0}^{2} + w_{1}^{2} w_{0} + w_{1}^{3}\right) + \\
+&z^{4} \left(w_{0}^{4} + w_{1} w_{0}^{3} + w_{1}^{2} w_{0}^{2} + w_{1}^{3} w_{0} + w_{1}^{4}\right) + \\
+&z^{5} \left(w_{0}^{5} + w_{1} w_{0}^{4} + w_{1}^{2} w_{0}^{3} + w_{1}^{3} w_{0}^{2} + w_{1}^{4} w_{0} + w_{1}^{5}\right) + \\
+&z^{6} \left(w_{0}^{6} + w_{1} w_{0}^{5} + w_{1}^{2} w_{0}^{4} + w_{1}^{3} w_{0}^{3} + w_{1}^{4} w_{0}^{2} + w_{1}^{5} w_{0} + w_{1}^{6}\right) + O\left(z^{7}\right)
+\end{split}
+\end{displaymath}
+and (ii)~\textit{like objects in both unlike and like boxes}
+\begin{displaymath}
+1 + 2 z \bullet + 3 z^{2} \bullet^{2} + 4 z^{3} \bullet^{3} + 5 z^{4} \bullet^{4} + 6 z^{5} \bullet^{5} + 7 z^{6} \bullet^{6} + O\left(z^{7}\right),
+\end{displaymath}
+respectively; precisely, here the nature of boxes doesn't yield a different
+enumeration because there is no $␣$ symbols in the type.
+\end{example}
+
+\begin{definition}
+The generalization of the previous type is so fundamental that we stick to it a name
 \begin{displaymath}
 \begin{split}
     \Gamma\quad::=\quad&... \\
-           |\quad&\derangements{\Gamma}\,\triangleq\,(-1\cdot2)^{\Gamma}\times_{b}\lst{\Gamma}\indent\text{(derangements)}
+           |\quad&\tydef{\typosnat}{\tycp{\typarens{\tylst{\tytruth}}}{\typarens{\tylst{\tyfalsehood}}}}{naturals}
 \end{split}
 \end{displaymath}
 with semantic
 \begin{displaymath}
-    \semantic{\derangements{a}} = e^{-\semantic{a}}\star\frac{1}{1-\semantic{a}\,z}
+    \semantic{\typosnat} =  \frac{1}{\left(w_{0} z - 1\right) \left(w_{1} z - 1\right)}.
 \end{displaymath}
+\end{definition}
+
+\begin{example}
+Consider the semantic
+\begin{displaymath}
+    \semantic{\tylst{\tyboolean}} = - \frac{1}{w_{0} z + w_{1} z - 1}
+\end{displaymath}
+and its series expansion with respect to $z$ enumerates as follows,
+according to the cases (i)~\textit{unlike objects in unlike boxes}
+\begin{displaymath}
+\begin{split}
+&1 + \\
+&z \left(w_{0} + w_{1}\right) + \\
+&z^{2} \left(w_{0} w_{1} + w_{0}^{2} + w_{1} w_{0} + w_{1}^{2}\right) + \\
+&z^{3} \left(w_{0} w_{1} w_{0} + w_{0} w_{1}^{2} + w_{0}^{2} w_{1} + w_{0}^{3} + w_{1} w_{0} w_{1} + w_{1} w_{0}^{2} + w_{1}^{2} w_{0} + w_{1}^{3}\right) + \\
+&z^{4} \left(w_{0} w_{1} w_{0} w_{1} + w_{0} w_{1} w_{0}^{2} + w_{0} w_{1}^{2} w_{0} + w_{0} w_{1}^{3} + w_{0}^{2} w_{1} w_{0} + w_{0}^{2} w_{1}^{2} + w_{0}^{3} w_{1} +\right.\\
+&\indent\left.w_{0}^{4} + w_{1} w_{0} w_{1} w_{0} + w_{1} w_{0} w_{1}^{2} + w_{1} w_{0}^{2} w_{1} + w_{1} w_{0}^{3} + w_{1}^{2} w_{0} w_{1} + w_{1}^{2} w_{0}^{2} + \right.\\
+&\indent\left.w_{1}^{3} w_{0} + w_{1}^{4}\right) + O\left(z^{5}\right)
+\end{split}
+\end{displaymath}
+(ii)~\textit{unlike objects in like boxes}
+\begin{displaymath}
+\begin{split}
+&1 + \\
+&z \left(w_{0} + w_{1}\right) + \\
+&z^{2} \left(w_{0}^{2} + 2 w_{0} w_{1} + w_{1}^{2}\right) + \\
+&z^{3} \left(w_{0}^{3} + 3 w_{0}^{2} w_{1} + 3 w_{0} w_{1}^{2} + w_{1}^{3}\right) + \\
+&z^{4} \left(w_{0}^{4} + 4 w_{0}^{3} w_{1} + 6 w_{0}^{2} w_{1}^{2} + 4 w_{0} w_{1}^{3} + w_{1}^{4}\right) + O\left(z^{5}\right)
+\end{split}
+\end{displaymath}
+finally, (iii)~\textit{like objects in both like and unlike boxes}
+\begin{displaymath}
+\begin{split}
+1 + 2 \circ z + 4 \circ^{2} z^{2} + 8 \circ^{3} z^{3} + 16 \circ^{4} z^{4} + O\left(z^{5}\right)
+\end{split}
+\end{displaymath}
+respectively.
+\end{example}
+
+\begin{example}
+Consider the semantic
+\begin{displaymath}
+\begin{split}
+&\semantic{\tycp{\typarens{\tylst{\tyvar{u_{1}\,z}}}}{
+            \tycp{\typarens{\tylst{\tyvar{u_{5}\,z^{5}}}}}{
+            \tycp{\typarens{\tylst{\tyvar{u_{10}\,z^{10}}}}}{\right.\\
+            &\indent\left.\tycp{\typarens{\tylst{\tyvar{u_{25}\,z^{25}}}}}
+                  {\typarens{\tylst{\tyvar{u_{50}\,z^{50}}}}}}}}} \\
+\end{split}
+\end{displaymath}
+which equals
+\begin{displaymath}
+- \frac{1}{\left(u_{1} z - 1\right) \left(u_{10} z^{10} - 1\right) \left(u_{25} z^{25} - 1\right) \left(u_{5} z^{5} - 1\right) \left(u_{50} z^{50} - 1\right)}
+\end{displaymath}
+and its series expansion with respect to $z$ enumerates as follows,
+according to the case of \textit{unlike objects in like boxes}, to change $42¢$ 
+we need to extract the coefficient of $z^{42}$, which is
+\begin{displaymath}
+\begin{split}
+&u_{1}^{42} + u_{1}^{37} u_{5} + u_{1}^{32} u_{10} + u_{1}^{32} u_{5}^{2} + u_{1}^{27} u_{10} u_{5} + u_{1}^{27} u_{5}^{3} + u_{1}^{22} u_{10}^{2} + u_{1}^{22} u_{10} u_{5}^{2} + \\
+&u_{1}^{22} u_{5}^{4} + u_{1}^{17} u_{10}^{2} u_{5} + u_{1}^{17} u_{10} u_{5}^{3} + u_{1}^{17} u_{25} + u_{1}^{17} u_{5}^{5} + u_{1}^{12} u_{10}^{3} + u_{1}^{12} u_{10}^{2} u_{5}^{2} + \\
+&u_{1}^{12} u_{10} u_{5}^{4} + u_{1}^{12} u_{25} u_{5} + u_{1}^{12} u_{5}^{6} + u_{1}^{7} u_{10}^{3} u_{5} + u_{1}^{7} u_{10}^{2} u_{5}^{3} + u_{1}^{7} u_{10} u_{25} + u_{1}^{7} u_{10} u_{5}^{5} + \\
+&u_{1}^{7} u_{25} u_{5}^{2} + u_{1}^{7} u_{5}^{7} + u_{1}^{2} u_{10}^{4} + u_{1}^{2} u_{10}^{3} u_{5}^{2} + u_{1}^{2} u_{10}^{2} u_{5}^{4} + u_{1}^{2} u_{10} u_{25} u_{5} + u_{1}^{2} u_{10} u_{5}^{6} + \\
+&u_{1}^{2} u_{25} u_{5}^{3} + u_{1}^{2} u_{5}^{8}
+\end{split}
+\end{displaymath}
+namely, the summand $u_{1}^{12} u_{25} u_{5}$ proves that $42¢$ can be changed
+using $12$ $1¢$-coins, $1$ $25¢$-coin and $1$ $5¢$-coin, respectively.
+Moreover, $1\$$ can be changed in $292$ ways by substituting $u_{1} = u_{5} =
+u_{10} = u_{25} = u_{50} = 1$ in the coefficient of $z^{100}$.
+\end{example}
+
+
+\begin{definition}
+The generalization of the previous type is so fundamental that we stick to it a name
+\begin{displaymath}
+\begin{split}
+    \Gamma\quad::=\quad&... \\
+           |\quad&\tydef{\tynnlst{\Gamma}}{\tyrec{ \lbrace L \rbrace}{\tydu{\Gamma}{\tycp{\Gamma}{\tyvar{ \lbrace L \rbrace}}}}}{non-empty list}
+\end{split}
+\end{displaymath}
+where $L\in\mathcal{V}$ is a fresh symbol not used in $\Gamma$ yet, with semantic
+\begin{displaymath}
+    \semantic{\tynnlst{a}} = \frac{\semantic{a}}{1\,-\,\semantic{a}},
+\end{displaymath}
+namely $\tynnlst{\gamma}$ is the set of all (possibly infinite) lists with at least 
+one object with type $\gamma\in\Gamma$. 
+\end{definition}
+
+\begin{example}
+Consider the semantic
+\begin{displaymath}
+    \semantic{\tynnlst{\typarens{\tycp{\typarens{\tynnlst{\tytruth}}}{\tyvar{w_{0}}}}}} = - \frac{w_{0} w_{1} z}{w_{0} w_{1} z + w_{1} z - 1}
+\end{displaymath}
+and its series expansion with respect to $z$ enumerates as follows,
+according to the cases (i)~\textit{unlike objects in unlike boxes}
+\begin{displaymath}
+\begin{split}
+&z w_{1} w_{0} + \\
+&z^{2} \left(w_{1} w_{0} w_{1} + w_{1} w_{0} w_{1} w_{0}\right) + \\
+&z^{3} \left(w_{1} w_{0} w_{1} w_{0} w_{1} + w_{1} w_{0} w_{1} w_{0} w_{1} w_{0} + w_{1} w_{0} w_{1}^{2} + w_{1} w_{0} w_{1}^{2} w_{0}\right) + \\
+&z^{4} \left(w_{1} w_{0} w_{1} w_{0} w_{1} w_{0} w_{1} + w_{1} w_{0} w_{1} w_{0} w_{1} w_{0} w_{1} w_{0} + w_{1} w_{0} w_{1} w_{0} w_{1}^{2} +\right.\\
+&\indent\left. w_{1} w_{0} w_{1} w_{0} w_{1}^{2} w_{0} + w_{1} w_{0} w_{1}^{2} w_{0} w_{1} + w_{1} w_{0} w_{1}^{2} w_{0} w_{1} w_{0} + w_{1} w_{0} w_{1}^{3} + \right.\\
+&\indent\left.w_{1} w_{0} w_{1}^{3} w_{0}\right) + O\left(z^{5}\right)
+\end{split}
+\end{displaymath}
+for the sake of clarity, the coefficient of $z^{3}$ might be rewritten as
+    $$\left((w_{1} w_{0})^{2} w_{1} + (w_{1} w_{0})^{3} + (w_{1} w_{0})
+    w_{1}^{2} + (w_{1} w_{0}) w_{1} (w_{1} w_{0})\right)$$ and should be read by
+    exponent by exponent to yield the compositions of $3$
+    which are $2+1, 3, 1+2$ and $1+1+1$, respectively;
+(ii)~\textit{unlike objects in like boxes}
+\begin{displaymath}
+\begin{split}
+&w_{0} w_{1} z +\\
+&z^{2} \left(w_{0}^{2} w_{1}^{2} + w_{0} w_{1}^{2}\right) + \\
+&z^{3} \left(w_{0}^{3} w_{1}^{3} + 2 w_{0}^{2} w_{1}^{3} + w_{0} w_{1}^{3}\right) + \\
+&z^{4} \left(w_{0}^{4} w_{1}^{4} + 3 w_{0}^{3} w_{1}^{4} + 3 w_{0}^{2} w_{1}^{4} + w_{0} w_{1}^{4}\right) + O\left(z^{5}\right)
+\end{split}
+\end{displaymath}
+respectively.
+\end{example}
 
 \section{Unlabelled structures}
 
