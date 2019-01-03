@@ -1,6 +1,6 @@
 
 from contextlib import contextmanager, redirect_stdout
-from sympy import Eq, Lambda, Function, Indexed, latex, Subs, factorial, Symbol
+from sympy import Eq, Lambda, Function, Indexed, latex, Subs, factorial, Symbol, binomial, Integer
 from functools import partial
 
 def define(let, be, ctor=Eq, **kwds,):
@@ -91,24 +91,40 @@ class FEq(Eq):
         expr = self.rhs
         n = kwds.get('n', 6)
         kwds['n'] = n # simple update to make sure that SymPy's `series` uses the same `n`.
-        is_exp = kwds.pop('is_exp', False)
+        kernel = kwds.pop('kernel', 'ordinary')
         t, *_ = args
-        handler = factorial if is_exp else lambda i: 1
+
+        if kernel == 'exponential':
+            handler = factorial 
+        elif kernel == 'catalan':
+            handler = lambda n: (n+1) / binomial(2*n, n)
+        elif kernel == 'ordinary':
+            handler = lambda _: Integer(1)
+        else:
+            raise ValueError
 
         s = expr.series(*args, **kwds)
-        if is_exp:
-            bigO = s.getO()
-            s = sum([s.coeff(t,i) * handler(i) * t**i
-                     for i in range(n)]) + (bigO if bigO else 0)
+        bigO = s.getO()
+        s = sum([s.coeff(t,i) * handler(i) * t**i
+                 for i in range(n)]) + (bigO if bigO else Integer(0))
 
         return define(self.lhs, define(self.rhs, s, ctor=FEq), ctor=FEq)
 
-def commute_symbols(expr, symbols, commutative=True):
+def commute_symbols(eq, commutative=True):
 
+    symbols = eq.free_symbols
     commuted_symbols = {fs: Symbol(fs.name, commutative=commutative)
-                        for fs in symbols}
+                        for fs in symbols
+                        if not fs.is_commutative}
 
-    return expr.subs(commuted_symbols, simultaneous=True)
+    def subs(eq):
+        return define(eq.lhs.subs({c:o for o,c in commuted_symbols.items()}, 
+                                  simultaneous=True),
+                      eq.rhs.subs({c:o for o,c in commuted_symbols.items()}, 
+                                  simultaneous=True))
+
+    return define(eq.lhs.subs(commuted_symbols, simultaneous=True),
+                  eq.rhs.subs(commuted_symbols, simultaneous=True)), subs
 
 
 
