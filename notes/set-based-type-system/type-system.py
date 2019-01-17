@@ -63,6 +63,11 @@ class ty:
     def __invert__(self):
         return cycle(self)
 
+    def __getitem__(self, key):
+        if not isinstance(key,  Basic):
+            raise TypeError
+        return self * tyvar(key)
+
 class cp(ty):
         
     def gf_rhs(self, *types):
@@ -178,4 +183,11 @@ def occupancy(eq, syms, objects='unlike', boxes='unlike'):
 
     f = Function('gf')
     return define(f(*gf.free_symbols), gf, ctor=FEq)
+
+# ______________________________________________________________________________
+# Basic concrete types
+# ______________________________________________________________________________
+
+truth, falsehood = tyvar(w[1]), tyvar(w[0])
+boolean = truth | falsehood
 
