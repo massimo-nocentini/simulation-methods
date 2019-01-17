@@ -43,6 +43,8 @@
 \newcommand{\tydef}[3]{#1\indent\triangleq\indent#2\indent\textit{(#3)}}
 \newcommand{\typarens}[1]{\left(\,#1\,\right)}
 \newcommand{\tyunit}[0]{\textbf{unit}}
+\newcommand{\tycount}[2]{{#1}_{\,#2}}
+\newcommand{\tycountp}[2]{\tycount{\typarens{#1}}{#2}}
 \newcommand{\tytruth}[0]{\textbf{truth}}
 \newcommand{\tyfalsehood}[0]{\textbf{falsehood}}
 \newcommand{\tyboolean}[0]{\textbf{boolean}}
@@ -50,7 +52,7 @@
 \newcommand{\tycp}[2]{#1\,\times\,#2}
 \newcommand{\tymaybe}[1]{\textbf{maybe}\,#1}
 \newcommand{\tyrec}[2]{\textbf{rec}\,#1.\,#2}
-\newcommand{\tyvar}[1]{\textbf{tyvar}\,#1}
+\newcommand{\tyvar}[1]{\textbf{tyvar}\,\,#1}
 \newcommand{\tylst}[1]{\textbf{lst}\,#1}
 \newcommand{\tynnlst}[1]{\textbf{lst}_{+}\,#1}
 \newcommand{\typosnat}[0]{\textbf{nat}_{+}}

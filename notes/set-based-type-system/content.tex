@@ -14,15 +14,18 @@ abstract ideas introduced by the referenced authors, which aims \emph{to
 automate the computation of generating functions (both ordinary and
 exponential) for arbitrary compositions of types}; moreover, the interleave of
 symbolic manipulation with the usual functional style allows us to obtain
-counting formulae in closed form.
+counting formulae in closed form; paraphrasing \citet{Wilf:2006:GEN:1204575}, a
+generating function is a clothesline on which we hang up a sequence of
+\textit{symbols} for display.
 
-This work is an extended exercise on understanding basic concepts of
-combinatorial analysis, drawing and inspired by
-\citet{riordan2002introduction}, to further combine to form a coherent
-language; eventually, we wish to \textit{use generating functions as a true
-enumeration device by a tight integration with symbolic programming}, not just
-for its counting capabilities which say nothing about the structure of actual
-objects being counted.
+This work is an extended exercise to understand concepts of combinatorial
+analysis drawing ideas and inspiration from \citet{riordan2002introduction}
+\footnote{Say that additional material from olimpic training and clever uses
+are collected too.}, trying to collect them in one place in the while;
+eventually, we wish to \textit{use generating functions as a true enumeration
+device by a tight integration with symbolic programming}, in addition to their
+counting capabilities which, on the contrary, say nothing about the structure
+of actual objects being counted.
 
 How to read this document: words in \texttt{monospace font} represent Python
 code that can be typed and evaluated in a Python 3 interpreter while the
@@ -47,8 +50,8 @@ The type system subject of our study is defined by the grammar
 \begin{definition}[Syntax]
 \begin{displaymath}
 \begin{split}
-\Gamma\quad::=\quad&\tyunit\indent\textit{(empty type)} \\
-             |\quad&\textbf{tyvar}\,\mathcal{V}_{z}\indent\textit{(type variable)} \\
+\Gamma\quad::=%\quad&\tyunit\indent\textit{(empty type)} \\
+              \quad&\textbf{tyvar}\,\mathcal{V}\indent\textit{(type variable)} \\
              |\quad&\typarens{\Gamma}\indent\textit{(precedence)} \\
              |\quad&\tydu{\Gamma}{\Gamma}\indent\textit{(disjoint union)} \\
              |\quad&\tycp{\Gamma}{\Gamma}\indent\textit{(cartesian product)} \\
@@ -59,17 +62,19 @@ The type system subject of our study is defined by the grammar
              %|\quad&2^{\Gamma}\indent\textit{(set of all finite subsets)} \\
              %|\quad&(-2)^{\Gamma}\indent\textit{(derangements)} \\
              %|\quad&\sim\Gamma\indent\textit{(cycles)} \\
-             |\quad&\partial\,{\Gamma}\indent\textit{(derivation)} \\
-             |\quad&\int{\Gamma}\indent\textit{(integration)} \\
-             |\quad&\Gamma\,\Gamma\indent\textit{(application)} \\
+             |\quad&\partial_{\mathcal{V}}\,{\Gamma}\indent\textit{(derivation)} \\
+             |\quad&\int_{\mathcal{V}}{\Gamma}\indent\textit{(integration)} \\
+             |\quad&\Gamma\big|_{\mathcal{V}=\Gamma}\indent\textit{(substitution)} \\
 \end{split}
 \end{displaymath}
-where $\mathcal{V}_{z} = \lbrace v\,z^{i}:v\in\mathcal{V}^{+}
-\rbrace_{i\in\mathbb{N}}$ is built on $\mathcal{V}=  \lbrace v_{i}
-\rbrace_{i\in\mathbb{N}}$, which is a \textit{countable} set of pure symbols;
-moreover, $\mathcal{F}$ is a set of continuous and differentiable (infinitely
-many times) functions over $\mathbb{Z}[z]$, namely  $\mathcal{F} = \lbrace
-f\,\in\,C^{\infty}(\mathbb{Z}[z], \mathbb{Z}[z])\rbrace$.
+where $\mathcal{V}=  \lbrace v_{i} \rbrace_{i\in\mathbb{N}}$ is a
+\textit{countable} set of pure symbols and we use the overload
+$\tyvar{\typarens{\alpha_{0}\cdots\alpha_{k-1}}}$ to denote
+$\tycp{\typarens{\tyvar{\alpha_{0}}}}{\tycp{\cdots}{\typarens{\tyvar{\alpha_{k-1}}}}}$
+for $k>0$; moreover, $\mathcal{F}$ is a set of continuous and differentiable
+    (infinitely many times) functions over $\mathbb{Z}[z]$, namely
+    $\mathcal{F} = \lbrace f\,\in\,C^{\infty}(\mathbb{Z}[z],
+    \mathbb{Z}[z])\rbrace$.
 \end{definition}
 
 In what follow, we stick to the habit that uses greek symbols to denote type
@@ -87,37 +92,42 @@ The semantic function $\semantic{}: \Gamma \rightarrow
 \mathbb{Z}[z]$ is defined by structural induction for terms in $\Gamma$,
 \begin{displaymath}
 \begin{split}
-    \semantic{\tyunit} &= 1 \\
-    \semantic{\tyvar{\gamma}} &= \gamma\indent\textit{(observe that $\gamma$ may contain powers of $z$)} \\
+    %\semantic{\tyunit} &= 1 \\
+    \semantic{\tyvar{\gamma}} &= \gamma \\
     \semantic{\typarens{\gamma}} &= \semantic{\gamma}\\
     \semantic{\tydu{a}{b}} &= \semantic{a} + \semantic{b} \\
     \semantic{\tycp{a}{b}} &= \semantic{a}\cdot\semantic{b} \\
     %\semantic{a\,\times_{b}\,c} &= \semantic{a}\star\semantic{c} \\
-    \semantic{\tyrec{\gamma}{a}} &= \beta(z)  \quad\text{where}\quad
+    \semantic{\tyrec{\gamma}{a}} &= \beta  \quad\text{where}\quad
         %\semantic{\textbf{tyvar}\,\gamma}\,=_{\beta}\,\semantic{a\,[\textbf{tyvar}\,\gamma/\gamma]}\\
-        \semantic{\tyvar{\gamma}}\,=_{\gamma,\beta(z)}\,\semantic{a}\\
+        \semantic{\tyvar{\gamma}}\,=_{\gamma,\beta}\,\semantic{a}\\
     %\semantic{-\,a} &= -\,\semantic{a}\\
     %\semantic{2^{a}} &= e^{\semantic{a}}\\
     %\semantic{(-2)^{a}} &= \frac{e^{-\beta}}{1-\beta}\quad\text{where}\quad\beta=\semantic{a}(z)\\
     %\semantic{\sim a} &= log\,\semantic{a}\\
     \semantic{f(\,a\,)} &= f(\,\semantic{a}\,)\indent\textit{(recall that $f\,:\,\mathbb{Z}[z]\rightarrow\mathbb{Z}[z]$)}\\
-    \semantic{\partial\,a} &= \frac{\partial}{\partial\,z}\,\semantic{a}\\
-    \semantic{\int{a}} &= \int{\semantic{a}\,dz}\\
-    \semantic{a\,b} &= \semantic{a}\big|_{z=\semantic{b}}\\
+    \semantic{\partial_{z}\,a} &= \frac{\partial}{\partial\,z}\,\semantic{a}\\
+    \semantic{\int_{z}{a}} &= \int_{0}^{z}{\semantic{a\big|_{z=\tyvar{\gamma}}}\,d\gamma}\indent\text{where $\gamma$ is fresh wrt $a$}\\
+    \semantic{a\big|_{z=b}} &= \semantic{a}\big|_{z=\semantic{b}}\\
 \end{split}
 \end{displaymath}
-denoting with $\alpha\,=_{\gamma,\beta}\,\eta$ that $\beta$ is the solution of
-the equation $\alpha\,=\,\eta$ with respect to $\gamma$; moreover, the operator
-$c\,\big|_{a=b}$ substitutes every occurrence of $a$ expressions with the $b$
-expression in the context expression $c$.
+denoting with $\alpha\,=_{\gamma,\beta}\,\eta$ that $\beta$ is
+the\footnote{Actually, for the types we are interested in we have
+\textit{exactly one} generating function but in the general case we might have
+more than one solution.} solution of the equation $\alpha\,=\,\eta$ with
+respect to $\gamma$ -- observe that $\beta$ might depend on a subset
+$A\subset\mathcal{V}$; moreover, the operator $c\,\big|_{a=b}$ substitutes
+every occurrence of $a$ expressions with the $b$ expression in the context
+expression $c$.
 \end{definition}
 
 In plain words, $\semantic{a}$ yields  the \textit{generating function} that
 counts the number of atomic objects in values of type $a$; in particular, the
 coefficient $a_{n}$ of $z^{n}$ in the series expansion of $\semantic{a}$, in
-symbols $[z^{n}]\,\semantic{a} = a_{n}$, counts the number of atomic objects
-within a value of dimension $n$ with type $a\in\Gamma$ -- the operator
-$[z^{n}]$ is studied in depth by \citet{MSV07}.
+symbols $[z^{n}]\,\semantic{a} = a_{n}$\footnote{This "operation" should be
+added to the language too since it applies to a gf.}, counts the number of
+atomic objects within a value of dimension $n$ with type $a\in\Gamma$ -- the
+operator $[z^{n}]$ is studied in depth by \citet{MSV07}.
 
 Precisely, the semantic of the cartesian product type
 $\tycp{\Gamma}{\Gamma}$ is defined as the Cauchy convolution
@@ -157,6 +167,39 @@ object of type $\alpha$, respectively.  Therefore, when we write down a type,
 we give the configuration of a box, namely types represent selections of
 objects to fullfil cells in that box.
 
+\begin{definition}[\tyunit]
+The type that has not inhabitants is in order,
+\begin{displaymath}
+\begin{split}
+    \Gamma\quad::=\quad&... \\
+           |\quad&\tydef{\tyunit}{\tyvar{1}}{empty type}\\
+\end{split}
+\end{displaymath}
+with semantic
+\begin{displaymath}
+    \semantic{\tyunit} = 1.
+\end{displaymath}
+\end{definition}
+
+The goal of this language is twofold, (i)~it allows us to describe families of
+values and, in parallel, (ii)~to count when a specific object appear in a
+combinatorial configuration; in order to have the second one, we introduce the
+following syntactic sugar
+\begin{definition}
+The "subscript" type that count the occurrence of a value of type $a\in\Gamma$
+with respect to a symbol $\alpha\in\mathcal{V}$,
+\begin{displaymath}
+\begin{split}
+    \Gamma\quad::=\quad&... \\
+           |\quad&\tydef{\tycount{\Gamma}{\mathcal{V}}}{\tycp{\Gamma}{\tyvar{\mathcal{V}}}}{counting}\\
+\end{split}
+\end{displaymath}
+with semantic
+\begin{displaymath}
+    \semantic{\tycount{a}{\alpha}} = \semantic{\tycp{a}{\tyvar{\alpha}}}.
+\end{displaymath}
+\end{definition}
+
 \section{Linear types}
 
 This section explores how combinations of the primitive types $\tyunit$ and
@@ -169,30 +212,34 @@ Types that represent truth, falsehood and boolean are in order,
 \begin{displaymath}
 \begin{split}
     \Gamma\quad::=\quad&... \\
-           |\quad&\tydef{\tytruth}{\tyvar{w_{1}\,z}}{logical success}\\
-           |\quad&\tydef{\tyfalsehood}{\tyvar{w_{0}\,z}}{logical failure}\\
+           |\quad&\tydef{\tytruth}{\tyvar{w_{1}}}{logical success}\\
+           |\quad&\tydef{\tyfalsehood}{\tyvar{w_{0}}}{logical failure}\\
            |\quad&\tydef{\tyboolean}{\tydu{\tytruth}{\tyfalsehood}}{logical choice}\\
 \end{split}
 \end{displaymath}
-with semantic
+where $w_{1}, w_{0} \in\mathcal{V}$ with semantic
 \begin{displaymath}
 \begin{split}
-    \semantic{\tytruth} &= w_{1}\,z\\
-    \semantic{\tyfalsehood} &= w_{0}\,z\\
-    \semantic{\tyboolean} &= (w_{1} + w_{0})\,z,
+    \semantic{\tytruth} &= w_{1}\\
+    \semantic{\tyfalsehood} &= w_{0}\\
+    \semantic{\tyboolean} &= w_{1} + w_{0},
 \end{split}
 \end{displaymath}
 respectively.
 \end{definition}
 
+The previous definitions shows that symbols $w_{1}$ and $w_{0}$ resemble
+\textit{true} and \textit{false} objects, as usual -- observe that no formal
+variables that counts according to a measure is used.
+
 \begin{example}
 Let $\alpha\in\mathcal{V}$ and consider the type
 \begin{displaymath}
-    \tydu{\tyunit}{\tyvar{\alpha\,z}}
+    \tydu{\tyunit}{\tycount{\typarens{\tyvar{\alpha}}}{z}}
 \end{displaymath}
 whose generating function can be found by the semantic
 \begin{displaymath}
-    \semantic{\tydu{\tyunit}{\tyvar{\alpha\,z}}} = 1 + \alpha\,z
+    \semantic{\tydu{\tyunit}{\tycount{\typarens{\tyvar{\alpha}}}{z}}} = 1 + \alpha\,z
 \end{displaymath}
 which represents the possibility to choose an element of type \tyvar{\alpha} or
 to choose nothing.
@@ -393,30 +440,32 @@ respectively.
 Last section introduces and deepen linear types and their connection with a
 setting of a finite number of boxes; on the other hand, this section studies
 how such setting can be extended to consider \textit{countably many} boxes and
-their configurations. 
+their configurations.
 
 \begin{example}
 Let $L,\alpha\in\mathcal{V}$ be pure symbols then consider the type
 \begin{displaymath}
-    \tyrec{L}{\tydu{\tyunit}{\tycp{\tyvar{\alpha\,z}}{\tyvar{L}}}}
+    \tyrec{L}{\tydu{\tyunit}{\tycp{\tycountp{\tyvar{\alpha}}{z}}{\tyvar{L}}}}
 \end{displaymath}
 whose generating function can be found by the semantic
 \begin{displaymath}
-    \semantic{\tyrec{L}{\tydu{\tyunit}{\tycp{\tyvar{\alpha\,z}}{\tyvar{L}}}}} = \beta(z)
+    \semantic{\tyrec{L}{\tydu{\tyunit}{\tycp{\tycountp{\tyvar{\alpha}}{z}}{\tyvar{L}}}}} = \beta
 \end{displaymath}
-where $\beta(z)$ is the solution of the equation
+where $\beta$ is the solution of the equation
 \begin{displaymath}
     \semantic{\tyvar{L}} = \semantic{\tydu{\tyunit}{\tycp{\tyvar{\alpha\,z}}{\tyvar{L}}}}
 \end{displaymath}
 which reduces to solve $L = 1 + \alpha\,z\,L$ with respect to $L$, therefore
-$\displaystyle L = \frac{1}{1 - \alpha\,z}$ so take $\displaystyle \beta(z) =
-\frac{1}{1 - \alpha\,z}$, as required.  A series expansion of $\beta(z)$ yields
+$\displaystyle L = \frac{1}{1 - \alpha\,z}$ so take $\displaystyle \beta =
+\frac{1}{1 - \alpha\,z}$, as required; moreover, its series expansion with
+respect to $z$ yields
 \begin{displaymath}
-\beta(z) = 1 + \alpha z + \alpha^{2} z^{2} + \alpha^{3} z^{3} + \alpha^{4} z^{4} + \alpha^{5} z^{5} + \alpha^{6} z^{6} + \alpha^{7} z^{7} + \alpha^{8} z^{8} + \alpha^{9} z^{9} + O\left(z^{10}\right)
+1 + \alpha z + \alpha^{2} z^{2} + \alpha^{3} z^{3} + \alpha^{4} z^{4} + \alpha^{5} z^{5} + \alpha^{6} z^{6} + \alpha^{7} z^{7} + \alpha^{8} z^{8} + \alpha^{9} z^{9} + O\left(z^{10}\right)
 \end{displaymath}
-hence $[z^{n}]\,\semantic{\tyrec{L}{\tydu{\tyunit}{\tycp{\tyvar{\alpha\,z}}{\tyvar{L}}}}} = \alpha^{n}$ 
-which says that there is $1$ composition of $n$ values having type
-$\tyvar{\alpha\,z}$ each one of them.
+hence
+$[z^{n}]\,\semantic{\tyrec{L}{\tydu{\tyunit}{\tycp{\tycountp{\tyvar{\alpha}}{z}}{\tyvar{L}}}}}
+= \alpha^{n}$ which says that there is $1$ composition of $n$ values having
+type $\tyvar{\alpha\,z}$ each one of them.
 \end{example}
 
 \begin{definition}
@@ -432,7 +481,7 @@ where $L\in\mathcal{V}$ is a fresh symbol not used in $\Gamma$ yet, with semanti
     \semantic{\tylst{a}} = \frac{1}{1\,-\,\semantic{a}},
 \end{displaymath}
 namely $\tylst{\gamma}$ is the set of all (possibly infinite) lists of
-objects with type $\gamma\in\Gamma$. 
+objects with type $\gamma\in\Gamma$.
 \end{definition}
 
 The following three examples shows how simple combinations of types
@@ -441,32 +490,32 @@ $\tylst{}$, $\tymaybe{}$ and $\tyboolean$ yield well known combinatorial results
 \begin{example}
 Consider the semantic
 \begin{displaymath}
-    \semantic{\tylst{\typarens{\tycp{\tymaybe{\typarens{\tyvar{y}}}}{\tyvar{z}}}}} = - \frac{1}{y z + z ␣ - 1}
+    \semantic{\tylst{\tycountp{\tymaybe{\tytruth}}{z}}} = - \frac{1}{w_{1} z + z ␣ - 1}
 \end{displaymath}
 and its series expansion with respect to $z$ enumerates as follows,
 according to the cases (i)~\textit{unlike objects in unlike boxes}
 \begin{displaymath}
 \begin{split}
 &1 + \\
-&z \left(y + ␣\right) + \\
-&z^{2} \left(y ␣ + y^{2} + ␣ y + ␣^{2}\right) + \\
-&z^{3} \left(y ␣ y + y ␣^{2} + y^{2} ␣ + y^{3} + ␣ y ␣ + ␣ y^{2} + ␣^{2} y + ␣^{3}\right) + \\
-&z^{4} \left(y ␣ y ␣ + y ␣ y^{2} + y ␣^{2} y + y ␣^{3} + y^{2} ␣ y + y^{2} ␣^{2} + y^{3} ␣ + y^{4} \right.+\\
-&\indent\left. ␣ y ␣ y + ␣ y ␣^{2} + ␣ y^{2} ␣ + ␣ y^{3} + ␣^{2} y ␣ + ␣^{2} y^{2} + ␣^{3} y + ␣^{4}\right) + O\left(z^{5}\right);
+&z \left(w_{1} + ␣\right) + \\
+&z^{2} \left(w_{1} ␣ + w_{1}^{2} + ␣ w_{1} + ␣^{2}\right) + \\
+&z^{3} \left(w_{1} ␣ w_{1} + w_{1} ␣^{2} + w_{1}^{2} ␣ + w_{1}^{3} + ␣ w_{1} ␣ + ␣ w_{1}^{2} + ␣^{2} w_{1} + ␣^{3}\right) + \\
+&z^{4} \left(w_{1} ␣ w_{1} ␣ + w_{1} ␣ w_{1}^{2} + w_{1} ␣^{2} w_{1} + w_{1} ␣^{3} + w_{1}^{2} ␣ w_{1} + w_{1}^{2} ␣^{2} + w_{1}^{3} ␣ + w_{1}^{4} \right.+\\
+&\indent\left. ␣ w_{1} ␣ w_{1} + ␣ w_{1} ␣^{2} + ␣ w_{1}^{2} ␣ + ␣ w_{1}^{3} + ␣^{2} w_{1} ␣ + ␣^{2} w_{1}^{2} + ␣^{3} w_{1} + ␣^{4}\right) + O\left(z^{5}\right);
 \end{split}
 \end{displaymath}
 (ii)~\textit{unlike objects in like boxes}
 \begin{displaymath}
 \begin{split}
 &1 + \\
-&z \left(y + ␣\right) + \\
-&z^{2} \left(y^{2} + 2 y ␣ + ␣^{2}\right) + \\
-&z^{3} \left(y^{3} + 3 y^{2} ␣ + 3 y ␣^{2} + ␣^{3}\right) + \\
-&z^{4} \left(y^{4} + 4 y^{3} ␣ + 6 y^{2} ␣^{2} + 4 y ␣^{3} + ␣^{4}\right) + O\left(z^{5}\right);
+&z \left(w_{1} + ␣\right) + \\
+&z^{2} \left(w_{1}^{2} + 2 w_{1} ␣ + ␣^{2}\right) + \\
+&z^{3} \left(w_{1}^{3} + 3 w_{1}^{2} ␣ + 3 w_{1} ␣^{2} + ␣^{3}\right) + \\
+&z^{4} \left(w_{1}^{4} + 4 w_{1}^{3} ␣ + 6 w_{1}^{2} ␣^{2} + 4 w_{1} ␣^{3} + ␣^{4}\right) + O\left(z^{5}\right);
 \end{split}
 \end{displaymath}
 in parallel, the enumerations for \textit{like objects in unlike boxes}
-equals the previous one with the substitutions $y\mapsto\bullet$;
+equals the previous one with the substitutions $w_{1}\mapsto\bullet$;
 finally, (iii)~\textit{like objects in like boxes}
 \begin{displaymath}
 \begin{split}
@@ -483,7 +532,8 @@ respectively.
 \begin{example}
 Consider the following semantic
 \begin{displaymath}
-    \semantic{\tycp{\typarens{\tylst{\tytruth}}}{\typarens{\tylst{\tyfalsehood}}}} = \frac{1}{\left(w_{0} z - 1\right) \left(w_{1} z - 1\right)}
+    \semantic{\tycp{\typarens{\tylst{\tycount{\tytruth}{z}}}}{\typarens{\tylst{\tycount{\tyfalsehood}{z}}}}} =
+        \frac{1}{\left(w_{0} z - 1\right) \left(w_{1} z - 1\right)}
 \end{displaymath}
 and its series expansion with respect to $z$ enumerates as follows,
 according to the cases (i)~\textit{unlike objects in both unlike and like boxes}
@@ -523,7 +573,7 @@ with semantic
 \begin{example}
 Consider the semantic
 \begin{displaymath}
-    \semantic{\tylst{\tyboolean}} = - \frac{1}{w_{0} z + w_{1} z - 1}
+    \semantic{\tylst{\tycount{\tyboolean}{z}}} = - \frac{1}{w_{0} z + w_{1} z - 1}
 \end{displaymath}
 and its series expansion with respect to $z$ enumerates as follows,
 according to the cases (i)~\textit{unlike objects in unlike boxes}
@@ -573,7 +623,7 @@ which equals
 - \frac{1}{\left(u_{1} z - 1\right) \left(u_{10} z^{10} - 1\right) \left(u_{25} z^{25} - 1\right) \left(u_{5} z^{5} - 1\right) \left(u_{50} z^{50} - 1\right)}
 \end{displaymath}
 and its series expansion with respect to $z$ enumerates as follows,
-according to the case of \textit{unlike objects in like boxes}, to change $42¢$ 
+according to the case of \textit{unlike objects in like boxes}, to change $42¢$
 we need to extract the coefficient of $z^{42}$, which is
 \begin{displaymath}
 \begin{split}
@@ -587,9 +637,53 @@ we need to extract the coefficient of $z^{42}$, which is
 namely, the summand $u_{1}^{12} u_{25} u_{5}$ proves that $42¢$ can be changed
 using $12$ $1¢$-coins, $1$ $25¢$-coin and $1$ $5¢$-coin, respectively.
 Moreover, $1\$$ can be changed in $292$ ways by substituting $u_{1} = u_{5} =
-u_{10} = u_{25} = u_{50} = 1$ in the coefficient of $z^{100}$.
+u_{10} = u_{25} = u_{50} = 1$ in the coefficient of $z^{100}$, which is too
+large to be shown here otherwise.
 \end{example}
 
+
+\begin{example}
+Enumerate all numbers that can be written as sum of powers of $2$, $3$ and $5$
+respectively, using at most $4$ powers of each, in any case using infinitely
+many times each power.  The answer lies in the semantic
+\begin{displaymath}
+\semantic{\tycp{a}{\tycp{b}{\tycp{c}{d}}}} = \frac{1}{\left(z^{b^{0}} \circ_{b^{0}} - 1\right) \left(z^{b^{1}} \circ_{b^{1}} - 1\right) \left(z^{b^{2}} \circ_{b^{2}} - 1\right) \left(z^{b^{3}} \circ_{b^{3}} - 1\right)}
+\end{displaymath}
+\begin{displaymath}
+\begin{split}
+\text{where}\quad
+    a &= \tylst{\typarens{\tyvar{{\circ}_{b^{0}} z^{b^{0}}}}},\quad
+        b = \tylst{\typarens{\tyvar{{\circ}_{b^{1}} z^{b^{1}}}}},\\
+    c &= \tylst{\typarens{\tyvar{{\circ}_{b^{2}} z^{b^{2}}}}}\quad\text{and}\quad
+        d = \tylst{\typarens{\tyvar{{\circ}_{b^{3}} z^{b^{3}}}}},
+\end{split}
+\end{displaymath}
+and its series expansion with respect to $z$ enumerates (i)~for $b=2$,
+\begin{displaymath}
+\begin{split}
+&1 + z \circ_{1} + z^{2} \left(\circ_{1}^{2} + \circ_{2}\right) + z^{3} \left(\circ_{1}^{3} + \circ_{1} \circ_{2}\right) + z^{4} \left(\circ_{1}^{4} + \circ_{1}^{2} \circ_{2} + \circ_{2}^{2} + \circ_{4}\right) + \\
+&z^{5} \left(\circ_{1}^{5} + \circ_{1}^{3} \circ_{2} + \circ_{1} \circ_{2}^{2} + \circ_{1} \circ_{4}\right) + z^{6} \left(\circ_{1}^{6} + \circ_{1}^{4} \circ_{2} + \circ_{1}^{2} \circ_{2}^{2} + \circ_{1}^{2} \circ_{4} + \circ_{2}^{3} + \circ_{2} \circ_{4}\right) + \\
+&z^{7} \left(\circ_{1}^{7} + \circ_{1}^{5} \circ_{2} + \circ_{1}^{3} \circ_{2}^{2} + \circ_{1}^{3} \circ_{4} + \circ_{1} \circ_{2}^{3} + \circ_{1} \circ_{2} \circ_{4}\right) + O\left(z^{8}\right)
+\end{split}
+\end{displaymath}
+(ii)~for $b=3$,
+\begin{displaymath}
+\begin{split}
+&1 + z {\circ}_{1} + z^{2} {\circ}_{1}^{2} + z^{3} \left({\circ}_{1}^{3} + {\circ}_{3}\right) + z^{4} \left({\circ}_{1}^{4} + {\circ}_{1} {\circ}_{3}\right) + z^{5} \left({\circ}_{1}^{5} + {\circ}_{1}^{2} {\circ}_{3}\right) +\\
+&z^{6} \left({\circ}_{1}^{6} + {\circ}_{1}^{3} {\circ}_{3} + {\circ}_{3}^{2}\right) + z^{7} \left({\circ}_{1}^{7} + {\circ}_{1}^{4} {\circ}_{3} + {\circ}_{1} {\circ}_{3}^{2}\right) + z^{8} \left({\circ}_{1}^{8} + {\circ}_{1}^{5} {\circ}_{3} + {\circ}_{1}^{2} {\circ}_{3}^{2}\right) + O\left(z^{9}\right)
+\end{split}
+\end{displaymath}
+and (iii)~for $b=5$,
+\begin{displaymath}
+\begin{split}
+&1 + z {\circ}_{1} + z^{2} {\circ}_{1}^{2} + z^{3} {\circ}_{1}^{3} + z^{4} {\circ}_{1}^{4} + z^{5} \left({\circ}_{1}^{5} + {\circ}_{5}\right) + z^{6} \left({\circ}_{1}^{6} + {\circ}_{1} {\circ}_{5}\right) +\\
+&z^{7} \left({\circ}_{1}^{7} + {\circ}_{1}^{2} {\circ}_{5}\right) + z^{8} \left({\circ}_{1}^{8} + {\circ}_{1}^{3} {\circ}_{5}\right) + z^{9} \left({\circ}_{1}^{9} + {\circ}_{1}^{4} {\circ}_{5}\right) + O\left(z^{10}\right)
+\end{split}
+\end{displaymath}
+respectively; for the sake of clarity, $z^{9} \left({\circ}_{1}^{9} +
+{\circ}_{1}^{4} {\circ}_{5}\right)$ proves that both $9 = 9\cdot1$ and $9 =
+4\cdot1 + 5$, using only powers of $5$.
+\end{example}
 
 \begin{definition}
 The generalization of the previous type is so fundamental that we stick to it a name
@@ -603,14 +697,14 @@ where $L\in\mathcal{V}$ is a fresh symbol not used in $\Gamma$ yet, with semanti
 \begin{displaymath}
     \semantic{\tynnlst{a}} = \frac{\semantic{a}}{1\,-\,\semantic{a}},
 \end{displaymath}
-namely $\tynnlst{\gamma}$ is the set of all (possibly infinite) lists with at least 
-one object with type $\gamma\in\Gamma$. 
+namely $\tynnlst{\gamma}$ is the set of all (possibly infinite) lists with at least
+one object with type $\gamma\in\Gamma$.
 \end{definition}
 
 \begin{example}
 Consider the semantic
 \begin{displaymath}
-    \semantic{\tynnlst{\typarens{\tycp{\typarens{\tynnlst{\tytruth}}}{\tyvar{w_{0}}}}}} = - \frac{w_{0} w_{1} z}{w_{0} w_{1} z + w_{1} z - 1}
+    \semantic{\tynnlst{\typarens{\tycp{\typarens{\tynnlst{\tycount{\tytruth}{z}}}}{\tyfalsehood}}}} = - \frac{w_{0} w_{1} z}{w_{0} w_{1} z + w_{1} z - 1}
 \end{displaymath}
 and its series expansion with respect to $z$ enumerates as follows,
 according to the cases (i)~\textit{unlike objects in unlike boxes}
@@ -626,7 +720,7 @@ according to the cases (i)~\textit{unlike objects in unlike boxes}
 \end{displaymath}
 for the sake of clarity, the coefficient of $z^{3}$ might be rewritten as
     $$\left((w_{1} w_{0})^{2} w_{1} + (w_{1} w_{0})^{3} + (w_{1} w_{0})
-    w_{1}^{2} + (w_{1} w_{0}) w_{1} (w_{1} w_{0})\right)$$ and should be read by
+    w_{1}^{2} + (w_{1} w_{0}) w_{1} (w_{1} w_{0})\right)$$ and should be read
     exponent by exponent to yield the compositions of $3$
     which are $2+1, 3, 1+2$ and $1+1+1$, respectively;
 (ii)~\textit{unlike objects in like boxes}
